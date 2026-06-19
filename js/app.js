@@ -2,10 +2,15 @@ let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
 const PAGE_SIZE = 48;
 let currentPage = 1;
+let showSoldOut = localStorage.getItem('showSoldOut') !== 'false';
 
 function updateCartCount(){
+  const count = cart.reduce((a,b)=>a+Number(b.qty || 0),0);
   const el = document.getElementById('cartCount');
-  if(el) el.textContent = cart.reduce((a,b)=>a+Number(b.qty || 0),0);
+  if(el) el.textContent = count;
+
+  const label = document.getElementById('cartLabelCount');
+  if(label) label.textContent = count;
 }
 updateCartCount();
 
@@ -81,6 +86,47 @@ function ensurePaginationControls(){
   return controls;
 }
 
+function ensureSoldOutToggle(){
+  const filters = document.querySelector('.filters') || document.querySelector('.controls') || document.getElementById('filters');
+  const catalog = document.getElementById('catalog');
+  const parent = filters || catalog?.parentElement || document.body;
+
+  if(document.getElementById('showSoldOutInput')) return;
+
+  const label = document.createElement('label');
+  label.className = 'show-soldout-toggle';
+  label.innerHTML = `<input id="showSoldOutInput" type="checkbox" ${showSoldOut ? 'checked' : ''}> Mostrar agotadas`;
+  parent.appendChild(label);
+
+  document.getElementById('showSoldOutInput').addEventListener('change', (e)=>{
+    showSoldOut = e.target.checked;
+    localStorage.setItem('showSoldOut', String(showSoldOut));
+    currentPage = 1;
+    if(window.__renderCatalog) window.__renderCatalog();
+  });
+}
+
+function pageNumbers(current, total){
+  const pages = [];
+  const add = (value) => {
+    if(value >= 1 && value <= total && !pages.includes(value)) pages.push(value);
+  };
+
+  add(1);
+  add(2);
+  for(let i = current - 1; i <= current + 1; i++) add(i);
+  add(total - 1);
+  add(total);
+
+  const sorted = pages.sort((a,b)=>a-b);
+  const result = [];
+  for(let i = 0; i < sorted.length; i++){
+    if(i > 0 && sorted[i] - sorted[i-1] > 1) result.push('...');
+    result.push(sorted[i]);
+  }
+  return result;
+}
+
 loadCards().then(cards=>{
   const catalog=document.getElementById('catalog');
   const search=document.getElementById('search');
@@ -88,6 +134,8 @@ loadCards().then(cards=>{
   const rarity=document.getElementById('rarityFilter');
   const statusFilter=document.getElementById('statusFilter');
   const paginationControls = ensurePaginationControls();
+
+  ensureSoldOutToggle();
 
   if(setFilter){
     const current = setFilter.value;
@@ -106,6 +154,7 @@ loadCards().then(cards=>{
   function filteredCards(){
     const q = search ? search.value.toLowerCase() : '';
     return cards.filter(card =>
+      (showSoldOut || Number(card.stock || 0) > 0) &&
       (!setFilter || !setFilter.value || card.set===setFilter.value) &&
       (!rarity || !rarity.value || card.rarity===rarity.value) &&
       (!statusFilter || !statusFilter.value || card.status===statusFilter.value) &&
@@ -115,38 +164,6 @@ loadCards().then(cards=>{
         String(card.dotggCode || '').toLowerCase().includes(q)
       )
     );
-  }
-
-  function pageNumbers(current, total){
-    const pages = [];
-
-    const add = (value) => {
-      if(!pages.includes(value)) pages.push(value);
-    };
-
-    add(1);
-    add(2);
-
-    for(let i = current - 1; i <= current + 1; i++){
-      if(i >= 1 && i <= total) add(i);
-    }
-
-    add(total - 1);
-    add(total);
-
-    const sorted = pages
-      .filter(p => p >= 1 && p <= total)
-      .sort((a,b)=>a-b);
-
-    const result = [];
-    for(let i = 0; i < sorted.length; i++){
-      if(i > 0 && sorted[i] - sorted[i-1] > 1){
-        result.push("...");
-      }
-      result.push(sorted[i]);
-    }
-
-    return result;
   }
 
   function renderPagination(totalItems){
@@ -164,12 +181,9 @@ loadCards().then(cards=>{
     const end = Math.min(currentPage * PAGE_SIZE, totalItems);
 
     const numberButtons = pageNumbers(currentPage, totalPages).map(page => {
-      if(page === "..."){
-        return `<span class="page-dots">...</span>`;
-      }
-
-      return `<button class="page-number ${page === currentPage ? "active" : ""}" data-page="${page}">${page}</button>`;
-    }).join("");
+      if(page === '...') return `<span class="page-dots">...</span>`;
+      return `<button class="page-number ${page === currentPage ? 'active' : ''}" data-page="${page}">${page}</button>`;
+    }).join('');
 
     paginationControls.innerHTML = `
       <div class="pagination-main">
@@ -194,13 +208,13 @@ loadCards().then(cards=>{
       window.scrollTo({top:0, behavior:'smooth'});
     });
 
-    paginationControls.querySelectorAll(".page-number").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
+    paginationControls.querySelectorAll('.page-number').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
         const page = Number(btn.dataset.page);
         if(!page || page === currentPage) return;
         currentPage = page;
         render();
-        window.scrollTo({top:0, behavior:"smooth"});
+        window.scrollTo({top:0, behavior:'smooth'});
       });
     });
   }
@@ -240,6 +254,8 @@ loadCards().then(cards=>{
 
     renderPagination(filtered.length);
   }
+
+  window.__renderCatalog = render;
 
   window.addToCart=function(id){
     const card = cards.find(c=>c.id===id);

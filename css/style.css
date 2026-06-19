@@ -359,7 +359,34 @@ footer,
 }
 
 
-/* v7.5 pagination whatsapp pro */
+/* v7.5.1 UI pagination cart badge */
+.cart-header-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#ffb000;
+  color:#000 !important;
+  text-decoration:none;
+  border-radius:999px;
+  padding:10px 14px;
+  font-weight:900;
+  box-shadow:0 0 0 1px rgba(255,255,255,.15), 0 6px 18px rgba(255,176,0,.18);
+}
+
+.cart-header-btn strong,
+#cartCount{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:26px;
+  height:26px;
+  border-radius:999px;
+  background:#000;
+  color:#ffb000;
+  font-weight:900;
+  padding:0 8px;
+}
+
 .pagination-controls{
   width:100%;
   display:flex;
@@ -422,7 +449,29 @@ footer,
   text-align:center;
 }
 
+.show-soldout-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  color:#fff;
+  background:#151515;
+  border:1px solid #333;
+  border-radius:10px;
+  padding:8px 12px;
+  margin-left:8px;
+  font-weight:700;
+}
+
+.show-soldout-toggle input{
+  width:auto;
+}
+
 @media(max-width:700px){
+  .cart-header-btn{
+    padding:9px 12px;
+    font-size:14px;
+  }
+
   .pagination-controls{
     padding:0 10px;
   }
@@ -445,5 +494,9 @@ footer,
 
   .pagination-controls button{
     padding:10px 12px;
+  }
+
+  .show-soldout-toggle{
+    margin:8px 0 0;
   }
 }
