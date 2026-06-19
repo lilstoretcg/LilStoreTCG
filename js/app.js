@@ -117,6 +117,38 @@ loadCards().then(cards=>{
     );
   }
 
+  function pageNumbers(current, total){
+    const pages = [];
+
+    const add = (value) => {
+      if(!pages.includes(value)) pages.push(value);
+    };
+
+    add(1);
+    add(2);
+
+    for(let i = current - 1; i <= current + 1; i++){
+      if(i >= 1 && i <= total) add(i);
+    }
+
+    add(total - 1);
+    add(total);
+
+    const sorted = pages
+      .filter(p => p >= 1 && p <= total)
+      .sort((a,b)=>a-b);
+
+    const result = [];
+    for(let i = 0; i < sorted.length; i++){
+      if(i > 0 && sorted[i] - sorted[i-1] > 1){
+        result.push("...");
+      }
+      result.push(sorted[i]);
+    }
+
+    return result;
+  }
+
   function renderPagination(totalItems){
     if(!paginationControls) return;
 
@@ -131,22 +163,45 @@ loadCards().then(cards=>{
     const start = (currentPage - 1) * PAGE_SIZE + 1;
     const end = Math.min(currentPage * PAGE_SIZE, totalItems);
 
+    const numberButtons = pageNumbers(currentPage, totalPages).map(page => {
+      if(page === "..."){
+        return `<span class="page-dots">...</span>`;
+      }
+
+      return `<button class="page-number ${page === currentPage ? "active" : ""}" data-page="${page}">${page}</button>`;
+    }).join("");
+
     paginationControls.innerHTML = `
-      <button id="prevPageBtn" ${currentPage === 1 ? 'disabled' : ''}>← Anterior</button>
-      <span>Página ${currentPage} de ${totalPages} · Mostrando ${start}-${end} de ${totalItems}</span>
-      <button id="nextPageBtn" ${currentPage === totalPages ? 'disabled' : ''}>Siguiente →</button>
+      <div class="pagination-main">
+        <button id="prevPageBtn" class="page-nav" ${currentPage === 1 ? 'disabled' : ''}>← Anterior</button>
+        <div class="pagination-numbers">${numberButtons}</div>
+        <button id="nextPageBtn" class="page-nav" ${currentPage === totalPages ? 'disabled' : ''}>Siguiente →</button>
+      </div>
+      <div class="pagination-info">Página ${currentPage} de ${totalPages} · Mostrando ${start}-${end} de ${totalItems}</div>
     `;
 
     document.getElementById('prevPageBtn')?.addEventListener('click', ()=>{
+      if(currentPage <= 1) return;
       currentPage--;
       render();
       window.scrollTo({top:0, behavior:'smooth'});
     });
 
     document.getElementById('nextPageBtn')?.addEventListener('click', ()=>{
+      if(currentPage >= totalPages) return;
       currentPage++;
       render();
       window.scrollTo({top:0, behavior:'smooth'});
+    });
+
+    paginationControls.querySelectorAll(".page-number").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const page = Number(btn.dataset.page);
+        if(!page || page === currentPage) return;
+        currentPage = page;
+        render();
+        window.scrollTo({top:0, behavior:"smooth"});
+      });
     });
   }
 

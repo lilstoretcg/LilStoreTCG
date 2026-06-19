@@ -243,7 +243,7 @@ async function renderCart(){
     const subtotal = unitPrice * qty;
     total += subtotal;
 
-    lines.push(`${card.name} x${qty} - ${peso(subtotal)} CLP`);
+    lines.push(`• ${card.name} x${qty}\n  ${card.publicCode || card.dotggCode || ''}\n  $${peso(subtotal)} CLP`);
 
     return `
       <div class="cart-item">
@@ -263,10 +263,15 @@ async function renderCart(){
 
   if(whatsappBtn){
     const message = [
-      "Hola, quiero hacer este pedido en LilStore TCG:",
+      "Hola LilStore TCG 👋",
+      "",
+      "Quiero comprar:",
+      "",
       ...lines,
-      `Total: ${peso(total)} CLP`
-    ].join("\n");
+      "",
+      `Total: $${peso(total)} CLP`
+    ].join("
+");
 
     const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
 
