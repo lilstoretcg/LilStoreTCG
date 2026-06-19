@@ -227,3 +227,61 @@ footer,
 .soldout-badge{background:#7f1d1d;color:#fecaca}
 .available-badge{background:#064e3b;color:#a7f3d0}
 .soldout-btn{background:#444!important;color:#aaa!important;cursor:not-allowed!important}
+
+
+/* v7.2 cart fix */
+.cart-item{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  background:#151515;
+  border:1px solid #333;
+  border-radius:12px;
+  padding:14px;
+  margin:12px 0;
+}
+
+.cart-item img{
+  width:70px;
+  height:98px;
+  object-fit:cover;
+  border-radius:8px;
+  background:#000;
+}
+
+.cart-info{
+  flex:1;
+}
+
+.cart-info p{
+  margin:4px 0;
+  color:#ccc;
+}
+
+.cart-empty{
+  background:#151515;
+  border:1px solid #333;
+  border-radius:12px;
+  padding:18px;
+  margin:12px 0;
+}
+
+.cart-item button{
+  background:#dc3545;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  padding:10px 14px;
+  cursor:pointer;
+}
+
+@media(max-width:700px){
+  .cart-item{
+    align-items:flex-start;
+  }
+
+  .cart-item img{
+    width:58px;
+    height:82px;
+  }
+}

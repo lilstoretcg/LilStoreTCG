@@ -130,7 +130,8 @@ loadCards().then(cards=>{
       return;
     }
 
-    const existing=cart.find(x=>x.id===id);
+    const cardKey = keyFor(card);
+    const existing=cart.find(x=>(x.cardKey || x.publicCode || x.dotggCode || x.id)===cardKey || x.id===id);
     const currentQty = existing ? existing.qty : 0;
 
     if(currentQty >= Number(card.stock || 0)){
@@ -138,8 +139,13 @@ loadCards().then(cards=>{
       return;
     }
 
-    if(existing) existing.qty++;
-    else cart.push({id:id,qty:1});
+    if(existing){
+      existing.cardKey = cardKey;
+      delete existing.id;
+      existing.qty++;
+    } else {
+      cart.push({cardKey:cardKey,qty:1});
+    }
 
     localStorage.setItem('cart',JSON.stringify(cart));
     updateCartCount();
