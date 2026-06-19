@@ -10,6 +10,21 @@ function keyFor(card){
   return card.publicCode || `${card.setCode || card.set}-${card.name}`;
 }
 
+async function loadCatalog(){
+  try{
+    const remote = await fetch('/.netlify/functions/catalog');
+    if(remote.ok){
+      const remoteCards = await remote.json();
+      if(Array.isArray(remoteCards) && remoteCards.length){
+        return remoteCards;
+      }
+    }
+  }catch(e){}
+
+  const cardsRes = await fetch('data/cards.json');
+  return await cardsRes.json();
+}
+
 async function loadInventory(){
   try{
     const res = await fetch('/.netlify/functions/stock');
@@ -21,8 +36,7 @@ async function loadInventory(){
 }
 
 async function loadCards(){
-  const cardsRes = await fetch('data/cards.json');
-  const cards = await cardsRes.json();
+  const cards = await loadCatalog();
   const inventory = await loadInventory();
 
   return cards.map(card=>{
@@ -61,7 +75,7 @@ loadCards().then(cards=>{
     setFilter.innerHTML = '<option value="">Todos</option>';
     [...new Set(cards.map(c=>c.set).filter(Boolean))]
       .sort((a,b)=>{
-        const order = {"Origins":0,"Spiritforged":1,"Unleashed":2};
+        const order = {"Origins":0,"Spiritforged":1,"Unleashed":2,"Proving Grounds":3};
         return (order[a] ?? 99) - (order[b] ?? 99) || a.localeCompare(b);
       })
       .forEach(s=>setFilter.innerHTML += `<option value="${s}">${s}</option>`);
@@ -78,7 +92,8 @@ loadCards().then(cards=>{
       (!statusFilter || !statusFilter.value || card.status===statusFilter.value) &&
       (
         card.name.toLowerCase().includes(q) ||
-        String(card.publicCode || '').toLowerCase().includes(q)
+        String(card.publicCode || '').toLowerCase().includes(q) ||
+        String(card.dotggCode || '').toLowerCase().includes(q)
       )
     );
 
@@ -98,7 +113,7 @@ loadCards().then(cards=>{
         <h3>${card.name}</h3>
         <p><strong>Set:</strong> ${card.set}</p>
         <p><strong>Rareza:</strong> ${card.rarity}</p>
-        <p><strong>N°:</strong> ${card.publicCode || '-'}</p>
+        <p><strong>N°:</strong> ${card.publicCode || card.dotggCode || '-'}</p>
         <p><strong>Stock:</strong> ${card.stock || 0}</p>
         ${statusLabel}
         <p>Mercado: $${card.marketPrice || 0} USD</p>

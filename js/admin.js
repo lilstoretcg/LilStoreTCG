@@ -6,6 +6,7 @@ const searchInput = document.getElementById("searchInput");
 const stockFilter = document.getElementById("stockFilter");
 const saveBtn = document.getElementById("saveBtn");
 const syncPricesBtn = document.getElementById("syncPricesBtn");
+const syncCatalogBtn = document.getElementById("syncCatalogBtn");
 const message = document.getElementById("message");
 
 function keyFor(card){
@@ -91,8 +92,20 @@ function render(){
 }
 
 async function load(){
-  const cardsRes = await fetch("data/cards.json");
-  cards = await cardsRes.json();
+  try{
+    const catalogRes = await fetch("/.netlify/functions/catalog");
+    if(catalogRes.ok){
+      const remoteCards = await catalogRes.json();
+      if(Array.isArray(remoteCards) && remoteCards.length){
+        cards = remoteCards;
+      }
+    }
+  }catch(e){}
+
+  if(!cards.length){
+    const cardsRes = await fetch("data/cards.json");
+    cards = await cardsRes.json();
+  }
 
   try{
     const invRes = await fetch("/.netlify/functions/stock");
@@ -156,6 +169,57 @@ async function save(){
 }
 
 
+
+async function syncDotGGCatalog(){
+  const pin = document.getElementById("adminPin").value.trim();
+  if(!pin){
+    showMessage("Ingresa el PIN administrador antes de actualizar catálogo.", true);
+    return;
+  }
+
+  showMessage("Actualizando catálogo desde DotGG...");
+
+  const res = await fetch("/.netlify/functions/sync-dotgg-catalog", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "x-admin-pin": pin
+    },
+    body: JSON.stringify({
+      currentCards: cards.map(card => ({
+        name: card.name,
+        publicCode: card.publicCode,
+        dotggCode: card.dotggCode,
+        set: card.set,
+        setCode: card.setCode,
+        tcgplayerId: card.tcgplayerId,
+        cardType: card.cardType
+      }))
+    })
+  });
+
+  const data = await res.json().catch(()=>({}));
+
+  if(!res.ok){
+    showMessage(data.error || data.message || "No se pudo actualizar el catálogo.", true);
+    return;
+  }
+
+  try{
+    const catalogRes = await fetch("/.netlify/functions/catalog?v=" + Date.now());
+    if(catalogRes.ok){
+      const remoteCards = await catalogRes.json();
+      if(Array.isArray(remoteCards) && remoteCards.length){
+        cards = remoteCards;
+      }
+    }
+  }catch(e){}
+
+  render();
+  showMessage(`Catálogo DotGG actualizado: ${data.saved} cartas. Sets: ${Object.entries(data.bySet || {}).map(([k,v])=>`${k}: ${v}`).join(", ")}`);
+}
+
+
 async function syncRiftboundPrices(){
   const pin = document.getElementById("adminPin").value.trim();
   if(!pin){
@@ -212,5 +276,6 @@ searchInput.addEventListener("input", render);
 stockFilter.addEventListener("change", render);
 saveBtn.addEventListener("click", save);
 if(syncPricesBtn) syncPricesBtn.addEventListener("click", syncRiftboundPrices);
+if(syncCatalogBtn) syncCatalogBtn.addEventListener("click", syncDotGGCatalog);
 
 load();
