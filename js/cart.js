@@ -232,7 +232,7 @@
     totalEl.textContent = `$${peso(total)} CLP`;
 
     const message = [
-      "Hola LilStore TCG 👋",
+      "Hola LilStore TCG",
       "",
       "Quiero comprar:",
       "",
