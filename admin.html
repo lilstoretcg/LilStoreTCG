@@ -46,6 +46,24 @@
 
     <section id="message" class="message"></section>
 
+
+    <section class="panel price-sync-panel">
+      <h2>Sincronización de precios</h2>
+      <div class="price-sync-grid">
+        <div>
+          <label>Dólar CLP</label>
+          <input id="dollarInput" type="number" min="1" step="1" value="900">
+        </div>
+        <div>
+          <label>Multiplicador LilStore</label>
+          <input id="marginInput" type="number" min="0" step="0.01" value="1">
+          <small>Ejemplo: 0.95 = 5% más barato que mercado.</small>
+        </div>
+        <button id="syncPricesBtn" type="button">Actualizar precios Riftbound.gg</button>
+      </div>
+      <small>Usa el precio visible de Riftbound.gg / Buy on TCGplayer como Market USD.</small>
+    </section>
+
     <section class="table-panel">
       <table>
         <thead>

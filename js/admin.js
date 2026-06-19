@@ -5,6 +5,7 @@ const rowsEl = document.getElementById("stockRows");
 const searchInput = document.getElementById("searchInput");
 const stockFilter = document.getElementById("stockFilter");
 const saveBtn = document.getElementById("saveBtn");
+const syncPricesBtn = document.getElementById("syncPricesBtn");
 const message = document.getElementById("message");
 
 function keyFor(card){
@@ -154,8 +155,62 @@ async function save(){
   render();
 }
 
+
+async function syncRiftboundPrices(){
+  const pin = document.getElementById("adminPin").value.trim();
+  if(!pin){
+    showMessage("Ingresa el PIN administrador antes de actualizar precios.", true);
+    return;
+  }
+
+  const dollar = Number(document.getElementById("dollarInput")?.value || 900);
+  const margin = Number(document.getElementById("marginInput")?.value || 1);
+
+  showMessage("Actualizando precios desde Riftbound.gg... Esto puede tardar unos segundos.");
+
+  const res = await fetch("/.netlify/functions/sync-riftboundgg-prices", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "x-admin-pin": pin
+    },
+    body: JSON.stringify({
+      cards: cards.map(card => ({
+        name: card.name,
+        publicCode: card.publicCode,
+        set: card.set,
+        setCode: card.setCode,
+        stock: currentStockFor(card),
+        marketPrice: normalizeEntry(card).marketPrice,
+        storePrice: normalizeEntry(card).storePrice
+      })),
+      dollar,
+      margin
+    })
+  });
+
+  const data = await res.json().catch(()=>({}));
+
+  if(!res.ok){
+    showMessage(data.error || data.message || "No se pudieron sincronizar los precios.", true);
+    return;
+  }
+
+  try{
+    const invRes = await fetch("/.netlify/functions/stock");
+    if(invRes.ok){
+      inventory = await invRes.json();
+    }
+  }catch(e){}
+
+  render();
+  showMessage(`Precios actualizados: ${data.updated}. Detectados en Riftbound.gg: ${data.pricesDetected}. Sin precio encontrado: ${data.notFoundCount}.`);
+}
+
+
 searchInput.addEventListener("input", render);
 stockFilter.addEventListener("change", render);
 saveBtn.addEventListener("click", save);
+if(syncPricesBtn) syncPricesBtn.addEventListener("click", syncRiftboundPrices);
 
 load();

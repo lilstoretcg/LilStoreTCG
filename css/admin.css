@@ -165,3 +165,28 @@ td input[data-field="marketPrice"],
 td input[data-field="storePrice"]{
   max-width:120px;
 }
+
+
+/* v6.7 riftbound price sync */
+.price-sync-panel h2{
+  margin:0 0 14px;
+  color:#ffd34d;
+  font-size:20px;
+}
+
+.price-sync-grid{
+  display:grid;
+  grid-template-columns:180px 220px 260px;
+  gap:14px;
+  align-items:end;
+}
+
+.price-sync-grid button{
+  height:44px;
+}
+
+@media(max-width:900px){
+  .price-sync-grid{
+    grid-template-columns:1fr;
+  }
+}
