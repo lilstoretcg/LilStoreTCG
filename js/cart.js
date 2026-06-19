@@ -4,47 +4,89 @@ function keyFor(card){
   return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
 }
 
+function peso(n){
+  return Number(n || 0).toLocaleString("es-CL");
+}
+
 function normalizeCartItem(item){
-  // Compatible with older carts saved as {id, qty}
-  if(item.cardKey){
-    return { cardKey: item.cardKey, qty: Number(item.qty || 1) };
-  }
-
-  if(item.publicCode){
-    return { cardKey: item.publicCode, qty: Number(item.qty || 1) };
-  }
-
-  if(item.dotggCode){
-    return { cardKey: item.dotggCode, qty: Number(item.qty || 1) };
-  }
-
-  return { id: item.id, qty: Number(item.qty || 1) };
+  return {
+    cardKey: item.cardKey || item.publicCode || item.dotggCode || null,
+    legacyId: item.id ?? null,
+    qty: Number(item.qty || 1)
+  };
 }
 
 function saveCart(){
   localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartCount();
 }
 
-async function loadCatalog(){
-  try{
-    const remote = await fetch("/.netlify/functions/catalog");
-    if(remote.ok){
-      const remoteCards = await remote.json();
-      if(Array.isArray(remoteCards) && remoteCards.length){
-        return remoteCards;
-      }
-    }
-  }catch(e){}
+function updateCartCount(){
+  const count = cart.reduce((sum,item)=>sum + Number(item.qty || 0), 0);
+  const el = document.getElementById("cartCount");
+  if(el) el.textContent = count;
+}
 
-  const cardsRes = await fetch("data/cards.json");
-  return await cardsRes.json();
+function ensureCartLayout(){
+  let container = document.getElementById("cartItems") || document.getElementById("cart") || document.getElementById("cartList");
+  let totalEl = document.getElementById("cartTotal") || document.getElementById("total");
+  let whatsappBtn = document.getElementById("whatsappBtn");
+
+  const h1 = [...document.querySelectorAll("h1")].find(x => x.textContent.toLowerCase().includes("carrito"));
+
+  if(!container){
+    container = document.createElement("div");
+    container.id = "cartItems";
+    if(h1) h1.insertAdjacentElement("afterend", container);
+    else document.body.appendChild(container);
+  }
+
+  if(!totalEl){
+    const p = document.createElement("p");
+    p.className = "cart-total-line";
+    p.innerHTML = `Total: <strong id="cartTotal">$0 CLP</strong>`;
+    container.insertAdjacentElement("afterend", p);
+    totalEl = document.getElementById("cartTotal");
+  }
+
+  if(!whatsappBtn){
+    whatsappBtn = document.createElement("a");
+    whatsappBtn.id = "whatsappBtn";
+    whatsappBtn.className = "whatsapp-btn";
+    whatsappBtn.href = "#";
+    whatsappBtn.textContent = "Finalizar por WhatsApp";
+    totalEl.parentElement.insertAdjacentElement("afterend", whatsappBtn);
+  }
+
+  return { container, totalEl, whatsappBtn };
+}
+
+async function loadJson(url){
+  const res = await fetch(url, { cache: "no-store" });
+  if(!res.ok) throw new Error(`No se pudo cargar ${url}`);
+  return await res.json();
+}
+
+async function loadRemoteCatalog(){
+  try{
+    const data = await loadJson("/.netlify/functions/catalog?v=" + Date.now());
+    if(Array.isArray(data) && data.length) return data;
+  }catch(e){}
+  return [];
+}
+
+async function loadLocalCatalog(){
+  try{
+    const data = await loadJson("data/cards.json?v=" + Date.now());
+    if(Array.isArray(data) && data.length) return data;
+  }catch(e){}
+  return [];
 }
 
 async function loadInventory(){
   try{
-    const res = await fetch("/.netlify/functions/stock");
-    if(!res.ok) return {};
-    return await res.json();
+    const data = await loadJson("/.netlify/functions/stock?v=" + Date.now());
+    return data && typeof data === "object" ? data : {};
   }catch(e){
     return {};
   }
@@ -69,7 +111,6 @@ function applyInventory(cards, inventory){
     }
 
     const stockValue = Number(entry.stock ?? card.stock ?? 0);
-
     return {
       ...card,
       stock: stockValue,
@@ -80,26 +121,42 @@ function applyInventory(cards, inventory){
   });
 }
 
-function peso(n){
-  return Number(n || 0).toLocaleString("es-CL");
-}
-
-function findCard(cards, item){
+function findCard(catalogCards, localCards, item){
   const normalized = normalizeCartItem(item);
 
   if(normalized.cardKey){
-    return cards.find(card => keyFor(card) === normalized.cardKey || card.publicCode === normalized.cardKey || card.dotggCode === normalized.cardKey);
+    const byKey = catalogCards.find(card =>
+      keyFor(card) === normalized.cardKey ||
+      card.publicCode === normalized.cardKey ||
+      card.dotggCode === normalized.cardKey
+    );
+    if(byKey) return byKey;
   }
 
-  // Legacy fallback by id, only for carts saved before v7.2.
-  return cards.find(card => Number(card.id) === Number(normalized.id));
+  // Legacy carts saved before DotGG catalog used numeric ids.
+  if(normalized.legacyId !== null && normalized.legacyId !== undefined){
+    const localById = localCards.find(card => Number(card.id) === Number(normalized.legacyId));
+    if(localById){
+      const stableKey = keyFor(localById);
+      return catalogCards.find(card =>
+        keyFor(card) === stableKey ||
+        card.publicCode === localById.publicCode ||
+        card.dotggCode === localById.dotggCode
+      ) || localById;
+    }
+
+    const remoteById = catalogCards.find(card => Number(card.id) === Number(normalized.legacyId));
+    if(remoteById) return remoteById;
+  }
+
+  return null;
 }
 
-function migrateCart(cards){
+function migrateCart(catalogCards, localCards){
   let changed = false;
 
   cart = cart.map(item=>{
-    const card = findCard(cards, item);
+    const card = findCard(catalogCards, localCards, item);
     const qty = Number(item.qty || 1);
 
     if(card){
@@ -113,7 +170,9 @@ function migrateCart(cards){
     return item;
   });
 
-  if(changed) saveCart();
+  if(changed){
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
 }
 
 function removeItem(cardKey){
@@ -129,22 +188,32 @@ function clearCart(){
 }
 
 async function renderCart(){
-  const container = document.getElementById("cartItems") || document.getElementById("cart");
-  const totalEl = document.getElementById("cartTotal") || document.getElementById("total");
-  const whatsappBtn = document.getElementById("whatsappBtn");
+  updateCartCount();
 
-  if(!container) return;
+  const { container, totalEl, whatsappBtn } = ensureCartLayout();
 
-  const rawCards = await loadCatalog();
+  let remoteCards = await loadRemoteCatalog();
+  const localCards = await loadLocalCatalog();
+
+  // Fallback for first deploy or if Blobs catalog is empty.
+  if(!remoteCards.length) remoteCards = localCards;
+
   const inventory = await loadInventory();
-  const cards = applyInventory(rawCards, inventory);
+  const cards = applyInventory(remoteCards, inventory);
+  const localWithInventory = applyInventory(localCards, inventory);
 
-  migrateCart(cards);
+  migrateCart(cards, localWithInventory);
 
   if(!cart.length){
     container.innerHTML = `<div class="cart-empty">Tu carrito está vacío.</div>`;
     if(totalEl) totalEl.textContent = "$0 CLP";
-    if(whatsappBtn) whatsappBtn.href = "#";
+    if(whatsappBtn){
+      whatsappBtn.href = "#";
+      whatsappBtn.onclick = (event) => {
+        event.preventDefault();
+        alert("Tu carrito está vacío.");
+      };
+    }
     return;
   }
 
@@ -153,15 +222,16 @@ async function renderCart(){
 
   container.innerHTML = cart.map(item=>{
     const normalized = normalizeCartItem(item);
-    const card = findCard(cards, item);
+    const card = findCard(cards, localWithInventory, item);
     const qty = Number(normalized.qty || 1);
 
     if(!card){
       return `
         <div class="cart-item missing">
-          <div>
+          <div class="cart-info">
             <strong>Carta no encontrada</strong>
-            <p>Esta carta quedó guardada desde una versión anterior del catálogo.</p>
+            <p>Este producto quedó guardado desde una versión anterior.</p>
+            <p>Clave: ${normalized.cardKey || normalized.legacyId || "sin clave"}</p>
           </div>
           <button onclick="removeItem('${normalized.cardKey || ""}')">❌ Eliminar</button>
         </div>
@@ -196,10 +266,10 @@ async function renderCart(){
       "Hola, quiero hacer este pedido en LilStore TCG:",
       ...lines,
       `Total: ${peso(total)} CLP`
-    ].join("
-");
+    ].join("\n");
 
     const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+
     whatsappBtn.href = url;
     whatsappBtn.target = "_blank";
     whatsappBtn.rel = "noopener noreferrer";
@@ -214,4 +284,4 @@ window.removeItem = removeItem;
 window.clearCart = clearCart;
 window.renderCart = renderCart;
 
-renderCart();
+document.addEventListener("DOMContentLoaded", renderCart);
