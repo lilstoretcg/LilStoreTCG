@@ -285,3 +285,47 @@ footer,
     height:82px;
   }
 }
+
+
+/* v7.3 pagination whatsapp */
+.pagination-controls{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:14px;
+  margin:24px 0 36px;
+  color:#fff;
+  flex-wrap:wrap;
+}
+
+.pagination-controls button{
+  background:#ffb000;
+  color:#000;
+  border:none;
+  border-radius:10px;
+  padding:10px 16px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.pagination-controls button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.whatsapp-btn,
+#whatsappBtn{
+  display:inline-block;
+  background:#25d366;
+  color:#000;
+  padding:12px 16px;
+  border-radius:10px;
+  font-weight:800;
+  text-decoration:none;
+  margin-top:12px;
+}
+
+.cart-total-line{
+  font-size:20px;
+  margin:18px 0 8px;
+}

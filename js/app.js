@@ -1,13 +1,16 @@
 let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
+const PAGE_SIZE = 48;
+let currentPage = 1;
+
 function updateCartCount(){
   const el = document.getElementById('cartCount');
-  if(el) el.textContent = cart.reduce((a,b)=>a+b.qty,0);
+  if(el) el.textContent = cart.reduce((a,b)=>a+Number(b.qty || 0),0);
 }
 updateCartCount();
 
 function keyFor(card){
-  return card.publicCode || `${card.setCode || card.set}-${card.name}`;
+  return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
 }
 
 async function loadCatalog(){
@@ -63,19 +66,35 @@ async function loadCards(){
   });
 }
 
+function ensurePaginationControls(){
+  const catalog = document.getElementById('catalog');
+  if(!catalog) return null;
+
+  let controls = document.getElementById('paginationControls');
+  if(!controls){
+    controls = document.createElement('div');
+    controls.id = 'paginationControls';
+    controls.className = 'pagination-controls';
+    catalog.insertAdjacentElement('afterend', controls);
+  }
+
+  return controls;
+}
+
 loadCards().then(cards=>{
   const catalog=document.getElementById('catalog');
   const search=document.getElementById('search');
   const setFilter=document.getElementById('setFilter');
   const rarity=document.getElementById('rarityFilter');
   const statusFilter=document.getElementById('statusFilter');
+  const paginationControls = ensurePaginationControls();
 
   if(setFilter){
     const current = setFilter.value;
-    setFilter.innerHTML = '<option value="">Todos</option>';
+    setFilter.innerHTML = '<option value="">Todos los Sets</option>';
     [...new Set(cards.map(c=>c.set).filter(Boolean))]
       .sort((a,b)=>{
-        const order = {"Origins":0,"Spiritforged":1,"Unleashed":2,"Proving Grounds":3};
+        const order = {"Origins":0,"Spiritforged":1,"Unleashed":2,"Proving Grounds":3,"ARC":4};
         return (order[a] ?? 99) - (order[b] ?? 99) || a.localeCompare(b);
       })
       .forEach(s=>setFilter.innerHTML += `<option value="${s}">${s}</option>`);
@@ -84,9 +103,9 @@ loadCards().then(cards=>{
 
   function peso(n){ return Number(n||0).toLocaleString('es-CL'); }
 
-  function render(){
+  function filteredCards(){
     const q = search ? search.value.toLowerCase() : '';
-    const filtered = cards.filter(card =>
+    return cards.filter(card =>
       (!setFilter || !setFilter.value || card.set===setFilter.value) &&
       (!rarity || !rarity.value || card.rarity===rarity.value) &&
       (!statusFilter || !statusFilter.value || card.status===statusFilter.value) &&
@@ -96,11 +115,53 @@ loadCards().then(cards=>{
         String(card.dotggCode || '').toLowerCase().includes(q)
       )
     );
+  }
+
+  function renderPagination(totalItems){
+    if(!paginationControls) return;
+
+    const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
+    currentPage = Math.min(Math.max(1, currentPage), totalPages);
+
+    if(totalPages <= 1){
+      paginationControls.innerHTML = '';
+      return;
+    }
+
+    const start = (currentPage - 1) * PAGE_SIZE + 1;
+    const end = Math.min(currentPage * PAGE_SIZE, totalItems);
+
+    paginationControls.innerHTML = `
+      <button id="prevPageBtn" ${currentPage === 1 ? 'disabled' : ''}>← Anterior</button>
+      <span>Página ${currentPage} de ${totalPages} · Mostrando ${start}-${end} de ${totalItems}</span>
+      <button id="nextPageBtn" ${currentPage === totalPages ? 'disabled' : ''}>Siguiente →</button>
+    `;
+
+    document.getElementById('prevPageBtn')?.addEventListener('click', ()=>{
+      currentPage--;
+      render();
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+
+    document.getElementById('nextPageBtn')?.addEventListener('click', ()=>{
+      currentPage++;
+      render();
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  }
+
+  function render(){
+    const filtered = filteredCards();
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    currentPage = Math.min(Math.max(1, currentPage), totalPages);
+
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const pageCards = filtered.slice(startIndex, startIndex + PAGE_SIZE);
 
     if(!catalog) return;
     catalog.innerHTML='';
 
-    filtered.forEach(card=>{
+    pageCards.forEach(card=>{
       const soldout = Number(card.stock || 0) <= 0;
       const statusLabel = soldout ? '<span class="soldout-badge">AGOTADO</span>' : '<span class="available-badge">DISPONIBLE</span>';
       const button = soldout
@@ -109,7 +170,7 @@ loadCards().then(cards=>{
 
       catalog.innerHTML += `
       <div class="card ${soldout ? 'soldout-card' : ''}">
-        <img src="${card.image || 'assets/logo.png'}" alt="${card.name}" onerror="this.src='assets/logo.png'">
+        <img src="${card.image || 'assets/logo.png'}" alt="${card.name}" loading="lazy" onerror="this.src='assets/logo.png'">
         <h3>${card.name}</h3>
         <p><strong>Set:</strong> ${card.set}</p>
         <p><strong>Rareza:</strong> ${card.rarity}</p>
@@ -121,6 +182,8 @@ loadCards().then(cards=>{
         ${button}
       </div>`;
     });
+
+    renderPagination(filtered.length);
   }
 
   window.addToCart=function(id){
@@ -132,7 +195,7 @@ loadCards().then(cards=>{
 
     const cardKey = keyFor(card);
     const existing=cart.find(x=>(x.cardKey || x.publicCode || x.dotggCode || x.id)===cardKey || x.id===id);
-    const currentQty = existing ? existing.qty : 0;
+    const currentQty = existing ? Number(existing.qty || 0) : 0;
 
     if(currentQty >= Number(card.stock || 0)){
       alert('No puedes agregar más unidades que el stock disponible.');
@@ -142,7 +205,7 @@ loadCards().then(cards=>{
     if(existing){
       existing.cardKey = cardKey;
       delete existing.id;
-      existing.qty++;
+      existing.qty = currentQty + 1;
     } else {
       cart.push({cardKey:cardKey,qty:1});
     }
@@ -152,9 +215,14 @@ loadCards().then(cards=>{
     alert('Carta agregada al carrito');
   }
 
-  if(search) search.oninput=render;
-  if(setFilter) setFilter.onchange=render;
-  if(rarity) rarity.onchange=render;
-  if(statusFilter) statusFilter.onchange=render;
+  function resetAndRender(){
+    currentPage = 1;
+    render();
+  }
+
+  if(search) search.oninput=resetAndRender;
+  if(setFilter) setFilter.onchange=resetAndRender;
+  if(rarity) rarity.onchange=resetAndRender;
+  if(statusFilter) statusFilter.onchange=resetAndRender;
   render();
 });

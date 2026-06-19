@@ -196,9 +196,17 @@ async function renderCart(){
       "Hola, quiero hacer este pedido en LilStore TCG:",
       ...lines,
       `Total: ${peso(total)} CLP`
-    ].join("\n");
+    ].join("
+");
 
-    whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    whatsappBtn.href = url;
+    whatsappBtn.target = "_blank";
+    whatsappBtn.rel = "noopener noreferrer";
+    whatsappBtn.onclick = (event) => {
+      event.preventDefault();
+      window.open(url, "_blank", "noopener,noreferrer");
+    };
   }
 }
 
