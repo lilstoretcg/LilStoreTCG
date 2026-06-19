@@ -166,7 +166,7 @@ async function syncRiftboundPrices(){
   const dollar = Number(document.getElementById("dollarInput")?.value || 900);
   const margin = Number(document.getElementById("marginInput")?.value || 1);
 
-  showMessage("Actualizando precios desde Riftbound.gg... Esto puede tardar unos segundos.");
+  showMessage("Actualizando precios desde DotGG... Esto puede tardar unos segundos.");
 
   const res = await fetch("/.netlify/functions/sync-riftboundgg-prices", {
     method:"POST",
@@ -204,7 +204,7 @@ async function syncRiftboundPrices(){
   }catch(e){}
 
   render();
-  showMessage(`Precios actualizados: ${data.updated}. Detectados en Riftbound.gg: ${data.pricesDetected}. Sin precio encontrado: ${data.notFoundCount}.`);
+  showMessage(`Precios actualizados: ${data.updated}. Códigos consultados: ${data.uniqueCodes}. Sin precio encontrado: ${data.notFoundCount}. Fallidos: ${data.failedCount}.`);
 }
 
 
