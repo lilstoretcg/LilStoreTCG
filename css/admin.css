@@ -158,3 +158,10 @@ td input{
     font-size:13px;
   }
 }
+
+
+/* v6.6 price inputs */
+td input[data-field="marketPrice"],
+td input[data-field="storePrice"]{
+  max-width:120px;
+}

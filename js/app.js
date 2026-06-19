@@ -10,7 +10,7 @@ function keyFor(card){
   return card.publicCode || `${card.setCode || card.set}-${card.name}`;
 }
 
-async function loadStock(){
+async function loadInventory(){
   try{
     const res = await fetch('/.netlify/functions/stock');
     if(!res.ok) return {};
@@ -23,22 +23,35 @@ async function loadStock(){
 async function loadCards(){
   const cardsRes = await fetch('data/cards.json');
   const cards = await cardsRes.json();
-  const stock = await loadStock();
+  const inventory = await loadInventory();
 
   return cards.map(card=>{
     const key = keyFor(card);
-    const remote = stock[key];
+    const entry = inventory[key];
 
-    if(remote === undefined){
+    if(entry === undefined){
       return card;
     }
 
-    const stockValue = Number(remote || 0);
+    if(typeof entry === "number"){
+      const stockValue = Number(entry || 0);
+      return {
+        ...card,
+        stock: stockValue,
+        status: stockValue > 0 ? 'available' : 'soldout'
+      };
+    }
+
+    const stockValue = Number(entry.stock ?? card.stock ?? 0);
+    const marketPrice = Number(entry.marketPrice ?? card.marketPrice ?? 0);
+    const storePrice = Number(entry.storePrice ?? card.storePrice ?? 0);
 
     return {
       ...card,
       stock: stockValue,
-      status: stockValue > 0 ? 'available' : 'soldout'
+      status: stockValue > 0 ? 'available' : 'soldout',
+      marketPrice,
+      storePrice
     };
   });
 }

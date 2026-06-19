@@ -1,5 +1,5 @@
 let cards = [];
-let remoteStock = {};
+let inventory = {};
 
 const rowsEl = document.getElementById("stockRows");
 const searchInput = document.getElementById("searchInput");
@@ -11,18 +11,36 @@ function keyFor(card){
   return card.publicCode || `${card.setCode || card.set}-${card.name}`;
 }
 
+function normalizeEntry(card){
+  const key = keyFor(card);
+  const entry = inventory[key];
+
+  // Compatibility with previous version where stored value was only a number.
+  if(typeof entry === "number"){
+    return {
+      stock: entry,
+      marketPrice: Number(card.marketPrice || 0),
+      storePrice: Number(card.storePrice || 0)
+    };
+  }
+
+  return {
+    stock: Number(entry?.stock ?? card.stock ?? 0),
+    marketPrice: Number(entry?.marketPrice ?? card.marketPrice ?? 0),
+    storePrice: Number(entry?.storePrice ?? card.storePrice ?? 0)
+  };
+}
+
 function showMessage(text, isError=false){
   message.textContent = text;
   message.style.color = isError ? "#fecaca" : "#a7f3d0";
 }
 
 function currentStockFor(card){
-  const key = keyFor(card);
-  return Number(remoteStock[key] ?? card.stock ?? 0);
+  return normalizeEntry(card).stock;
 }
 
-function updateStats(filtered){
-  const all = filtered || cards;
+function updateStats(){
   const totalUnits = cards.reduce((sum, card)=>sum + currentStockFor(card), 0);
   const availableCards = cards.filter(card=>currentStockFor(card)>0).length;
   document.getElementById("totalCards").textContent = cards.length;
@@ -50,7 +68,7 @@ function render(){
 
   rowsEl.innerHTML = filtered.map(card=>{
     const key = keyFor(card);
-    const stock = currentStockFor(card);
+    const entry = normalizeEntry(card);
 
     return `
       <tr>
@@ -61,14 +79,14 @@ function render(){
         <td>${card.set}</td>
         <td>${card.rarity}</td>
         <td>${card.publicCode || "-"}</td>
-        <td>
-          <input type="number" min="0" value="${stock}" data-stock-key="${key}">
-        </td>
+        <td><input type="number" min="0" value="${entry.stock}" data-field="stock" data-card-key="${key}"></td>
+        <td><input type="number" min="0" step="0.01" value="${entry.marketPrice}" data-field="marketPrice" data-card-key="${key}"></td>
+        <td><input type="number" min="0" step="1" value="${entry.storePrice}" data-field="storePrice" data-card-key="${key}"></td>
       </tr>
     `;
   }).join("");
 
-  updateStats(filtered);
+  updateStats();
 }
 
 async function load(){
@@ -76,13 +94,13 @@ async function load(){
   cards = await cardsRes.json();
 
   try{
-    const stockRes = await fetch("/.netlify/functions/stock");
-    if(stockRes.ok){
-      remoteStock = await stockRes.json();
+    const invRes = await fetch("/.netlify/functions/stock");
+    if(invRes.ok){
+      inventory = await invRes.json();
     }
   }catch(e){
-    remoteStock = {};
-    showMessage("Modo local: no se pudo leer stock remoto. En Netlify funcionará con Functions.", true);
+    inventory = {};
+    showMessage("Modo local: no se pudo leer inventario remoto. En Netlify funcionará con Functions.", true);
   }
 
   render();
@@ -95,11 +113,25 @@ async function save(){
     return;
   }
 
-  document.querySelectorAll("[data-stock-key]").forEach(input=>{
-    const key = input.dataset.stockKey;
-    const value = Math.max(0, Number(input.value || 0));
-    if(value > 0) remoteStock[key] = value;
-    else delete remoteStock[key];
+  document.querySelectorAll("[data-card-key]").forEach(input=>{
+    const key = input.dataset.cardKey;
+    const field = input.dataset.field;
+    const value = Number(input.value || 0);
+
+    if(typeof inventory[key] === "number"){
+      inventory[key] = { stock: inventory[key] };
+    }
+
+    inventory[key] = inventory[key] || {};
+    inventory[key][field] = field === "marketPrice" ? Math.max(0, Number(value.toFixed(2))) : Math.max(0, Math.round(value));
+  });
+
+  // Remove fully empty entries to keep Blobs clean.
+  Object.keys(inventory).forEach(key=>{
+    const e = inventory[key];
+    if(!e || (Number(e.stock || 0) <= 0 && Number(e.marketPrice || 0) <= 0 && Number(e.storePrice || 0) <= 0)){
+      delete inventory[key];
+    }
   });
 
   const res = await fetch("/.netlify/functions/stock", {
@@ -108,7 +140,7 @@ async function save(){
       "Content-Type":"application/json",
       "x-admin-pin": pin
     },
-    body: JSON.stringify({ stock: remoteStock })
+    body: JSON.stringify({ inventory })
   });
 
   const data = await res.json().catch(()=>({}));
@@ -118,7 +150,7 @@ async function save(){
     return;
   }
 
-  showMessage(`Stock guardado correctamente. Cartas con stock: ${data.updated}`);
+  showMessage(`Inventario guardado correctamente. Cartas editadas: ${data.updated}`);
   render();
 }
 

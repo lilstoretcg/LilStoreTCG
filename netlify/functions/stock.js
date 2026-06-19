@@ -1,7 +1,7 @@
 const { getStore, connectLambda } = require("@netlify/blobs");
 
-const STORE_NAME = "lilstore-stock";
-const STOCK_KEY = "stock";
+const STORE_NAME = "lilstore-inventory";
+const INVENTORY_KEY = "inventory";
 
 function json(statusCode, body) {
   return {
@@ -21,11 +21,10 @@ exports.handler = async (event) => {
 
   try {
     connectLambda(event);
-
     const store = getStore(STORE_NAME);
 
     if (event.httpMethod === "GET") {
-      const current = await store.get(STOCK_KEY, { type: "json" });
+      const current = await store.get(INVENTORY_KEY, { type: "json" });
       return json(200, current || {});
     }
 
@@ -33,13 +32,8 @@ exports.handler = async (event) => {
       const adminPin = process.env.ADMIN_PIN || "";
       const receivedPin = event.headers["x-admin-pin"] || event.headers["X-Admin-Pin"] || "";
 
-      if (!adminPin) {
-        return json(500, { error: "Falta configurar ADMIN_PIN en Netlify." });
-      }
-
-      if (receivedPin !== adminPin) {
-        return json(401, { error: "PIN incorrecto." });
-      }
+      if (!adminPin) return json(500, { error: "Falta configurar ADMIN_PIN en Netlify." });
+      if (receivedPin !== adminPin) return json(401, { error: "PIN incorrecto." });
 
       let payload;
       try {
@@ -48,13 +42,13 @@ exports.handler = async (event) => {
         return json(400, { error: "JSON inválido." });
       }
 
-      const stock = payload.stock || {};
-      await store.setJSON(STOCK_KEY, stock);
+      const inventory = payload.inventory || payload.stock || {};
+      await store.setJSON(INVENTORY_KEY, inventory);
 
       return json(200, {
         ok: true,
-        updated: Object.keys(stock).length,
-        stock
+        updated: Object.keys(inventory).length,
+        inventory
       });
     }
 
