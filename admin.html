@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Stock - LilStore TCG</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <header class="admin-header">
+    <div>
+      <h1>Panel de Stock</h1>
+      <p>LilStore TCG · Actualización en vivo</p>
+    </div>
+    <a href="index.html" class="back-link">Volver a la tienda</a>
+  </header>
+
+  <main class="admin-wrap">
+    <section class="panel">
+      <label>PIN administrador</label>
+      <input id="adminPin" type="password" placeholder="Ingresa tu PIN privado">
+      <small>Este PIN se configura en Netlify como variable privada ADMIN_PIN.</small>
+    </section>
+
+    <section class="panel grid-controls">
+      <div>
+        <label>Buscar carta</label>
+        <input id="searchInput" type="text" placeholder="Buscar por nombre o código">
+      </div>
+      <div>
+        <label>Filtro</label>
+        <select id="stockFilter">
+          <option value="">Todas</option>
+          <option value="available">Con stock</option>
+          <option value="soldout">Sin stock</option>
+        </select>
+      </div>
+      <button id="saveBtn">Guardar stock</button>
+    </section>
+
+    <section class="stats">
+      <div><strong id="totalCards">0</strong><span>Cartas</span></div>
+      <div><strong id="availableCards">0</strong><span>Con stock</span></div>
+      <div><strong id="totalUnits">0</strong><span>Unidades</span></div>
+    </section>
+
+    <section id="message" class="message"></section>
+
+    <section class="table-panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Carta</th>
+            <th>Set</th>
+            <th>Rareza</th>
+            <th>Código</th>
+            <th>Stock</th>
+          </tr>
+        </thead>
+        <tbody id="stockRows"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

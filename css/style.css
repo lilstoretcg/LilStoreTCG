@@ -1,0 +1,229 @@
+body{background:#0a0a0a;color:#fff;font-family:Arial;margin:0}.header{display:flex;justify-content:space-between;padding:16px;background:#151515}.filters{padding:12px;display:flex;gap:10px}#catalog{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;padding:16px}.card{background:#151515;padding:12px;border-radius:12px}.card img{width:100%;height:320px;object-fit:cover}footer{text-align:center;padding:20px}
+
+/* LilStore TCG v4.2 branding */
+:root{
+  --lil-bg:#0a0a0a;
+  --lil-card:#151515;
+  --lil-border:#2a2a2a;
+  --lil-orange:#f59e0b;
+  --lil-text:#ffffff;
+  --lil-muted:#bdbdbd;
+  --lil-danger:#c62828;
+  --lil-whatsapp:#25D366;
+}
+
+body{
+  background:var(--lil-bg);
+  color:var(--lil-text);
+}
+
+.header,
+.cart-page-header{
+  background:var(--lil-bg);
+  border-bottom:1px solid var(--lil-border);
+  padding:14px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+}
+
+.brand-header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  text-decoration:none;
+  color:var(--lil-text);
+}
+
+.site-logo{
+  height:90px;
+  width:90px;
+  object-fit:contain;
+  display:block;
+}
+
+.brand-text h1{
+  margin:0;
+  color:var(--lil-text);
+  font-size:1.7rem;
+  line-height:1.1;
+}
+
+.brand-text span{
+  color:var(--lil-muted);
+  font-size:.95rem;
+}
+
+.card{
+  background:var(--lil-card);
+  border:1px solid var(--lil-border);
+}
+
+.card button,
+.back-btn,
+a[href="index.html"]{
+  background:var(--lil-orange);
+  color:#000;
+  font-weight:700;
+}
+
+.cart-page{
+  background:var(--lil-bg);
+  color:var(--lil-text);
+  font-family:Arial, sans-serif;
+}
+
+#items > div{
+  background:var(--lil-card);
+  border:1px solid var(--lil-border);
+  border-radius:12px;
+  padding:14px;
+  margin:12px 0;
+}
+
+#items button{
+  background:var(--lil-danger);
+  color:white;
+  border:0;
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+#clearCart{
+  background:var(--lil-danger) !important;
+  color:white !important;
+  border:0;
+  padding:10px 14px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+#wa{
+  background:var(--lil-whatsapp);
+  color:#062b13;
+  border:0;
+  padding:10px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+footer{
+  background:var(--lil-bg);
+  color:var(--lil-muted);
+  border-top:1px solid var(--lil-border);
+}
+
+@media(max-width:600px){
+  .site-logo{
+    height:70px;
+    width:70px;
+  }
+  .brand-text h1{
+    font-size:1.25rem;
+  }
+  .brand-text span{
+    font-size:.8rem;
+  }
+}
+
+
+/* LilStore TCG v4.3 - clean black theme and single logo */
+html,
+body,
+.header,
+.cart-page-header,
+.filters,
+main,
+#catalog,
+footer,
+.cart-page {
+  background:#000000 !important;
+}
+
+.header,
+.cart-page-header {
+  border-bottom:1px solid #1f1f1f !important;
+}
+
+.header > img,
+.header > div > img:not(.site-logo) {
+  display:none !important;
+}
+
+.brand-header .site-logo {
+  display:block !important;
+  height:90px !important;
+  width:90px !important;
+  object-fit:contain !important;
+}
+
+.brand-header {
+  display:flex !important;
+  align-items:center !important;
+  gap:14px !important;
+  text-decoration:none !important;
+  color:#ffffff !important;
+}
+
+.brand-text h1 {
+  margin:0 !important;
+  color:#ffffff !important;
+}
+
+.brand-text span {
+  color:#d1d5db !important;
+}
+
+.cart-link {
+  color:#ffffff !important;
+  text-decoration:none !important;
+  font-weight:700 !important;
+}
+
+.filters {
+  border-top:1px solid #111 !important;
+  padding:14px !important;
+}
+
+.card {
+  background:#151515 !important;
+}
+
+
+/* v5.5 catalogo 234 */
+.soldout-card{opacity:.65;filter:grayscale(.25)}
+.soldout-badge,.available-badge{
+  display:inline-block;padding:6px 10px;border-radius:999px;
+  font-size:.75rem;font-weight:700;margin:6px 0;
+}
+.soldout-badge{background:#7f1d1d;color:#fecaca}
+.available-badge{background:#064e3b;color:#a7f3d0}
+.soldout-btn{background:#444!important;color:#aaa!important;cursor:not-allowed!important}
+.filters select,.filters input{margin:4px}
+
+
+/* v6.1 origins clean */
+.soldout-card{opacity:.65;filter:grayscale(.25)}
+.soldout-badge,.available-badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:.75rem;font-weight:700;margin:6px 0}
+.soldout-badge{background:#7f1d1d;color:#fecaca}
+.available-badge{background:#064e3b;color:#a7f3d0}
+.soldout-btn{background:#444!important;color:#aaa!important;cursor:not-allowed!important}
+
+
+/* v6.2 origins full official JSON */
+.soldout-card{opacity:.65;filter:grayscale(.25)}
+.soldout-badge,.available-badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:.75rem;font-weight:700;margin:6px 0}
+.soldout-badge{background:#7f1d1d;color:#fecaca}
+.available-badge{background:#064e3b;color:#a7f3d0}
+.soldout-btn{background:#444!important;color:#aaa!important;cursor:not-allowed!important}
+
+
+/* v6.3 origins full official JSON with Epic */
+.soldout-card{opacity:.65;filter:grayscale(.25)}
+.soldout-badge,.available-badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:.75rem;font-weight:700;margin:6px 0}
+.soldout-badge{background:#7f1d1d;color:#fecaca}
+.available-badge{background:#064e3b;color:#a7f3d0}
+.soldout-btn{background:#444!important;color:#aaa!important;cursor:not-allowed!important}

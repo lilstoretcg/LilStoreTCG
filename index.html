@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LilStore TCG</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="assets/logo.png">
+</head>
+<body>
+<header class="header">
+  <a href="index.html" class="brand-header">
+    <img class="site-logo" src="assets/logo.png" alt="LilStore TCG">
+    <div class="brand-text">
+      <h1>LilStore TCG</h1>
+      <span>Riftbound Singles Chile</span>
+    </div>
+  </a>
+  <a href="cart.html" class="cart-link">🛒 <span id="cartCount">0</span></a>
+</header>
+
+<div class="filters">
+<input id="search" placeholder="Buscar carta">
+<select id="setFilter"><option value="">Todos los Sets</option></select>
+<select id="rarityFilter">
+<option value="">Todas</option>
+<option value="Common">Common</option>
+<option value="Uncommon">Uncommon</option>
+<option value="Rare">Rare</option>
+<option value="Epic">Epic</option>
+<option value="Showcase">Showcase</option>
+</select>
+<select id="statusFilter">
+<option value="">Todas</option>
+<option value="available">Disponibles</option>
+<option value="soldout">Agotadas</option>
+</select>
+</div>
+
+<main id="catalog"></main>
+
+<footer>WhatsApp +56 9 3382 3890 • © LilStore TCG</footer>
+<script src="js/app.js"></script>
+</body>
+</html>
