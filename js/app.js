@@ -35,23 +35,16 @@ async function loadCards(){
 
     if(typeof entry === "number"){
       const stockValue = Number(entry || 0);
-      return {
-        ...card,
-        stock: stockValue,
-        status: stockValue > 0 ? 'available' : 'soldout'
-      };
+      return {...card, stock: stockValue, status: stockValue > 0 ? 'available' : 'soldout'};
     }
 
     const stockValue = Number(entry.stock ?? card.stock ?? 0);
-    const marketPrice = Number(entry.marketPrice ?? card.marketPrice ?? 0);
-    const storePrice = Number(entry.storePrice ?? card.storePrice ?? 0);
-
     return {
       ...card,
       stock: stockValue,
       status: stockValue > 0 ? 'available' : 'soldout',
-      marketPrice,
-      storePrice
+      marketPrice: Number(entry.marketPrice ?? card.marketPrice ?? 0),
+      storePrice: Number(entry.storePrice ?? card.storePrice ?? 0)
     };
   });
 }
@@ -63,8 +56,16 @@ loadCards().then(cards=>{
   const rarity=document.getElementById('rarityFilter');
   const statusFilter=document.getElementById('statusFilter');
 
-  if(setFilter && setFilter.options.length <= 1){
-    ["Origins","Spiritforged","Unleashed"].forEach(s=>setFilter.innerHTML += `<option value="${s}">${s}</option>`);
+  if(setFilter){
+    const current = setFilter.value;
+    setFilter.innerHTML = '<option value="">Todos</option>';
+    [...new Set(cards.map(c=>c.set).filter(Boolean))]
+      .sort((a,b)=>{
+        const order = {"Origins":0,"Spiritforged":1,"Unleashed":2};
+        return (order[a] ?? 99) - (order[b] ?? 99) || a.localeCompare(b);
+      })
+      .forEach(s=>setFilter.innerHTML += `<option value="${s}">${s}</option>`);
+    setFilter.value = current;
   }
 
   function peso(n){ return Number(n||0).toLocaleString('es-CL'); }
@@ -75,7 +76,10 @@ loadCards().then(cards=>{
       (!setFilter || !setFilter.value || card.set===setFilter.value) &&
       (!rarity || !rarity.value || card.rarity===rarity.value) &&
       (!statusFilter || !statusFilter.value || card.status===statusFilter.value) &&
-      card.name.toLowerCase().includes(q)
+      (
+        card.name.toLowerCase().includes(q) ||
+        String(card.publicCode || '').toLowerCase().includes(q)
+      )
     );
 
     if(!catalog) return;
