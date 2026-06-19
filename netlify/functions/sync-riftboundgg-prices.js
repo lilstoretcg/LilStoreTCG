@@ -63,11 +63,22 @@ function findPriceDeep(obj, depth = 0) {
   }
 
   const preferredKeys = [
-    "Normal", "normal",
-    "tcgplayerPrice", "tcgPlayerPrice", "tcgplayer", "tcgPlayer",
-    "marketPrice", "market", "price",
-    "closePrice", "openPrice", "highPrice", "lowPrice"
-  ];
+  "Normal", "normal",
+
+  "Foil", "foil",
+  "Holofoil", "holofoil",
+  "ColdFoil", "coldfoil",
+
+  "tcgplayerPrice", "tcgPlayerPrice",
+  "tcgplayer", "tcgPlayer",
+
+  "marketPrice", "market", "price",
+
+  "closePrice",
+  "openPrice",
+  "highPrice",
+  "lowPrice"
+];
 
   for (const key of preferredKeys) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
