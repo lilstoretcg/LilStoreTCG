@@ -650,4 +650,18 @@ header .brand img{
     font-size:11px;
     padding:2px 7px;
   }
+
+}
+
+.filter-group{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.filter-group label{
+    color:#f5c542;
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:2px;
 }
