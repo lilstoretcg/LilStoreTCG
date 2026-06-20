@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LilStore TCG</title>
-<link rel="stylesheet" href="css/style.css?v=772">
+<link rel="stylesheet" href="css/style.css?v=778">
 <link rel="icon" href="assets/logo.png">
 </head>
 <body>
@@ -19,30 +19,44 @@
   <a class="cart-header-btn" href="cart.html">🛒 <span>Carrito</span> <strong id="cartCount">0</strong></a>
 </header>
 
-<div class="filter-group">
+<div class="filters">
+  <div class="filter-group search-group">
+    <label for="search">Buscar carta</label>
+    <input id="search" type="text" placeholder="Buscar carta">
+  </div>
+
+  <div class="filter-group">
     <label for="setFilter">Set</label>
     <select id="setFilter">
-        <option value="">Todos los Sets</option>
+      <option value="">Todos los Sets</option>
     </select>
-</div>
+  </div>
 
-<div class="filter-group">
+  <div class="filter-group">
     <label for="rarityFilter">Rareza</label>
     <select id="rarityFilter">
-        <option value="">Todas</option>
+      <option value="">Todas</option>
+      <option value="Common">Common</option>
+      <option value="Uncommon">Uncommon</option>
+      <option value="Rare">Rare</option>
+      <option value="Epic">Epic</option>
+      <option value="Showcase">Showcase</option>
     </select>
-</div>
+  </div>
 
-<div class="filter-group">
-    <label for="stockFilter">Stock</label>
-    <select id="stockFilter">
-        <option value="">Todas</option>
+  <div class="filter-group">
+    <label for="statusFilter">Stock</label>
+    <select id="statusFilter">
+      <option value="">Todas</option>
+      <option value="available">Disponible</option>
+      <option value="soldout">Agotado</option>
     </select>
+  </div>
 </div>
 
 <main id="catalog"></main>
 
 <footer>WhatsApp +56 9 3382 3890 • © LilStore TCG</footer>
-<script src="js/app.js?v=772"></script>
+<script src="js/app.js?v=778"></script>
 </body>
 </html>
