@@ -10,30 +10,40 @@ const syncCatalogBtn = document.getElementById("syncCatalogBtn");
 const message = document.getElementById("message");
 
 function keyFor(card){
-  return card.publicCode || `${card.setCode || card.set}-${card.name}`;
+  return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
+}
+
+function supportsFoil(card){
+  return ["common", "uncommon"].includes(String(card.rarity || "").toLowerCase());
 }
 
 function normalizeEntry(card){
   const key = keyFor(card);
   const entry = inventory[key];
 
-  // Compatibility with previous version where stored value was only a number.
   if(typeof entry === "number"){
     return {
-      stock: entry,
+      stock: Number(entry || 0),
+      foilStock: 0,
       marketPrice: Number(card.marketPrice || 0),
-      storePrice: Number(card.storePrice || 0)
+      storePrice: Number(card.storePrice || 0),
+      foilMarketPrice: Number(card.foilMarketPrice || 0),
+      foilStorePrice: Number(card.foilStorePrice || 0)
     };
   }
 
   return {
     stock: Number(entry?.stock ?? card.stock ?? 0),
+    foilStock: Number(entry?.foilStock ?? card.foilStock ?? 0),
     marketPrice: Number(entry?.marketPrice ?? card.marketPrice ?? 0),
-    storePrice: Number(entry?.storePrice ?? card.storePrice ?? 0)
+    storePrice: Number(entry?.storePrice ?? card.storePrice ?? 0),
+    foilMarketPrice: Number(entry?.foilMarketPrice ?? card.foilMarketPrice ?? 0),
+    foilStorePrice: Number(entry?.foilStorePrice ?? card.foilStorePrice ?? 0)
   };
 }
 
 function showMessage(text, isError=false){
+  if(!message) return;
   message.textContent = text;
   message.style.color = isError ? "#fecaca" : "#a7f3d0";
 }
@@ -42,28 +52,37 @@ function currentStockFor(card){
   return normalizeEntry(card).stock;
 }
 
+function currentFoilStockFor(card){
+  return supportsFoil(card) ? normalizeEntry(card).foilStock : 0;
+}
+
 function updateStats(){
-  const totalUnits = cards.reduce((sum, card)=>sum + currentStockFor(card), 0);
-  const availableCards = cards.filter(card=>currentStockFor(card)>0).length;
+  const totalUnits = cards.reduce((sum, card)=>sum + currentStockFor(card) + currentFoilStockFor(card), 0);
+  const availableCards = cards.filter(card=>currentStockFor(card)>0 || currentFoilStockFor(card)>0).length;
+
   document.getElementById("totalCards").textContent = cards.length;
   document.getElementById("availableCards").textContent = availableCards;
   document.getElementById("totalUnits").textContent = totalUnits;
 }
 
 function render(){
-  const q = searchInput.value.toLowerCase();
-  const filter = stockFilter.value;
+  if(!rowsEl) return;
+
+  const q = (searchInput?.value || "").toLowerCase();
+  const filter = stockFilter?.value || "";
 
   const filtered = cards.filter(card=>{
     const stock = currentStockFor(card);
+    const foilStock = currentFoilStockFor(card);
     const matchesText =
-      card.name.toLowerCase().includes(q) ||
-      String(card.publicCode || "").toLowerCase().includes(q);
+      String(card.name || "").toLowerCase().includes(q) ||
+      String(card.publicCode || "").toLowerCase().includes(q) ||
+      String(card.dotggCode || "").toLowerCase().includes(q);
 
     const matchesStock =
       !filter ||
-      (filter === "available" && stock > 0) ||
-      (filter === "soldout" && stock <= 0);
+      (filter === "available" && (stock > 0 || foilStock > 0)) ||
+      (filter === "soldout" && stock <= 0 && foilStock <= 0);
 
     return matchesText && matchesStock;
   });
@@ -73,7 +92,7 @@ function render(){
     const entry = normalizeEntry(card);
     const hasFoil = supportsFoil(card);
     const foilDisabled = hasFoil ? "" : "disabled";
-    const foilPlaceholder = hasFoil ? "" : "No aplica";
+    const foilTitle = hasFoil ? "Stock foil" : "Foil no aplica para esta rareza";
 
     return `
       <tr>
@@ -81,12 +100,15 @@ function render(){
           <div class="card-name">${card.name}</div>
           <div class="card-code">${card.cardType || ""}</div>
         </td>
-        <td>${card.set}</td>
-        <td>${card.rarity}</td>
-        <td>${card.publicCode || "-"}</td>
+        <td>${card.set || ""}</td>
+        <td>${card.rarity || ""}</td>
+        <td>${card.publicCode || card.dotggCode || "-"}</td>
         <td><input type="number" min="0" value="${entry.stock}" data-field="stock" data-card-key="${key}"></td>
+        <td><input type="number" min="0" value="${hasFoil ? entry.foilStock : 0}" data-field="foilStock" data-card-key="${key}" ${foilDisabled} title="${foilTitle}"></td>
         <td><input type="number" min="0" step="0.01" value="${entry.marketPrice}" data-field="marketPrice" data-card-key="${key}"></td>
         <td><input type="number" min="0" step="1" value="${entry.storePrice}" data-field="storePrice" data-card-key="${key}"></td>
+        <td><input type="number" min="0" step="0.01" value="${hasFoil ? entry.foilMarketPrice : 0}" data-field="foilMarketPrice" data-card-key="${key}" ${foilDisabled} title="${foilTitle}"></td>
+        <td><input type="number" min="0" step="1" value="${hasFoil ? entry.foilStorePrice : 0}" data-field="foilStorePrice" data-card-key="${key}" ${foilDisabled} title="${foilTitle}"></td>
       </tr>
     `;
   }).join("");
@@ -95,8 +117,10 @@ function render(){
 }
 
 async function load(){
+  showMessage("Cargando catálogo...");
+
   try{
-    const catalogRes = await fetch("/.netlify/functions/catalog");
+    const catalogRes = await fetch("/.netlify/functions/catalog?v=" + Date.now(), { cache:"no-store" });
     if(catalogRes.ok){
       const remoteCards = await catalogRes.json();
       if(Array.isArray(remoteCards) && remoteCards.length){
@@ -106,12 +130,16 @@ async function load(){
   }catch(e){}
 
   if(!cards.length){
-    const cardsRes = await fetch("data/cards.json");
-    cards = await cardsRes.json();
+    try{
+      const cardsRes = await fetch("data/cards.json?v=" + Date.now(), { cache:"no-store" });
+      cards = await cardsRes.json();
+    }catch(e){
+      cards = [];
+    }
   }
 
   try{
-    const invRes = await fetch("/.netlify/functions/stock");
+    const invRes = await fetch("/.netlify/functions/stock?v=" + Date.now(), { cache:"no-store" });
     if(invRes.ok){
       inventory = await invRes.json();
     }
@@ -121,6 +149,7 @@ async function load(){
   }
 
   render();
+  showMessage(`Catálogo cargado: ${cards.length} cartas.`);
 }
 
 async function save(){
@@ -132,6 +161,7 @@ async function save(){
 
   document.querySelectorAll("[data-card-key]").forEach(input=>{
     if(input.disabled) return;
+
     const key = input.dataset.cardKey;
     const field = input.dataset.field;
     const value = Number(input.value || 0);
@@ -141,13 +171,22 @@ async function save(){
     }
 
     inventory[key] = inventory[key] || {};
-    inventory[key][field] = field === "marketPrice" ? Math.max(0, Number(value.toFixed(2))) : Math.max(0, Math.round(value));
+
+    inventory[key][field] = (field === "marketPrice" || field === "foilMarketPrice")
+      ? Math.max(0, Number(value.toFixed(2)))
+      : Math.max(0, Math.round(value));
   });
 
-  // Remove fully empty entries to keep Blobs clean.
   Object.keys(inventory).forEach(key=>{
     const e = inventory[key];
-    if(!e || (Number(e.stock || 0) <= 0 && Number(e.marketPrice || 0) <= 0 && Number(e.storePrice || 0) <= 0)){
+    if(!e || (
+      Number(e.stock || 0) <= 0 &&
+      Number(e.foilStock || 0) <= 0 &&
+      Number(e.marketPrice || 0) <= 0 &&
+      Number(e.storePrice || 0) <= 0 &&
+      Number(e.foilMarketPrice || 0) <= 0 &&
+      Number(e.foilStorePrice || 0) <= 0
+    )){
       delete inventory[key];
     }
   });
@@ -171,8 +210,6 @@ async function save(){
   showMessage(`Inventario guardado correctamente. Cartas editadas: ${data.updated}`);
   render();
 }
-
-
 
 async function syncDotGGCatalog(){
   const pin = document.getElementById("adminPin").value.trim();
@@ -210,7 +247,7 @@ async function syncDotGGCatalog(){
   }
 
   try{
-    const catalogRes = await fetch("/.netlify/functions/catalog?v=" + Date.now());
+    const catalogRes = await fetch("/.netlify/functions/catalog?v=" + Date.now(), { cache:"no-store" });
     if(catalogRes.ok){
       const remoteCards = await catalogRes.json();
       if(Array.isArray(remoteCards) && remoteCards.length){
@@ -222,7 +259,6 @@ async function syncDotGGCatalog(){
   render();
   showMessage(`Catálogo DotGG actualizado: ${data.saved} cartas. Sets: ${Object.entries(data.bySet || {}).map(([k,v])=>`${k}: ${v}`).join(", ")}`);
 }
-
 
 async function syncRiftboundPrices(){
   const pin = document.getElementById("adminPin").value.trim();
@@ -245,12 +281,17 @@ async function syncRiftboundPrices(){
     body: JSON.stringify({
       cards: cards.map(card => ({
         name: card.name,
-        publicCode: card.publicCode,
+        publicCode: card.publicCode || card.dotggCode,
+        dotggCode: card.dotggCode,
         set: card.set,
         setCode: card.setCode,
+        rarity: card.rarity,
         stock: currentStockFor(card),
+        foilStock: supportsFoil(card) ? currentFoilStockFor(card) : 0,
         marketPrice: normalizeEntry(card).marketPrice,
-        storePrice: normalizeEntry(card).storePrice
+        storePrice: normalizeEntry(card).storePrice,
+        foilMarketPrice: supportsFoil(card) ? normalizeEntry(card).foilMarketPrice : 0,
+        foilStorePrice: supportsFoil(card) ? normalizeEntry(card).foilStorePrice : 0
       })),
       dollar,
       margin
@@ -265,7 +306,7 @@ async function syncRiftboundPrices(){
   }
 
   try{
-    const invRes = await fetch("/.netlify/functions/stock");
+    const invRes = await fetch("/.netlify/functions/stock?v=" + Date.now(), { cache:"no-store" });
     if(invRes.ok){
       inventory = await invRes.json();
     }
@@ -275,10 +316,9 @@ async function syncRiftboundPrices(){
   showMessage(`Precios actualizados: ${data.updated}. Códigos consultados: ${data.uniqueCodes}. Sin precio encontrado: ${data.notFoundCount}. Fallidos: ${data.failedCount}.`);
 }
 
-
-searchInput.addEventListener("input", render);
-stockFilter.addEventListener("change", render);
-saveBtn.addEventListener("click", save);
+searchInput?.addEventListener("input", render);
+stockFilter?.addEventListener("change", render);
+saveBtn?.addEventListener("click", save);
 if(syncPricesBtn) syncPricesBtn.addEventListener("click", syncRiftboundPrices);
 if(syncCatalogBtn) syncCatalogBtn.addEventListener("click", syncDotGGCatalog);
 

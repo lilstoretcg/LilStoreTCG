@@ -215,3 +215,13 @@ td input[data-field="storePrice"]{
   cursor:not-allowed;
   background:#222;
 }
+
+/* v7.7.3 admin foil fix */
+.table-panel{overflow-x:auto}
+.table-panel table{min-width:1180px}
+.table-panel input{max-width:110px}
+.table-panel input:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+  background:#222;
+}
