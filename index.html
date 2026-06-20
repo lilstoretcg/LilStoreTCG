@@ -19,22 +19,25 @@
   <a class="cart-header-btn" href="cart.html">🛒 <span>Carrito</span> <strong id="cartCount">0</strong></a>
 </header>
 
-<div class="filters">
-<input id="search" placeholder="Buscar carta">
-<select id="setFilter"><option value="">Todos los Sets</option></select>
-<select id="rarityFilter">
-<option value="">Todas</option>
-<option value="Common">Common</option>
-<option value="Uncommon">Uncommon</option>
-<option value="Rare">Rare</option>
-<option value="Epic">Epic</option>
-<option value="Showcase">Showcase</option>
-</select>
-<select id="statusFilter">
-<option value="">Todas</option>
-<option value="available">Disponibles</option>
-<option value="soldout">Agotadas</option>
-</select>
+<div class="filter-group">
+    <label for="setFilter">Set</label>
+    <select id="setFilter">
+        <option value="">Todos los Sets</option>
+    </select>
+</div>
+
+<div class="filter-group">
+    <label for="rarityFilter">Rareza</label>
+    <select id="rarityFilter">
+        <option value="">Todas</option>
+    </select>
+</div>
+
+<div class="filter-group">
+    <label for="stockFilter">Stock</label>
+    <select id="stockFilter">
+        <option value="">Todas</option>
+    </select>
 </div>
 
 <main id="catalog"></main>
