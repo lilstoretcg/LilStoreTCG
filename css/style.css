@@ -607,3 +607,47 @@ header .brand img{
 .variant-buttons{display:flex;flex-direction:column;gap:8px;margin-top:10px}
 .variant-buttons button{width:100%}
 .empty-results{color:#fff;padding:30px;font-size:18px}
+
+
+/* v7.7.4 cart variant badge */
+.variant-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-left:6px;
+  padding:3px 8px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.3px;
+  vertical-align:middle;
+}
+
+.variant-badge.normal{
+  background:#374151;
+  color:#fff;
+  border:1px solid #6b7280;
+}
+
+.variant-badge.foil{
+  background:linear-gradient(135deg,#fff7ad,#ffb000,#d946ef,#38bdf8);
+  color:#000;
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:0 0 10px rgba(255,176,0,.35);
+}
+
+.variant-line{
+  color:#ddd;
+}
+
+.cart-item:has(.variant-badge.foil){
+  border-color:#ffb000;
+  box-shadow:0 0 0 1px rgba(255,176,0,.25);
+}
+
+@media(max-width:700px){
+  .variant-badge{
+    font-size:11px;
+    padding:2px 7px;
+  }
+}

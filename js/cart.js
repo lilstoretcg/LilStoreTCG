@@ -220,7 +220,7 @@
           <img src="${card.image || "assets/logo.png"}" alt="${card.name}" onerror="this.src='assets/logo.png'">
           <div class="cart-info">
             <strong>${card.name} x${qty}</strong>
-            <p>${card.set || ""} · ${card.rarity || ""} · ${card.publicCode || card.dotggCode || ""}</p>
+            <p>${card.set || ""} · ${card.rarity || ""} · ${card.publicCode || card.dotggCode || ""}</p>\n            <p class="variant-line">Versión: <strong>${variantLabel}</strong></p>
             <p>Precio unidad: $${peso(unitPrice)} CLP</p>
             <p>Subtotal: $${peso(subtotal)} CLP</p>
           </div>
