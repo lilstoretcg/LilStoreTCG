@@ -23,7 +23,11 @@ function shortCode(publicCode = "") {
 }
 
 function keyFor(card) {
-  return card.publicCode || `${card.setCode || card.set}-${card.name}`;
+  return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
+}
+
+function supportsFoil(card) {
+  return ["common", "uncommon"].includes(String(card.rarity || "").toLowerCase());
 }
 
 function toNumber(value) {

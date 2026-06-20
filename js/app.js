@@ -13,6 +13,10 @@ function keyFor(card){
   return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
 }
 
+function supportsFoil(card){
+  return ["common", "uncommon"].includes(String(card.rarity || "").toLowerCase());
+}
+
 async function loadCatalog(){
   try{
     const remote = await fetch('/.netlify/functions/catalog?v=' + Date.now(), { cache:'no-store' });
@@ -72,7 +76,7 @@ async function loadCards(){
       ...card,
       stock: stockValue,
       foilStock,
-      status: (stockValue > 0 || foilStock > 0) ? 'available' : 'soldout',
+      status: (stockValue > 0 || (supportsFoil(card) && foilStock > 0)) ? 'available' : 'soldout',
       marketPrice: Number(entry.marketPrice ?? card.marketPrice ?? 0),
       storePrice: Number(entry.storePrice ?? card.storePrice ?? 0),
       foilMarketPrice: Number(entry.foilMarketPrice ?? card.foilMarketPrice ?? 0),
@@ -238,8 +242,9 @@ loadCards().then(cards=>{
 
     pageCards.forEach(card=>{
       const normalStock = Number(card.stock || 0);
-      const foilStock = Number(card.foilStock || 0);
-      const soldout = normalStock <= 0 && foilStock <= 0;
+      const hasFoil = supportsFoil(card);
+      const foilStock = hasFoil ? Number(card.foilStock || 0) : 0;
+      const soldout = normalStock <= 0 && (!hasFoil || foilStock <= 0);
       const statusLabel = soldout ? '<span class="soldout-badge">AGOTADO</span>' : '<span class="available-badge">DISPONIBLE</span>';
 
       catalog.innerHTML += `
@@ -249,16 +254,22 @@ loadCards().then(cards=>{
         <p><strong>Set:</strong> ${card.set}</p>
         <p><strong>Rareza:</strong> ${card.rarity}</p>
         <p><strong>N°:</strong> ${card.publicCode || card.dotggCode || '-'}</p>
-        <p><strong>Stock Normal:</strong> ${normalStock}</p>
-        <p><strong>Stock Foil:</strong> ${foilStock}</p>
+        ${hasFoil ? `
+          <p><strong>Stock Normal:</strong> ${normalStock}</p>
+          <p><strong>Stock Foil:</strong> ${foilStock}</p>
+        ` : `
+          <p><strong>Stock:</strong> ${normalStock}</p>
+        `}
         ${statusLabel}
-        <p>Mercado Normal: $${card.marketPrice || 0} USD</p>
-        <p>LilStore Normal: $${peso(card.storePrice)} CLP</p>
-        <p>Mercado Foil: $${card.foilMarketPrice || 0} USD</p>
-        <p>LilStore Foil: $${peso(card.foilStorePrice || card.storePrice)} CLP</p>
+        <p>Mercado: $${card.marketPrice || 0} USD</p>
+        <p>LilStore: $${peso(card.storePrice)} CLP</p>
+        ${hasFoil ? `
+          <p>Mercado Foil: $${card.foilMarketPrice || 0} USD</p>
+          <p>LilStore Foil: $${peso(card.foilStorePrice || card.storePrice)} CLP</p>
+        ` : ``}
         <div class="variant-buttons">
           ${normalButton(card)}
-          ${foilButton(card)}
+          ${hasFoil ? foilButton(card) : ''}
         </div>
       </div>`;
     });
@@ -268,6 +279,11 @@ loadCards().then(cards=>{
 
   window.addToCart=function(id, variant='normal'){
     const card = cards.find(c=>Number(c.id)===Number(id));
+    if(variant === 'foil' && !supportsFoil(card)){
+      alert('Esta carta no tiene versión foil.');
+      return;
+    }
+
     const stock = Number(variant === 'foil' ? card?.foilStock : card?.stock || 0);
 
     if(!card || stock<=0){

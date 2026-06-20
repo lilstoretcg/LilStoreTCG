@@ -71,6 +71,9 @@ function render(){
   rowsEl.innerHTML = filtered.map(card=>{
     const key = keyFor(card);
     const entry = normalizeEntry(card);
+    const hasFoil = supportsFoil(card);
+    const foilDisabled = hasFoil ? "" : "disabled";
+    const foilPlaceholder = hasFoil ? "" : "No aplica";
 
     return `
       <tr>
@@ -128,6 +131,7 @@ async function save(){
   }
 
   document.querySelectorAll("[data-card-key]").forEach(input=>{
+    if(input.disabled) return;
     const key = input.dataset.cardKey;
     const field = input.dataset.field;
     const value = Number(input.value || 0);
