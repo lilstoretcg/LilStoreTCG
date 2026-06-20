@@ -109,6 +109,63 @@ function latestPriceFromHistory(payload) {
   return null;
 }
 
+
+function priceFromCandidates(values) {
+  for (const value of values) {
+    const price = Number(value);
+    if (Number.isFinite(price) && price > 0) return price;
+  }
+  return null;
+}
+
+function latestNormalFoilPrices(payload) {
+  const rows = extractRows(payload);
+  if (!rows.length) return { normalPrice: null, foilPrice: null };
+
+  const sorted = rows
+    .filter(row => row && typeof row === "object")
+    .sort((a, b) => Number(a.date || a.timestamp || a.todate || 0) - Number(b.date || b.timestamp || b.todate || 0));
+
+  let normalPrice = null;
+  let foilPrice = null;
+
+  for (let i = sorted.length - 1; i >= 0; i--) {
+    const row = sorted[i];
+
+    if (!normalPrice) {
+      normalPrice = priceFromCandidates([
+        row.Normal,
+        row.normal,
+        row.closePrice,
+        row.openPrice,
+        row.highPrice,
+        row.lowPrice,
+        row.marketPrice,
+        row.price
+      ]);
+    }
+
+    if (!foilPrice) {
+      foilPrice = priceFromCandidates([
+        row.Foil,
+        row.foil,
+        row.Holofoil,
+        row.holofoil,
+        row.ColdFoil,
+        row.coldfoil,
+        row.foilPrice,
+        row.FoilPrice,
+        row.holoFoilPrice,
+        row.HoloFoilPrice
+      ]);
+    }
+
+    if (normalPrice && foilPrice) break;
+  }
+
+  return { normalPrice, foilPrice };
+}
+
 async function getDotGGPrice(cardId) {
   const url = `${DOTGG_PRICE_URL}?game=riftbound&cardid=${encodeURIComponent(cardId)}&cache=${Date.now()}`;
 
@@ -124,7 +181,8 @@ async function getDotGGPrice(cardId) {
   }
 
   const payload = await response.json();
-  const price = latestPriceFromHistory(payload);
+  const { normalPrice, foilPrice } = latestNormalFoilPrices(payload);
+  const price = normalPrice || foilPrice || null;
 
   if (!price) {
     return {
@@ -135,7 +193,13 @@ async function getDotGGPrice(cardId) {
     };
   }
 
-  return { ok: true, cardId, price };
+  return {
+    ok: true,
+    cardId,
+    price,
+    normalPrice,
+    foilPrice
+  };
 }
 
 async function asyncPool(limit, items, iteratorFn) {
@@ -196,8 +260,15 @@ exports.handler = async (event) => {
     const failed = [];
 
     for (const result of priceResults) {
-      if (result.ok) priceMap[result.cardId] = result.price;
-      else failed.push(result);
+      if (result.ok) {
+        priceMap[result.cardId] = {
+          price: result.price,
+          normalPrice: result.normalPrice,
+          foilPrice: result.foilPrice
+        };
+      } else {
+        failed.push(result);
+      }
     }
 
     const store = getStore(STORE_NAME);
@@ -208,7 +279,8 @@ exports.handler = async (event) => {
     const notFound = [];
 
     for (const card of cardsWithCodes) {
-      const price = priceMap[card.dotggId];
+      const priceData = priceMap[card.dotggId];
+      const price = priceData?.price;
 
       if (!price) {
         notFound.push({
@@ -227,8 +299,19 @@ exports.handler = async (event) => {
 
       inventory[key] = inventory[key] || {};
       inventory[key].stock = Number(inventory[key].stock ?? card.stock ?? 0);
-      inventory[key].marketPrice = Number(price.toFixed(2));
-      inventory[key].storePrice = Math.round(price * dollar * margin);
+
+      if (supportsFoil(card)) {
+        inventory[key].foilStock = Number(inventory[key].foilStock ?? card.foilStock ?? 0);
+      }
+
+      const normalPrice = priceData.normalPrice || price;
+      inventory[key].marketPrice = Number(normalPrice.toFixed(2));
+      inventory[key].storePrice = Math.round(normalPrice * dollar * margin);
+
+      if (supportsFoil(card) && priceData.foilPrice) {
+        inventory[key].foilMarketPrice = Number(priceData.foilPrice.toFixed(2));
+        inventory[key].foilStorePrice = Math.round(priceData.foilPrice * dollar * margin);
+      }
 
       updated++;
     }
