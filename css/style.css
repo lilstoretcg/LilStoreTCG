@@ -609,7 +609,7 @@ header .brand img{
 .empty-results{color:#fff;padding:30px;font-size:18px}
 
 
-/* v7.7.4 cart variant badge */
+/* v7.7.5 cart variant render fix */
 .variant-badge{
   display:inline-flex;
   align-items:center;
@@ -640,8 +640,8 @@ header .brand img{
   color:#ddd;
 }
 
-.cart-item:has(.variant-badge.foil){
-  border-color:#ffb000;
+.cart-item-foil{
+  border-color:#ffb000 !important;
   box-shadow:0 0 0 1px rgba(255,176,0,.25);
 }
 

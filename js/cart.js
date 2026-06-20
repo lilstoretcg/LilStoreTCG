@@ -23,6 +23,7 @@
     return {
       cardKey: item.cardKey || item.publicCode || item.dotggCode || null,
       legacyId: item.id ?? null,
+      variant: item.variant || "normal",
       qty: Number(item.qty || 1)
     };
   }
@@ -102,16 +103,20 @@
 
       if(typeof entry === "number"){
         const stockValue = Number(entry || 0);
-        return {...card, stock: stockValue, status: stockValue > 0 ? "available" : "soldout"};
+        return {...card, stock: stockValue, foilStock:0, status: stockValue > 0 ? "available" : "soldout"};
       }
 
       const stockValue = Number(entry.stock ?? card.stock ?? 0);
+      const foilStock = Number(entry.foilStock ?? card.foilStock ?? 0);
       return {
         ...card,
         stock: stockValue,
-        status: stockValue > 0 ? "available" : "soldout",
+        foilStock,
+        status: (stockValue > 0 || foilStock > 0) ? "available" : "soldout",
         marketPrice: Number(entry.marketPrice ?? card.marketPrice ?? 0),
-        storePrice: Number(entry.storePrice ?? card.storePrice ?? 0)
+        storePrice: Number(entry.storePrice ?? card.storePrice ?? 0),
+        foilMarketPrice: Number(entry.foilMarketPrice ?? card.foilMarketPrice ?? 0),
+        foilStorePrice: Number(entry.foilStorePrice ?? card.foilStorePrice ?? 0)
       };
     });
   }
@@ -150,14 +155,15 @@
 
     cart = cart.map(item=>{
       const card = findCard(catalogCards, localCards, item);
+      const normalized = normalizeCartItem(item);
       const qty = Number(item.qty || 1);
 
       if(card){
         const stableKey = keyFor(card);
-        if(item.cardKey !== stableKey || item.id !== undefined){
+        if(item.cardKey !== stableKey || item.id !== undefined || !item.variant){
           changed = true;
         }
-        return {cardKey: stableKey, qty};
+        return {cardKey: stableKey, variant: normalized.variant, qty};
       }
 
       return item;
@@ -203,28 +209,31 @@
               <strong>Carta no encontrada</strong>
               <p>Clave: ${normalized.cardKey || normalized.legacyId || "sin clave"}</p>
             </div>
-            <button onclick="removeCartItem('${normalized.cardKey || normalized.legacyId || ""}')">❌ Eliminar</button>
+            <button onclick="removeCartItem('${normalized.cardKey || normalized.legacyId || ""}', '${normalized.variant}')">❌ Eliminar</button>
           </div>
         `;
       }
 
       const cardKey = keyFor(card);
-      const unitPrice = Number(card.storePrice || 0);
+      const isFoil = normalized.variant === "foil";
+      const variantLabel = isFoil ? "Foil" : "Normal";
+      const unitPrice = Number(isFoil ? (card.foilStorePrice || card.storePrice) : card.storePrice || 0);
       const subtotal = unitPrice * qty;
       total += subtotal;
 
-      lines.push(`• ${card.name} x${qty}\n  ${card.publicCode || card.dotggCode || ""}\n  $${peso(subtotal)} CLP`);
+      lines.push(`• ${card.name} (${variantLabel}) x${qty}\n  ${card.publicCode || card.dotggCode || ""}\n  $${peso(subtotal)} CLP`);
 
       return `
-        <div class="cart-item">
+        <div class="cart-item ${isFoil ? "cart-item-foil" : "cart-item-normal"}">
           <img src="${card.image || "assets/logo.png"}" alt="${card.name}" onerror="this.src='assets/logo.png'">
           <div class="cart-info">
-            <strong>${card.name} x${qty}</strong>
-            <p>${card.set || ""} · ${card.rarity || ""} · ${card.publicCode || card.dotggCode || ""}</p>\n            <p class="variant-line">Versión: <strong>${variantLabel}</strong></p>
+            <strong>${card.name} <span class="variant-badge ${isFoil ? "foil" : "normal"}">${variantLabel}</span> x${qty}</strong>
+            <p>${card.set || ""} · ${card.rarity || ""} · ${card.publicCode || card.dotggCode || ""}</p>
+            <p class="variant-line">Versión: <strong>${variantLabel}</strong></p>
             <p>Precio unidad: $${peso(unitPrice)} CLP</p>
             <p>Subtotal: $${peso(subtotal)} CLP</p>
           </div>
-          <button onclick="removeCartItem('${cardKey}')">❌ Eliminar</button>
+          <button onclick="removeCartItem('${cardKey}', '${normalized.variant}')">❌ Eliminar</button>
         </div>
       `;
     }).join("");
@@ -232,9 +241,7 @@
     totalEl.textContent = `$${peso(total)} CLP`;
 
     const message = [
-      "Hola LilStore TCG 👋",
-      "",
-      "Quiero comprar:",
+      "Pedido LilStore TCG",
       "",
       ...lines,
       "",
@@ -251,10 +258,10 @@
     };
   }
 
-  window.removeCartItem = function(key){
+  window.removeCartItem = function(key, variant="normal"){
     cart = cart.filter(item => {
       const normalized = normalizeCartItem(item);
-      return normalized.cardKey !== key && String(normalized.legacyId) !== String(key);
+      return !((normalized.cardKey === key || String(normalized.legacyId) === String(key)) && normalized.variant === variant);
     });
     saveCart();
     renderCart();
