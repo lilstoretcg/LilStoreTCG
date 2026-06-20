@@ -57,16 +57,19 @@ async function loadCards(){
 
     if(typeof entry === "number"){
       const stockValue = Number(entry || 0);
-      return {...card, stock: stockValue, status: stockValue > 0 ? 'available' : 'soldout'};
+      return {...card, stock: stockValue, foilStock:0, status: stockValue > 0 ? 'available' : 'soldout'};
     }
 
     const stockValue = Number(entry.stock ?? card.stock ?? 0);
     return {
       ...card,
       stock: stockValue,
-      status: stockValue > 0 ? 'available' : 'soldout',
+      status: (stockValue > 0 || foilStock > 0) ? 'available' : 'soldout',
       marketPrice: Number(entry.marketPrice ?? card.marketPrice ?? 0),
-      storePrice: Number(entry.storePrice ?? card.storePrice ?? 0)
+      storePrice: Number(entry.storePrice ?? card.storePrice ?? 0),
+      foilStock,
+      foilMarketPrice: Number(entry.foilMarketPrice ?? card.foilMarketPrice ?? 0),
+      foilStorePrice: Number(entry.foilStorePrice ?? card.foilStorePrice ?? 0)
     };
   });
 }
@@ -231,11 +234,13 @@ loadCards().then(cards=>{
     catalog.innerHTML='';
 
     pageCards.forEach(card=>{
-      const soldout = Number(card.stock || 0) <= 0;
+      const soldout = Number(card.stock || 0) <= 0 && Number(card.foilStock || 0) <= 0;
       const statusLabel = soldout ? '<span class="soldout-badge">AGOTADO</span>' : '<span class="available-badge">DISPONIBLE</span>';
-      const button = soldout
-        ? `<button class="soldout-btn" disabled>Agotado</button>`
-        : `<button onclick="addToCart(${card.id})">Agregar al carrito</button>`;
+      const button = `
+        <div class="variant-buttons">
+          ${Number(card.stock || 0) > 0 ? `<button onclick="addToCart(${card.id}, 'normal')">Agregar Normal · $${peso(card.storePrice)}</button>` : `<button class="soldout-btn" disabled>Normal agotado</button>`}
+          ${Number(card.foilStock || 0) > 0 ? `<button onclick="addToCart(${card.id}, 'foil')">Agregar Foil · $${peso(card.foilStorePrice || card.storePrice)}</button>` : `<button class="soldout-btn" disabled>Foil agotado</button>`}
+        </div>`;
 
       catalog.innerHTML += `
       <div class="card ${soldout ? 'soldout-card' : ''}">
@@ -244,7 +249,7 @@ loadCards().then(cards=>{
         <p><strong>Set:</strong> ${card.set}</p>
         <p><strong>Rareza:</strong> ${card.rarity}</p>
         <p><strong>N°:</strong> ${card.publicCode || card.dotggCode || '-'}</p>
-        <p><strong>Stock:</strong> ${card.stock || 0}</p>
+        <p><strong>Stock Normal:</strong> ${card.stock || 0}</p>\n        <p><strong>Stock Foil:</strong> ${card.foilStock || 0}</p>
         ${statusLabel}
         <p>Mercado: $${card.marketPrice || 0} USD</p>
         <p>LilStore: $${peso(card.storePrice)} CLP</p>
@@ -257,18 +262,19 @@ loadCards().then(cards=>{
 
   window.__renderCatalog = render;
 
-  window.addToCart=function(id){
+  window.addToCart=function(id, variant='normal'){
     const card = cards.find(c=>c.id===id);
-    if(!card || Number(card.stock||0)<=0){
-      alert('Esta carta está agotada.');
+    const stock = Number(variant === 'foil' ? card?.foilStock : card?.stock || 0);
+    if(!card || stock<=0){
+      alert(`Esta versión ${variant === 'foil' ? 'foil' : 'normal'} está agotada.`);
       return;
     }
 
     const cardKey = keyFor(card);
-    const existing=cart.find(x=>(x.cardKey || x.publicCode || x.dotggCode || x.id)===cardKey || x.id===id);
+    const existing=cart.find(x=>(x.cardKey || x.publicCode || x.dotggCode || x.id)===cardKey && (x.variant || 'normal')===variant);
     const currentQty = existing ? Number(existing.qty || 0) : 0;
 
-    if(currentQty >= Number(card.stock || 0)){
+    if(currentQty >= stock){
       alert('No puedes agregar más unidades que el stock disponible.');
       return;
     }
@@ -276,14 +282,15 @@ loadCards().then(cards=>{
     if(existing){
       existing.cardKey = cardKey;
       delete existing.id;
+      existing.variant = variant;
       existing.qty = currentQty + 1;
     } else {
-      cart.push({cardKey:cardKey,qty:1});
+      cart.push({cardKey:cardKey, variant, qty:1});
     }
 
     localStorage.setItem('cart',JSON.stringify(cart));
     updateCartCount();
-    alert('Carta agregada al carrito');
+    alert(`Carta ${variant === 'foil' ? 'foil' : 'normal'} agregada al carrito`);
   }
 
   function resetAndRender(){

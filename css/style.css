@@ -602,3 +602,6 @@ header .brand img{
     height:82px;
   }
 }
+
+/* v7.7 foil stock */
+.variant-buttons{display:flex;flex-direction:column;gap:8px;margin-top:10px}.variant-buttons button{width:100%}

@@ -10,26 +10,24 @@ const syncCatalogBtn = document.getElementById("syncCatalogBtn");
 const message = document.getElementById("message");
 
 function keyFor(card){
-  return card.publicCode || `${card.setCode || card.set}-${card.name}`;
+  return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
 }
 
 function normalizeEntry(card){
   const key = keyFor(card);
   const entry = inventory[key];
 
-  // Compatibility with previous version where stored value was only a number.
   if(typeof entry === "number"){
-    return {
-      stock: entry,
-      marketPrice: Number(card.marketPrice || 0),
-      storePrice: Number(card.storePrice || 0)
-    };
+    return { stock: entry, foilStock: 0, marketPrice: Number(card.marketPrice || 0), storePrice: Number(card.storePrice || 0), foilMarketPrice: Number(card.foilMarketPrice || 0), foilStorePrice: Number(card.foilStorePrice || 0) };
   }
 
   return {
     stock: Number(entry?.stock ?? card.stock ?? 0),
+    foilStock: Number(entry?.foilStock ?? card.foilStock ?? 0),
     marketPrice: Number(entry?.marketPrice ?? card.marketPrice ?? 0),
-    storePrice: Number(entry?.storePrice ?? card.storePrice ?? 0)
+    storePrice: Number(entry?.storePrice ?? card.storePrice ?? 0),
+    foilMarketPrice: Number(entry?.foilMarketPrice ?? card.foilMarketPrice ?? 0),
+    foilStorePrice: Number(entry?.foilStorePrice ?? card.foilStorePrice ?? 0)
   };
 }
 
@@ -42,9 +40,13 @@ function currentStockFor(card){
   return normalizeEntry(card).stock;
 }
 
+function currentFoilStockFor(card){
+  return normalizeEntry(card).foilStock;
+}
+
 function updateStats(){
-  const totalUnits = cards.reduce((sum, card)=>sum + currentStockFor(card), 0);
-  const availableCards = cards.filter(card=>currentStockFor(card)>0).length;
+  const totalUnits = cards.reduce((sum, card)=>sum + currentStockFor(card) + currentFoilStockFor(card), 0);
+  const availableCards = cards.filter(card=>currentStockFor(card)>0 || currentFoilStockFor(card)>0).length;
   document.getElementById("totalCards").textContent = cards.length;
   document.getElementById("availableCards").textContent = availableCards;
   document.getElementById("totalUnits").textContent = totalUnits;
@@ -82,8 +84,11 @@ function render(){
         <td>${card.rarity}</td>
         <td>${card.publicCode || "-"}</td>
         <td><input type="number" min="0" value="${entry.stock}" data-field="stock" data-card-key="${key}"></td>
+        <td><input type="number" min="0" value="${entry.foilStock}" data-field="foilStock" data-card-key="${key}"></td>
         <td><input type="number" min="0" step="0.01" value="${entry.marketPrice}" data-field="marketPrice" data-card-key="${key}"></td>
         <td><input type="number" min="0" step="1" value="${entry.storePrice}" data-field="storePrice" data-card-key="${key}"></td>
+        <td><input type="number" min="0" step="0.01" value="${entry.foilMarketPrice}" data-field="foilMarketPrice" data-card-key="${key}"></td>
+        <td><input type="number" min="0" step="1" value="${entry.foilStorePrice}" data-field="foilStorePrice" data-card-key="${key}"></td>
       </tr>
     `;
   }).join("");
@@ -137,13 +142,13 @@ async function save(){
     }
 
     inventory[key] = inventory[key] || {};
-    inventory[key][field] = field === "marketPrice" ? Math.max(0, Number(value.toFixed(2))) : Math.max(0, Math.round(value));
+    inventory[key][field] = (field === "marketPrice" || field === "foilMarketPrice") ? Math.max(0, Number(value.toFixed(2))) : Math.max(0, Math.round(value));
   });
 
   // Remove fully empty entries to keep Blobs clean.
   Object.keys(inventory).forEach(key=>{
     const e = inventory[key];
-    if(!e || (Number(e.stock || 0) <= 0 && Number(e.marketPrice || 0) <= 0 && Number(e.storePrice || 0) <= 0)){
+    if(!e || (Number(e.stock || 0) <= 0 && Number(e.foilStock || 0) <= 0 && Number(e.marketPrice || 0) <= 0 && Number(e.storePrice || 0) <= 0 && Number(e.foilMarketPrice || 0) <= 0 && Number(e.foilStorePrice || 0) <= 0)){
       delete inventory[key];
     }
   });
@@ -245,8 +250,11 @@ async function syncRiftboundPrices(){
         set: card.set,
         setCode: card.setCode,
         stock: currentStockFor(card),
+        foilStock: currentFoilStockFor(card),
         marketPrice: normalizeEntry(card).marketPrice,
-        storePrice: normalizeEntry(card).storePrice
+        storePrice: normalizeEntry(card).storePrice,
+        foilMarketPrice: normalizeEntry(card).foilMarketPrice,
+        foilStorePrice: normalizeEntry(card).foilStorePrice
       })),
       dollar,
       margin
