@@ -120,48 +120,7 @@ async function getDotGGPrice(cardId) {
   }
 
   const payload = await response.json();
-  const rows = extractRows(payload);
-  let normalPrice = null;
-  let foilPrice = null;
-
-  const normalized = rows
-    .filter(row => row && typeof row === "object")
-    .sort((a, b) => Number(a.date || a.timestamp || a.todate || 0) - Number(b.date || b.timestamp || b.todate || 0));
-
-  for (let i = normalized.length - 1; i >= 0; i--) {
-    const row = normalized[i];
-
-    if (!normalPrice) {
-      normalPrice = findPriceDeep({
-        Normal: row.Normal,
-        normal: row.normal,
-        tcgplayerPrice: row.tcgplayerPrice,
-        tcgPlayerPrice: row.tcgPlayerPrice,
-        marketPrice: row.marketPrice,
-        market: row.market,
-        price: row.price,
-        closePrice: row.closePrice,
-        openPrice: row.openPrice,
-        highPrice: row.highPrice,
-        lowPrice: row.lowPrice
-      });
-    }
-
-    if (!foilPrice) {
-      foilPrice = findPriceDeep({
-        Foil: row.Foil,
-        foil: row.foil,
-        Holofoil: row.Holofoil,
-        holofoil: row.holofoil,
-        ColdFoil: row.ColdFoil,
-        coldfoil: row.coldfoil
-      });
-    }
-
-    if (normalPrice && foilPrice) break;
-  }
-
-  const price = normalPrice || foilPrice || null;
+  const price = latestPriceFromHistory(payload);
 
   if (!price) {
     return {
@@ -172,7 +131,7 @@ async function getDotGGPrice(cardId) {
     };
   }
 
-  return { ok: true, cardId, price, normalPrice, foilPrice };
+  return { ok: true, cardId, price };
 }
 
 async function asyncPool(limit, items, iteratorFn) {
@@ -233,15 +192,8 @@ exports.handler = async (event) => {
     const failed = [];
 
     for (const result of priceResults) {
-      if (result.ok) {
-        priceMap[result.cardId] = {
-          price: result.price,
-          normalPrice: result.normalPrice,
-          foilPrice: result.foilPrice
-        };
-      } else {
-        failed.push(result);
-      }
+      if (result.ok) priceMap[result.cardId] = result.price;
+      else failed.push(result);
     }
 
     const store = getStore(STORE_NAME);
@@ -252,8 +204,7 @@ exports.handler = async (event) => {
     const notFound = [];
 
     for (const card of cardsWithCodes) {
-      const priceData = priceMap[card.dotggId];
-      const price = priceData?.price;
+      const price = priceMap[card.dotggId];
 
       if (!price) {
         notFound.push({
@@ -272,20 +223,8 @@ exports.handler = async (event) => {
 
       inventory[key] = inventory[key] || {};
       inventory[key].stock = Number(inventory[key].stock ?? card.stock ?? 0);
-      inventory[key].foilStock = Number(inventory[key].foilStock ?? card.foilStock ?? 0);
-
-      if (priceData.normalPrice) {
-        inventory[key].marketPrice = Number(priceData.normalPrice.toFixed(2));
-        inventory[key].storePrice = Math.round(priceData.normalPrice * dollar * margin);
-      } else {
-        inventory[key].marketPrice = Number(price.toFixed(2));
-        inventory[key].storePrice = Math.round(price * dollar * margin);
-      }
-
-      if (priceData.foilPrice) {
-        inventory[key].foilMarketPrice = Number(priceData.foilPrice.toFixed(2));
-        inventory[key].foilStorePrice = Math.round(priceData.foilPrice * dollar * margin);
-      }
+      inventory[key].marketPrice = Number(price.toFixed(2));
+      inventory[key].storePrice = Math.round(price * dollar * margin);
 
       updated++;
     }

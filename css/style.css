@@ -603,5 +603,7 @@ header .brand img{
   }
 }
 
-/* v7.7 foil stock */
-.variant-buttons{display:flex;flex-direction:column;gap:8px;margin-top:10px}.variant-buttons button{width:100%}
+/* v7.7.1 catalog fix */
+.variant-buttons{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.variant-buttons button{width:100%}
+.empty-results{color:#fff;padding:30px;font-size:18px}
