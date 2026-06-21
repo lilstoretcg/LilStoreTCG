@@ -6,7 +6,7 @@ let currentPage = 1;
 function updateCartCount(){
   const count = cart.reduce((a,b)=>a + Number(b.qty || 0), 0);
   document.querySelectorAll('#cartCount, #cartLabelCount').forEach(el => el.textContent = count);
-  if(document.getElementById('miniCartDrawer')) renderMiniCart?.();
+  if(window.__miniCartReady && typeof renderMiniCart === 'function') renderMiniCart();
 }
 updateCartCount();
 
@@ -122,7 +122,178 @@ function pageNumbers(current, total){
   return result;
 }
 
+
+function miniCartElements(){
+  return {
+    drawer: document.getElementById('miniCartDrawer'),
+    overlay: document.getElementById('miniCartOverlay'),
+    closeBtn: document.getElementById('miniCartClose'),
+    items: document.getElementById('miniCartItems'),
+    summary: document.getElementById('miniCartSummary'),
+    total: document.getElementById('miniCartTotal'),
+    whatsapp: document.getElementById('miniCartWhatsappBtn'),
+    clearBtn: document.getElementById('miniCartClearBtn')
+  };
+}
+
+function openMiniCart(){
+  const {drawer, overlay} = miniCartElements();
+  if(!drawer || !overlay) return;
+  renderMiniCart();
+  drawer.classList.add('open');
+  overlay.classList.add('open');
+  drawer.setAttribute('aria-hidden', 'false');
+  overlay.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('mini-cart-open');
+}
+
+function closeMiniCart(){
+  const {drawer, overlay} = miniCartElements();
+  if(!drawer || !overlay) return;
+  drawer.classList.remove('open');
+  overlay.classList.remove('open');
+  drawer.setAttribute('aria-hidden', 'true');
+  overlay.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('mini-cart-open');
+}
+
+function miniCartCardForKey(cardKey){
+  return (window.__lilstoreCards || []).find(c => keyFor(c) === cardKey);
+}
+
+function miniCartItemCard(card, item){
+  const variant = item.variant || 'normal';
+  const isFoil = variant === 'foil';
+  const qty = Number(item.qty || 1);
+  const price = Number(isFoil ? (card.foilStorePrice || card.storePrice || 0) : (card.storePrice || 0));
+  const subtotal = price * qty;
+
+  return `
+    <div class="mini-cart-item ${isFoil ? 'foil' : 'normal'}">
+      <img src="${card.image || 'assets/logo.png'}" alt="${card.name}" onerror="this.src='assets/logo.png'">
+      <div class="mini-cart-info">
+        <strong>${card.name}</strong>
+        <span>${card.publicCode || card.dotggCode || ''}</span>
+        <em class="${isFoil ? 'foil' : 'normal'}">${isFoil ? 'Foil' : 'Normal'}</em>
+        <div class="mini-cart-qty">
+          <button type="button" onclick="miniCartChangeQty('${item.cardKey}', '${variant}', -1)">−</button>
+          <span>${qty}</span>
+          <button type="button" onclick="miniCartChangeQty('${item.cardKey}', '${variant}', 1)">+</button>
+        </div>
+      </div>
+      <div class="mini-cart-price">
+        <button type="button" onclick="miniCartRemoveItem('${item.cardKey}', '${variant}')">×</button>
+        <strong>$${peso(subtotal)} CLP</strong>
+      </div>
+    </div>
+  `;
+}
+
+function renderMiniCart(){
+  const {items, summary, total, whatsapp} = miniCartElements();
+  if(!items) return;
+
+  cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+  const totalQty = cart.reduce((sum, item)=>sum + Number(item.qty || 0), 0);
+  let totalValue = 0;
+  const whatsappLines = [];
+
+  if(summary){
+    summary.textContent = `${totalQty} ${totalQty === 1 ? 'producto' : 'productos'} en tu carrito`;
+  }
+
+  if(!cart.length){
+    items.innerHTML = '<p class="mini-cart-empty">Tu carrito está vacío.</p>';
+    if(total) total.textContent = '$0 CLP';
+    if(whatsapp) {
+      whatsapp.href = '#';
+      whatsapp.onclick = (event)=>{ event.preventDefault(); alert('Tu carrito está vacío.'); };
+    }
+    return;
+  }
+
+  const html = cart.map(item=>{
+    const card = miniCartCardForKey(item.cardKey || item.publicCode || item.dotggCode || item.id);
+    if(!card) return '';
+    const variant = item.variant || 'normal';
+    const qty = Number(item.qty || 1);
+    const isFoil = variant === 'foil';
+    const price = Number(isFoil ? (card.foilStorePrice || card.storePrice || 0) : (card.storePrice || 0));
+    const subtotal = price * qty;
+
+    totalValue += subtotal;
+    whatsappLines.push(`• ${card.name} (${isFoil ? 'Foil' : 'Normal'}) x${qty}\n  ${card.publicCode || card.dotggCode || ''}\n  $${peso(subtotal)} CLP`);
+
+    return miniCartItemCard(card, {
+      ...item,
+      cardKey: keyFor(card),
+      variant
+    });
+  }).join('');
+
+  items.innerHTML = html || '<p class="mini-cart-empty">Tu carrito está vacío.</p>';
+  if(total) total.textContent = `$${peso(totalValue)} CLP`;
+
+  if(whatsapp){
+    const message = ['Pedido LilStore TCG', '', ...whatsappLines, '', `Total: $${peso(totalValue)} CLP`].join('\n');
+    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    whatsapp.href = url;
+    whatsapp.onclick = (event)=>{ event.preventDefault(); window.open(url, '_blank', 'noopener,noreferrer'); };
+  }
+}
+
+function bindMiniCartButtons(){
+  const {overlay, closeBtn, clearBtn} = miniCartElements();
+  overlay?.addEventListener('click', closeMiniCart);
+  closeBtn?.addEventListener('click', closeMiniCart);
+
+  clearBtn?.addEventListener('click', ()=>{
+    if(!cart.length) return;
+    if(!confirm('¿Vaciar carrito?')) return;
+    cart = [];
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    renderMiniCart();
+  });
+
+  document.addEventListener('keydown', (event)=>{
+    if(event.key === 'Escape') closeMiniCart();
+  });
+
+  document.querySelectorAll('a[href="cart.html"], a[href="/cart.html"], .cart-button, #cartButton, #cartLink').forEach(el=>{
+    el.addEventListener('click', (event)=>{
+      event.preventDefault();
+      openMiniCart();
+    });
+  });
+}
+
+window.miniCartRemoveItem = function(cardKey, variant='normal'){
+  cart = cart.filter(item => !(item.cardKey === cardKey && (item.variant || 'normal') === variant));
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+  renderMiniCart();
+}
+
+window.miniCartChangeQty = function(cardKey, variant='normal', delta=0){
+  const card = miniCartCardForKey(cardKey);
+  const item = cart.find(x => x.cardKey === cardKey && (x.variant || 'normal') === variant);
+  if(!card || !item) return;
+
+  const maxStock = Number(variant === 'foil' ? card.foilStock : card.stock || 0);
+  const nextQty = Math.max(1, Math.min(maxStock, Number(item.qty || 1) + Number(delta || 0)));
+  item.qty = nextQty;
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+  renderMiniCart();
+}
+
+
 loadCards().then(cards=>{
+  window.__lilstoreCards = cards;
+  window.__miniCartReady = true;
   const catalog=document.getElementById('catalog');
   const search=document.getElementById('search');
   const setFilter=document.getElementById('setFilter');
