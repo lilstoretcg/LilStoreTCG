@@ -6,6 +6,7 @@ let currentPage = 1;
 function updateCartCount(){
   const count = cart.reduce((a,b)=>a + Number(b.qty || 0), 0);
   document.querySelectorAll('#cartCount, #cartLabelCount').forEach(el => el.textContent = count);
+  if(document.getElementById('miniCartDrawer')) renderMiniCart?.();
 }
 updateCartCount();
 
@@ -311,7 +312,8 @@ loadCards().then(cards=>{
 
     localStorage.setItem('cart',JSON.stringify(cart));
     updateCartCount();
-    alert(`Carta ${variant === 'foil' ? 'foil' : 'normal'} agregada al carrito`);
+    renderMiniCart();
+    openMiniCart();
   }
 
   function resetAndRender(){
@@ -323,7 +325,9 @@ loadCards().then(cards=>{
   if(setFilter) setFilter.onchange=resetAndRender;
   if(rarity) rarity.onchange=resetAndRender;
   if(statusFilter) statusFilter.onchange=resetAndRender;
+  bindMiniCartButtons();
   render();
+  renderMiniCart();
 }).catch(err=>{
   const catalog=document.getElementById('catalog');
   if(catalog){

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LilStore TCG</title>
-<link rel="stylesheet" href="css/style.css?v=7710">
+<link rel="stylesheet" href="css/style.css?v=81">
 <link rel="icon" href="assets/logo.png">
 </head>
 <body>
@@ -57,6 +57,33 @@
 <main id="catalog"></main>
 
 <footer>WhatsApp +56 9 3382 3890 • © LilStore TCG</footer>
-<script src="js/app.js?v=7710"></script>
+<script src="js/app.js?v=81"></script>
+
+  <div id="miniCartOverlay" class="mini-cart-overlay" aria-hidden="true"></div>
+
+  <aside id="miniCartDrawer" class="mini-cart-drawer" aria-hidden="true">
+    <div class="mini-cart-header">
+      <div>
+        <h2>🛒 Mi carrito</h2>
+        <span id="miniCartSummary">0 productos en tu carrito</span>
+      </div>
+      <button id="miniCartClose" class="mini-cart-close" type="button" aria-label="Cerrar carrito">×</button>
+    </div>
+
+    <div id="miniCartItems" class="mini-cart-items">
+      <p class="mini-cart-empty">Tu carrito está vacío.</p>
+    </div>
+
+    <div class="mini-cart-footer">
+      <div class="mini-cart-total-row">
+        <span>Total</span>
+        <strong id="miniCartTotal">$0 CLP</strong>
+      </div>
+      <a id="miniCartFullBtn" class="mini-cart-full-btn" href="cart.html">Ver carrito completo</a>
+      <a id="miniCartWhatsappBtn" class="mini-cart-whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer">Finalizar por WhatsApp</a>
+      <button id="miniCartClearBtn" class="mini-cart-clear-btn" type="button">Vaciar carrito</button>
+    </div>
+  </aside>
+
 </body>
 </html>
