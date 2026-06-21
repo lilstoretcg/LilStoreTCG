@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=773">
+  <link rel="stylesheet" href="css/admin.css?v=80">
 </head>
 <body>
   <header class="admin-header">
@@ -47,6 +47,18 @@
     <section id="message" class="message"></section>
 
 
+
+    
+    <section class="panel backup-panel">
+      <h2>Respaldos de inventario</h2>
+      <p>Descarga una copia de emergencia de tu stock actual en Excel y JSON.</p>
+      <div class="backup-actions">
+        <button id="exportBackupExcelBtn" type="button">📊 Exportar Excel</button>
+        <button id="exportBackupJsonBtn" type="button">🧾 Exportar JSON</button>
+        <button id="exportBackupBothBtn" type="button">⬇️ Descargar ambos</button>
+      </div>
+      <small>El Excel es cómodo para revisar stock. El JSON sirve para restaurar el inventario técnico si ocurre una emergencia.</small>
+    </section>
 
     <section class="panel catalog-sync-panel">
       <h2>Sincronización de catálogo</h2>
@@ -93,6 +105,7 @@
     </section>
   </main>
 
-  <script src="js/admin.js?v=773"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="js/admin.js?v=80"></script>
 </body>
 </html>

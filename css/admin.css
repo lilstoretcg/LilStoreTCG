@@ -225,3 +225,57 @@ td input[data-field="storePrice"]{
   cursor:not-allowed;
   background:#222;
 }
+
+
+/* v8.0 backup buttons */
+.backup-panel h2{
+  margin:0 0 10px;
+  color:#ffd34d;
+  font-size:20px;
+}
+
+.backup-panel p{
+  margin:0 0 14px;
+  color:#ccc;
+}
+
+.backup-actions{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.backup-actions button{
+  width:auto;
+  min-width:190px;
+  border-radius:10px;
+  font-weight:900;
+}
+
+#exportBackupExcelBtn{
+  background:#22c55e;
+  color:#000;
+}
+
+#exportBackupJsonBtn{
+  background:#38bdf8;
+  color:#000;
+}
+
+#exportBackupBothBtn{
+  background:#ffb000;
+  color:#000;
+}
+
+@media(max-width:700px){
+  .backup-actions{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .backup-actions button{
+    width:100%;
+  }
+}

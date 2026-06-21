@@ -8,6 +8,9 @@ const saveBtn = document.getElementById("saveBtn");
 const syncPricesBtn = document.getElementById("syncPricesBtn");
 const syncCatalogBtn = document.getElementById("syncCatalogBtn");
 const message = document.getElementById("message");
+const exportBackupExcelBtn = document.getElementById("exportBackupExcelBtn");
+const exportBackupJsonBtn = document.getElementById("exportBackupJsonBtn");
+const exportBackupBothBtn = document.getElementById("exportBackupBothBtn");
 
 function keyFor(card){
   return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
@@ -316,10 +319,135 @@ async function syncRiftboundPrices(){
   showMessage(`Precios actualizados: ${data.updated}. Códigos consultados: ${data.uniqueCodes}. Sin precio encontrado: ${data.notFoundCount}. Fallidos: ${data.failedCount}.`);
 }
 
+
+function backupDateStamp(){
+  const now = new Date();
+  const date = now.toISOString().slice(0,10);
+  const time = now.toTimeString().slice(0,5).replace(":", "-");
+  return `${date}_${time}`;
+}
+
+function downloadTextFile(filename, content, mime="application/json"){
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function backupRows(){
+  return cards.map(card=>{
+    const entry = normalizeEntry(card);
+    const hasFoil = supportsFoil(card);
+
+    return {
+      "Codigo": card.publicCode || card.dotggCode || "",
+      "Carta": card.name || "",
+      "Set": card.set || "",
+      "Rareza": card.rarity || "",
+      "Tipo": card.cardType || "",
+      "Stock Normal": entry.stock,
+      "Stock Foil": hasFoil ? entry.foilStock : 0,
+      "Mercado Normal USD": entry.marketPrice,
+      "LilStore Normal CLP": entry.storePrice,
+      "Mercado Foil USD": hasFoil ? entry.foilMarketPrice : 0,
+      "LilStore Foil CLP": hasFoil ? entry.foilStorePrice : 0,
+      "Tiene Foil": hasFoil ? "Sí" : "No"
+    };
+  });
+}
+
+function exportBackupExcel(){
+  if(!cards.length){
+    showMessage("El catálogo aún no está cargado.", true);
+    return;
+  }
+
+  if(!window.XLSX){
+    showMessage("No se pudo cargar la librería Excel. Intenta recargar la página.", true);
+    return;
+  }
+
+  const rows = backupRows();
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws["!cols"] = [
+    { wch: 16 }, { wch: 38 }, { wch: 18 }, { wch: 14 }, { wch: 16 },
+    { wch: 14 }, { wch: 12 }, { wch: 18 }, { wch: 18 }, { wch: 18 }, { wch: 18 }, { wch: 10 }
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Inventario");
+
+  const summary = [
+    ["Resumen LilStore TCG"],
+    ["Fecha", new Date().toLocaleString("es-CL")],
+    ["Cartas catálogo", cards.length],
+    ["Cartas con stock", cards.filter(card=>currentStockFor(card)>0 || currentFoilStockFor(card)>0).length],
+    ["Unidades normales", cards.reduce((sum, card)=>sum + currentStockFor(card), 0)],
+    ["Unidades foil", cards.reduce((sum, card)=>sum + currentFoilStockFor(card), 0)],
+    ["Total unidades", cards.reduce((sum, card)=>sum + currentStockFor(card) + currentFoilStockFor(card), 0)],
+    ["Valor normal CLP", cards.reduce((sum, card)=>sum + currentStockFor(card) * normalizeEntry(card).storePrice, 0)],
+    ["Valor foil CLP", cards.reduce((sum, card)=>sum + currentFoilStockFor(card) * normalizeEntry(card).foilStorePrice, 0)],
+    ["Valor total CLP", cards.reduce((sum, card)=>sum + currentStockFor(card) * normalizeEntry(card).storePrice + currentFoilStockFor(card) * normalizeEntry(card).foilStorePrice, 0)]
+  ];
+
+  const wsSummary = XLSX.utils.aoa_to_sheet(summary);
+  wsSummary["!cols"] = [{ wch: 24 }, { wch: 24 }];
+  XLSX.utils.book_append_sheet(wb, wsSummary, "Resumen");
+
+  XLSX.writeFile(wb, `LilStoreTCG_backup_stock_${backupDateStamp()}.xlsx`);
+  showMessage("Backup Excel descargado correctamente.");
+}
+
+function exportBackupJson(){
+  if(!cards.length){
+    showMessage("El catálogo aún no está cargado.", true);
+    return;
+  }
+
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    source: "LilStore TCG Admin",
+    version: "v8.0",
+    inventory,
+    summary: {
+      catalogCards: cards.length,
+      cardsWithStock: cards.filter(card=>currentStockFor(card)>0 || currentFoilStockFor(card)>0).length,
+      normalUnits: cards.reduce((sum, card)=>sum + currentStockFor(card), 0),
+      foilUnits: cards.reduce((sum, card)=>sum + currentFoilStockFor(card), 0),
+      totalUnits: cards.reduce((sum, card)=>sum + currentStockFor(card) + currentFoilStockFor(card), 0),
+      normalValueCLP: cards.reduce((sum, card)=>sum + currentStockFor(card) * normalizeEntry(card).storePrice, 0),
+      foilValueCLP: cards.reduce((sum, card)=>sum + currentFoilStockFor(card) * normalizeEntry(card).foilStorePrice, 0),
+      totalValueCLP: cards.reduce((sum, card)=>sum + currentStockFor(card) * normalizeEntry(card).storePrice + currentFoilStockFor(card) * normalizeEntry(card).foilStorePrice, 0)
+    }
+  };
+
+  downloadTextFile(
+    `LilStoreTCG_backup_inventory_${backupDateStamp()}.json`,
+    JSON.stringify(payload, null, 2),
+    "application/json"
+  );
+
+  showMessage("Backup JSON descargado correctamente.");
+}
+
+function exportBackupBoth(){
+  exportBackupExcel();
+  setTimeout(exportBackupJson, 500);
+}
+
+
 searchInput?.addEventListener("input", render);
 stockFilter?.addEventListener("change", render);
 saveBtn?.addEventListener("click", save);
 if(syncPricesBtn) syncPricesBtn.addEventListener("click", syncRiftboundPrices);
 if(syncCatalogBtn) syncCatalogBtn.addEventListener("click", syncDotGGCatalog);
+exportBackupExcelBtn?.addEventListener("click", exportBackupExcel);
+exportBackupJsonBtn?.addEventListener("click", exportBackupJson);
+exportBackupBothBtn?.addEventListener("click", exportBackupBoth);
 
 load();
