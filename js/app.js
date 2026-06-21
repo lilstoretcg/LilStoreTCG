@@ -247,6 +247,29 @@ function renderMiniCart(){
   }
 }
 
+
+function bindCartOpenersV82(){
+  const selectors = [
+    'a[href="cart.html"]',
+    'a[href="/cart.html"]',
+    'a[href="./cart.html"]',
+    '.cart-button',
+    '.cart-link',
+    '#cartButton',
+    '#cartLink',
+    '[data-open-cart]'
+  ];
+
+  document.querySelectorAll(selectors.join(',')).forEach(el=>{
+    if(el.dataset.miniCartBound === '1') return;
+    el.dataset.miniCartBound = '1';
+    el.addEventListener('click', (event)=>{
+      event.preventDefault();
+      openMiniCart();
+    });
+  });
+}
+
 function bindMiniCartButtons(){
   const {overlay, closeBtn, clearBtn} = miniCartElements();
   overlay?.addEventListener('click', closeMiniCart);
@@ -264,6 +287,8 @@ function bindMiniCartButtons(){
   document.addEventListener('keydown', (event)=>{
     if(event.key === 'Escape') closeMiniCart();
   });
+
+  bindCartOpenersV82();
 
   document.querySelectorAll('a[href="cart.html"], a[href="/cart.html"], .cart-button, #cartButton, #cartLink').forEach(el=>{
     el.addEventListener('click', (event)=>{
