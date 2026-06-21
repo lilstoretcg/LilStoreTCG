@@ -14,6 +14,10 @@ function keyFor(card){
   return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
 }
 
+function formatPesoGlobal(n){
+  return Number(n || 0).toLocaleString('es-CL');
+}
+
 function supportsFoil(card){
   return ["common", "uncommon"].includes(String(card.rarity || "").toLowerCase());
 }
@@ -139,7 +143,7 @@ function miniCartElements(){
 function openMiniCart(){
   const {drawer, overlay} = miniCartElements();
   if(!drawer || !overlay) return;
-  renderMiniCart();
+  try { renderMiniCart(); } catch(e) { console.error('Mini cart render error', e); }
   drawer.classList.add('open');
   overlay.classList.add('open');
   drawer.setAttribute('aria-hidden', 'false');
@@ -183,7 +187,7 @@ function miniCartItemCard(card, item){
       </div>
       <div class="mini-cart-price">
         <button type="button" onclick="miniCartRemoveItem('${item.cardKey}', '${variant}')">×</button>
-        <strong>$${peso(subtotal)} CLP</strong>
+        <strong>$${formatPesoGlobal(subtotal)} CLP</strong>
       </div>
     </div>
   `;
@@ -223,7 +227,7 @@ function renderMiniCart(){
     const subtotal = price * qty;
 
     totalValue += subtotal;
-    whatsappLines.push(`• ${card.name} (${isFoil ? 'Foil' : 'Normal'}) x${qty}\n  ${card.publicCode || card.dotggCode || ''}\n  $${peso(subtotal)} CLP`);
+    whatsappLines.push(`• ${card.name} (${isFoil ? 'Foil' : 'Normal'}) x${qty}\n  ${card.publicCode || card.dotggCode || ''}\n  $${formatPesoGlobal(subtotal)} CLP`);
 
     return miniCartItemCard(card, {
       ...item,
@@ -233,10 +237,10 @@ function renderMiniCart(){
   }).join('');
 
   items.innerHTML = html || '<p class="mini-cart-empty">Tu carrito está vacío.</p>';
-  if(total) total.textContent = `$${peso(totalValue)} CLP`;
+  if(total) total.textContent = `$${formatPesoGlobal(totalValue)} CLP`;
 
   if(whatsapp){
-    const message = ['Pedido LilStore TCG', '', ...whatsappLines, '', `Total: $${peso(totalValue)} CLP`].join('\n');
+    const message = ['Pedido LilStore TCG', '', ...whatsappLines, '', `Total: $${formatPesoGlobal(totalValue)} CLP`].join('\n');
     const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
     whatsapp.href = url;
     whatsapp.onclick = (event)=>{ event.preventDefault(); window.open(url, '_blank', 'noopener,noreferrer'); };
@@ -483,8 +487,7 @@ loadCards().then(cards=>{
 
     localStorage.setItem('cart',JSON.stringify(cart));
     updateCartCount();
-    renderMiniCart();
-    openMiniCart();
+    try { renderMiniCart(); openMiniCart(); } catch(e) { console.error('Mini cart open error', e); }
   }
 
   function resetAndRender(){
@@ -498,7 +501,7 @@ loadCards().then(cards=>{
   if(statusFilter) statusFilter.onchange=resetAndRender;
   bindMiniCartButtons();
   render();
-  renderMiniCart();
+  try { renderMiniCart(); } catch(e) { console.error('Mini cart initial render error', e); }
 }).catch(err=>{
   const catalog=document.getElementById('catalog');
   if(catalog){
