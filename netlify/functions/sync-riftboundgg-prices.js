@@ -376,6 +376,8 @@ exports.handler = async (event) => {
       return json(400, { error: "No se recibieron cartas para actualizar." });
     }
 
+    const minPriceRules = await getMinPriceRules();
+
     const cardsWithCodes = cards
       .map(card => ({ ...card, dotggId: shortCode(card.publicCode) }))
       .filter(card => card.dotggId);
