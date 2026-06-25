@@ -114,8 +114,8 @@ function latestPriceFromHistory(payload) {
 
 function priceFromCandidates(values) {
   for (const value of values) {
-    const price = Number(value);
-    if (Number.isFinite(price) && price > 0) return price;
+    const price = toNumber(value);
+    if (price) return price;
   }
   return null;
 }
@@ -138,6 +138,8 @@ function latestNormalFoilPrices(payload) {
       normalPrice = priceFromCandidates([
         row.Normal,
         row.normal,
+        row.normalPrice,
+        row.NormalPrice,
         row.closePrice,
         row.openPrice,
         row.highPrice,
@@ -145,6 +147,10 @@ function latestNormalFoilPrices(payload) {
         row.marketPrice,
         row.price
       ]);
+
+      if (!normalPrice) {
+        normalPrice = findPriceDeep(row);
+      }
     }
 
     if (!foilPrice) {
@@ -183,7 +189,10 @@ async function getDotGGPrice(cardId) {
   }
 
   const payload = await response.json();
-  const { normalPrice, foilPrice } = latestNormalFoilPrices(payload);
+  const parsed = latestNormalFoilPrices(payload);
+  const fallbackPrice = latestPriceFromHistory(payload);
+  const normalPrice = parsed.normalPrice || fallbackPrice || null;
+  const foilPrice = parsed.foilPrice || null;
   const price = normalPrice || foilPrice || null;
 
   if (!price) {
