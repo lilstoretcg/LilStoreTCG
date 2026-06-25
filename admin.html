@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=85">
+  <link rel="stylesheet" href="css/admin.css?v=851">
 </head>
 <body>
   <header class="admin-header">
@@ -51,8 +51,8 @@
     
     
     <section class="panel min-price-panel">
-      <h2>Precio base por rareza</h2>
-      <p>Define el precio base de cada rareza. Si el precio de mercado es inferior, se utilizará este valor como precio final.</p>
+      <h2>Precios mínimos por rareza</h2>
+      <p>Define un piso mínimo para evitar vender cartas demasiado baratas. El precio final queda como el mayor entre DotGG y el mínimo definido.</p>
 
       <div class="min-price-grid">
         <div class="min-price-head">Rareza</div>
@@ -81,11 +81,11 @@
       </div>
 
       <div class="admin-actions-row">
-        <button id="saveMinPricesBtn" type="button">Guardar precios base</button>
-        <button id="applyMinPricesBtn" type="button">Aplicar precios base</button>
+        <button id="saveMinPricesBtn" type="button">Guardar mínimos</button>
+        <button id="applyMinPricesBtn" type="button">Aplicar mínimos al inventario</button>
       </div>
 
-      <small>Nota: Rare, Epic y Showcase no usan stock foil en la tienda. Puedes dejar su precio base foil en 0.</small>
+      <small>Nota: Rare, Epic y Showcase no usan stock foil en la tienda. Puedes dejar su mínimo foil en 0.</small>
     </section>
 
     <section class="panel orders-panel">
@@ -133,6 +133,7 @@
           <small>Ejemplo: 0.95 = 5% más barato que mercado.</small>
         </div>
         <button id="syncPricesBtn" type="button">Actualizar precios DotGG</button>
+        <button id="debugDotGGBtn" type="button">Diagnóstico DotGG</button>
       </div>
       <small>Usa la API DotGG getcardprices como Market USD.</small>
     </section>
@@ -159,6 +160,6 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="js/admin.js?v=85"></script>
+  <script src="js/admin.js?v=851"></script>
 </body>
 </html>

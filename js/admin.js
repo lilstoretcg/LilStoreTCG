@@ -6,6 +6,7 @@ const searchInput = document.getElementById("searchInput");
 const stockFilter = document.getElementById("stockFilter");
 const saveBtn = document.getElementById("saveBtn");
 const syncPricesBtn = document.getElementById("syncPricesBtn");
+const debugDotGGBtn = document.getElementById("debugDotGGBtn");
 const syncCatalogBtn = document.getElementById("syncCatalogBtn");
 const message = document.getElementById("message");
 const exportBackupExcelBtn = document.getElementById("exportBackupExcelBtn");
@@ -18,6 +19,17 @@ const orderIdInput = document.getElementById("orderIdInput");
 const searchOrderBtn = document.getElementById("searchOrderBtn");
 const completeOrderBtn = document.getElementById("completeOrderBtn");
 const orderPreview = document.getElementById("orderPreview");
+
+
+function detalleErrorDotGG(data){
+  if(!data || typeof data !== "object") return "";
+  const parts = [];
+  if(data.error) parts.push(data.error);
+  if(data.message) parts.push("Detalle: " + data.message);
+  if(data.name) parts.push("Tipo: " + data.name);
+  if(data.status) parts.push("Status: " + data.status);
+  return parts.join(" | ");
+}
 
 function keyFor(card){
   return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
@@ -593,6 +605,30 @@ async function completeOrder(){
   showMessage(data.message || `Pedido #${id} descontado correctamente.`);
 }
 
+
+
+async function debugDotGGAdmin(){
+  showMessage("Probando conexión con DotGG...");
+
+  try{
+    const res = await fetch("/.netlify/functions/sync-riftboundgg-prices?debug=1&v=" + Date.now(), { cache:"no-store" });
+    const data = await res.json().catch(()=>({}));
+
+    if(!res.ok){
+      showMessage(detalleErrorDotGG(data) || "Diagnóstico DotGG falló.", true);
+      console.error("DotGG diagnostic error:", data);
+      return;
+    }
+
+    console.log("DotGG diagnostic:", data);
+
+    const preview = data.textPreview ? data.textPreview.slice(0, 180).replace(/\s+/g, " ") : "";
+    showMessage(`Diagnóstico DotGG: status ${data.status}. Content-Type: ${data.contentType || "sin tipo"}. Preview: ${preview}`);
+  }catch(error){
+    showMessage("No se pudo ejecutar diagnóstico DotGG: " + (error.message || error), true);
+    console.error(error);
+  }
+}
 
 function backupDateStamp(){
   const now = new Date();

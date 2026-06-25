@@ -257,7 +257,52 @@ function applyMinimumPriceToEntry(card, entry, rules) {
   return entry;
 }
 
+
+// DEBUG_DOTGG_DIAGNOSTIC
+async function debugDotGG() {
+  const testCardId = "OGN-001";
+  const url = `${DOTGG_PRICE_URL}?game=riftbound&cardid=${encodeURIComponent(testCardId)}&cache=${Date.now()}`;
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent": "LilStoreTCG/1.0 diagnostic",
+        "Accept": "application/json"
+      }
+    });
+
+    const text = await response.text();
+    let parsed = null;
+
+    try {
+      parsed = JSON.parse(text);
+    } catch {}
+
+    return json(200, {
+      ok: response.ok,
+      status: response.status,
+      statusText: response.statusText,
+      url,
+      contentType: response.headers.get("content-type"),
+      textPreview: text.slice(0, 1200),
+      parsedPreview: parsed
+    });
+  } catch (error) {
+    return json(500, {
+      ok: false,
+      error: "No se pudo conectar con DotGG.",
+      message: error.message || String(error),
+      stack: error.stack || "",
+      name: error.name || "Error",
+      url
+    });
+  }
+}
+
 exports.handler = async (event) => {
+  if (event.httpMethod === "GET" && event.queryStringParameters?.debug) {
+    return await debugDotGG();
+  }
   if (event.httpMethod === "OPTIONS") return json(200, { ok: true });
   if (event.httpMethod !== "POST") return json(405, { error: "Método no permitido." });
 
@@ -370,7 +415,9 @@ exports.handler = async (event) => {
   } catch (error) {
     return json(500, {
       error: "Error interno sincronizando precios DotGG.",
-      message: error.message || String(error)
+      message: error.message || String(error),
+      stack: error.stack || "",
+      name: error.name || "Error"
     });
   }
 };

@@ -441,17 +441,3 @@ td input[data-field="storePrice"]{
     grid-template-columns:1fr;
   }
 }
-
-
-/* v8.6 compact base price panel */
-.min-price-grid{
-display:grid;
-grid-template-columns:1fr 140px 140px;
-gap:10px 12px;
-max-width:620px;
-align-items:center;
-}
-.min-price-grid input{height:38px}
-@media(max-width:700px){
-.min-price-grid{grid-template-columns:1fr;}
-}
