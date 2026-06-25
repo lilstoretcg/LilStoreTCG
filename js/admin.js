@@ -12,6 +12,13 @@ const exportBackupExcelBtn = document.getElementById("exportBackupExcelBtn");
 const exportBackupJsonBtn = document.getElementById("exportBackupJsonBtn");
 const exportBackupBothBtn = document.getElementById("exportBackupBothBtn");
 
+const saveMinPricesBtn = document.getElementById("saveMinPricesBtn");
+const applyMinPricesBtn = document.getElementById("applyMinPricesBtn");
+const orderIdInput = document.getElementById("orderIdInput");
+const searchOrderBtn = document.getElementById("searchOrderBtn");
+const completeOrderBtn = document.getElementById("completeOrderBtn");
+const orderPreview = document.getElementById("orderPreview");
+
 function keyFor(card){
   return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
 }
@@ -320,6 +327,273 @@ async function syncRiftboundPrices(){
 }
 
 
+
+function rarityKey(card){
+  return String(card.rarity || "").toLowerCase();
+}
+
+function minPriceInputs(){
+  return {
+    common: {
+      normal: document.getElementById("minCommonNormal"),
+      foil: document.getElementById("minCommonFoil")
+    },
+    uncommon: {
+      normal: document.getElementById("minUncommonNormal"),
+      foil: document.getElementById("minUncommonFoil")
+    },
+    rare: {
+      normal: document.getElementById("minRareNormal"),
+      foil: document.getElementById("minRareFoil")
+    },
+    epic: {
+      normal: document.getElementById("minEpicNormal"),
+      foil: document.getElementById("minEpicFoil")
+    },
+    showcase: {
+      normal: document.getElementById("minShowcaseNormal"),
+      foil: document.getElementById("minShowcaseFoil")
+    }
+  };
+}
+
+function readMinPriceRules(){
+  const inputs = minPriceInputs();
+  const rules = {};
+
+  Object.keys(inputs).forEach(rarity=>{
+    rules[rarity] = {
+      normal: Math.max(0, Math.round(Number(inputs[rarity].normal?.value || 0))),
+      foil: Math.max(0, Math.round(Number(inputs[rarity].foil?.value || 0)))
+    };
+  });
+
+  return rules;
+}
+
+function fillMinPriceRules(rules = {}){
+  const inputs = minPriceInputs();
+
+  Object.keys(inputs).forEach(rarity=>{
+    if(inputs[rarity].normal) inputs[rarity].normal.value = Number(rules[rarity]?.normal ?? inputs[rarity].normal.value ?? 0);
+    if(inputs[rarity].foil) inputs[rarity].foil.value = Number(rules[rarity]?.foil ?? inputs[rarity].foil.value ?? 0);
+  });
+}
+
+async function loadMinPriceRules(){
+  try{
+    const res = await fetch("/.netlify/functions/settings?v=" + Date.now(), { cache:"no-store" });
+    if(!res.ok) return;
+    const rules = await res.json();
+    fillMinPriceRules(rules);
+  }catch(e){}
+}
+
+async function saveMinPriceRules(){
+  const pin = document.getElementById("adminPin").value.trim();
+  if(!pin){
+    showMessage("Ingresa el PIN administrador para guardar mínimos.", true);
+    return;
+  }
+
+  const rules = readMinPriceRules();
+
+  const res = await fetch("/.netlify/functions/settings", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "x-admin-pin": pin
+    },
+    body: JSON.stringify({ rules })
+  });
+
+  const data = await res.json().catch(()=>({}));
+
+  if(!res.ok){
+    showMessage(data.error || "No se pudieron guardar los precios mínimos.", true);
+    return;
+  }
+
+  fillMinPriceRules(data.rules);
+  showMessage("Precios mínimos guardados correctamente.");
+}
+
+function applyMinPricesLocal(){
+  const rules = readMinPriceRules();
+  let changed = 0;
+
+  cards.forEach(card=>{
+    const key = keyFor(card);
+    const entry = normalizeEntry(card);
+    const rarity = rarityKey(card);
+    const rule = rules[rarity];
+    if(!rule) return;
+
+    inventory[key] = inventory[key] || {};
+    if(typeof inventory[key] === "number"){
+      inventory[key] = { stock: inventory[key] };
+    }
+
+    const newStorePrice = Math.max(Number(entry.storePrice || 0), Number(rule.normal || 0));
+    if(newStorePrice !== Number(entry.storePrice || 0)){
+      inventory[key].storePrice = newStorePrice;
+      changed++;
+    }else{
+      inventory[key].storePrice = Number(entry.storePrice || 0);
+    }
+
+    inventory[key].stock = Number(entry.stock || 0);
+    inventory[key].marketPrice = Number(entry.marketPrice || 0);
+
+    if(supportsFoil(card)){
+      const newFoilPrice = Math.max(Number(entry.foilStorePrice || 0), Number(rule.foil || 0));
+      if(newFoilPrice !== Number(entry.foilStorePrice || 0)){
+        inventory[key].foilStorePrice = newFoilPrice;
+        changed++;
+      }else{
+        inventory[key].foilStorePrice = Number(entry.foilStorePrice || 0);
+      }
+
+      inventory[key].foilStock = Number(entry.foilStock || 0);
+      inventory[key].foilMarketPrice = Number(entry.foilMarketPrice || 0);
+    }
+  });
+
+  render();
+  return changed;
+}
+
+async function applyMinPricesAndSave(){
+  const pin = document.getElementById("adminPin").value.trim();
+  if(!pin){
+    showMessage("Ingresa el PIN administrador para aplicar mínimos.", true);
+    return;
+  }
+
+  const changed = applyMinPricesLocal();
+
+  const res = await fetch("/.netlify/functions/stock", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "x-admin-pin": pin
+    },
+    body: JSON.stringify({ inventory })
+  });
+
+  const data = await res.json().catch(()=>({}));
+
+  if(!res.ok){
+    showMessage(data.error || "No se pudo guardar el inventario con mínimos.", true);
+    return;
+  }
+
+  showMessage(`Precios mínimos aplicados. Cambios realizados: ${changed}. Inventario guardado.`);
+}
+
+function cleanOrderId(value){
+  return String(value || "").replace("#","").trim().padStart(5, "0");
+}
+
+function orderStatusLabel(status){
+  if(status === "completed") return "Descontado";
+  if(status === "cancelled") return "Cancelado";
+  return "Pendiente";
+}
+
+function renderOrderPreview(order){
+  if(!orderPreview) return;
+
+  const itemsHtml = (order.items || []).map(item=>{
+    const variant = item.variant === "foil" ? "Foil" : "Normal";
+    return `
+      <div class="order-preview-item">
+        <strong>${item.name}</strong>
+        <span>${item.code || item.cardKey} · ${variant} x${item.qty}</span>
+        <b>$${Number(item.subtotal || 0).toLocaleString("es-CL")} CLP</b>
+      </div>
+    `;
+  }).join("");
+
+  orderPreview.innerHTML = `
+    <div class="order-preview-head">
+      <strong>Pedido #${order.id}</strong>
+      <span>${orderStatusLabel(order.status)}</span>
+    </div>
+    <div class="order-preview-list">${itemsHtml}</div>
+    <div class="order-preview-total">
+      <span>Total</span>
+      <strong>$${Number(order.total || 0).toLocaleString("es-CL")} CLP</strong>
+    </div>
+  `;
+}
+
+async function searchOrder(){
+  const id = cleanOrderId(orderIdInput?.value);
+  if(!id || id === "00000"){
+    showMessage("Ingresa un número de pedido válido.", true);
+    return;
+  }
+
+  const res = await fetch("/.netlify/functions/orders?id=" + encodeURIComponent(id), { cache:"no-store" });
+  const data = await res.json().catch(()=>({}));
+
+  if(!res.ok){
+    if(orderPreview) orderPreview.textContent = data.error || "No se encontró el pedido.";
+    showMessage(data.error || "No se encontró el pedido.", true);
+    return;
+  }
+
+  renderOrderPreview(data.order);
+  showMessage(`Pedido #${data.order.id} cargado.`);
+}
+
+async function completeOrder(){
+  const pin = document.getElementById("adminPin").value.trim();
+  const id = cleanOrderId(orderIdInput?.value);
+
+  if(!pin){
+    showMessage("Ingresa el PIN administrador.", true);
+    return;
+  }
+
+  if(!id || id === "00000"){
+    showMessage("Ingresa un número de pedido válido.", true);
+    return;
+  }
+
+  if(!confirm(`¿Descontar stock del pedido #${id}? Esta acción no debería repetirse.`)){
+    return;
+  }
+
+  const res = await fetch("/.netlify/functions/orders", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "x-admin-pin": pin
+    },
+    body: JSON.stringify({
+      action:"complete",
+      orderId:id
+    })
+  });
+
+  const data = await res.json().catch(()=>({}));
+
+  if(!res.ok){
+    showMessage(data.error || "No se pudo descontar el pedido.", true);
+    if(data.order) renderOrderPreview(data.order);
+    return;
+  }
+
+  inventory = data.inventory || inventory;
+  renderOrderPreview(data.order);
+  render();
+  updateStats();
+  showMessage(data.message || `Pedido #${id} descontado correctamente.`);
+}
+
+
 function backupDateStamp(){
   const now = new Date();
   const date = now.toISOString().slice(0,10);
@@ -449,5 +723,10 @@ if(syncCatalogBtn) syncCatalogBtn.addEventListener("click", syncDotGGCatalog);
 exportBackupExcelBtn?.addEventListener("click", exportBackupExcel);
 exportBackupJsonBtn?.addEventListener("click", exportBackupJson);
 exportBackupBothBtn?.addEventListener("click", exportBackupBoth);
+saveMinPricesBtn?.addEventListener("click", saveMinPriceRules);
+applyMinPricesBtn?.addEventListener("click", applyMinPricesAndSave);
+searchOrderBtn?.addEventListener("click", searchOrder);
+completeOrderBtn?.addEventListener("click", completeOrder);
 
 load();
+loadMinPriceRules();

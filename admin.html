@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=80">
+  <link rel="stylesheet" href="css/admin.css?v=85">
 </head>
 <body>
   <header class="admin-header">
@@ -49,7 +49,60 @@
 
 
     
-    <section class="panel backup-panel">
+    
+    <section class="panel min-price-panel">
+      <h2>Precios mínimos por rareza</h2>
+      <p>Define un piso mínimo para evitar vender cartas demasiado baratas. El precio final queda como el mayor entre DotGG y el mínimo definido.</p>
+
+      <div class="min-price-grid">
+        <div class="min-price-head">Rareza</div>
+        <div class="min-price-head">Normal CLP</div>
+        <div class="min-price-head">Foil CLP</div>
+
+        <label>Common</label>
+        <input id="minCommonNormal" type="number" min="0" step="1" value="100">
+        <input id="minCommonFoil" type="number" min="0" step="1" value="200">
+
+        <label>Uncommon</label>
+        <input id="minUncommonNormal" type="number" min="0" step="1" value="150">
+        <input id="minUncommonFoil" type="number" min="0" step="1" value="300">
+
+        <label>Rare</label>
+        <input id="minRareNormal" type="number" min="0" step="1" value="500">
+        <input id="minRareFoil" type="number" min="0" step="1" value="0">
+
+        <label>Epic</label>
+        <input id="minEpicNormal" type="number" min="0" step="1" value="1000">
+        <input id="minEpicFoil" type="number" min="0" step="1" value="0">
+
+        <label>Showcase</label>
+        <input id="minShowcaseNormal" type="number" min="0" step="1" value="2000">
+        <input id="minShowcaseFoil" type="number" min="0" step="1" value="0">
+      </div>
+
+      <div class="admin-actions-row">
+        <button id="saveMinPricesBtn" type="button">Guardar mínimos</button>
+        <button id="applyMinPricesBtn" type="button">Aplicar mínimos al inventario</button>
+      </div>
+
+      <small>Nota: Rare, Epic y Showcase no usan stock foil en la tienda. Puedes dejar su mínimo foil en 0.</small>
+    </section>
+
+    <section class="panel orders-panel">
+      <h2>Confirmar pedido y descontar stock</h2>
+      <p>Ingresa el número de pedido enviado por WhatsApp. El stock se descuenta solo cuando confirmas el pedido.</p>
+
+      <div class="order-confirm-row">
+        <input id="orderIdInput" type="text" placeholder="Ej: 00001 o #00001">
+        <button id="searchOrderBtn" type="button">Buscar pedido</button>
+        <button id="completeOrderBtn" type="button">Descontar stock</button>
+      </div>
+
+      <div id="orderPreview" class="order-preview">
+        Ingresa un número de pedido para revisar sus cartas.
+      </div>
+    </section>
+<section class="panel backup-panel">
       <h2>Respaldos de inventario</h2>
       <p>Descarga una copia de emergencia de tu stock actual en Excel y JSON.</p>
       <div class="backup-actions">
@@ -106,6 +159,6 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="js/admin.js?v=80"></script>
+  <script src="js/admin.js?v=85"></script>
 </body>
 </html>

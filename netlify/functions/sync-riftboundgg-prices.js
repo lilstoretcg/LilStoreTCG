@@ -2,6 +2,8 @@ const { getStore, connectLambda } = require("@netlify/blobs");
 
 const STORE_NAME = "lilstore-inventory";
 const INVENTORY_KEY = "inventory";
+const SETTINGS_STORE = "lilstore-settings";
+const MIN_PRICES_KEY = "minimum-prices";
 const DOTGG_PRICE_URL = "https://api.dotgg.gg/cgfw/getcardprices";
 
 function json(statusCode, body) {
@@ -221,6 +223,40 @@ async function asyncPool(limit, items, iteratorFn) {
   return Promise.all(ret);
 }
 
+
+function defaultMinPrices() {
+  return {
+    common: { normal: 100, foil: 200 },
+    uncommon: { normal: 150, foil: 300 },
+    rare: { normal: 500, foil: 0 },
+    epic: { normal: 1000, foil: 0 },
+    showcase: { normal: 2000, foil: 0 }
+  };
+}
+
+async function getMinPriceRules() {
+  try {
+    const settingsStore = getStore(SETTINGS_STORE);
+    return await settingsStore.get(MIN_PRICES_KEY, { type: "json" }) || defaultMinPrices();
+  } catch {
+    return defaultMinPrices();
+  }
+}
+
+function applyMinimumPriceToEntry(card, entry, rules) {
+  const rarity = String(card.rarity || "").toLowerCase();
+  const rule = rules[rarity];
+  if (!rule) return entry;
+
+  entry.storePrice = Math.max(Number(entry.storePrice || 0), Number(rule.normal || 0));
+
+  if (["common", "uncommon"].includes(rarity)) {
+    entry.foilStorePrice = Math.max(Number(entry.foilStorePrice || 0), Number(rule.foil || 0));
+  }
+
+  return entry;
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return json(200, { ok: true });
   if (event.httpMethod !== "POST") return json(405, { error: "Método no permitido." });
@@ -313,6 +349,7 @@ exports.handler = async (event) => {
         inventory[key].foilStorePrice = Math.round(priceData.foilPrice * dollar * margin);
       }
 
+      applyMinimumPriceToEntry(card, inventory[key], minPriceRules);
       updated++;
     }
 

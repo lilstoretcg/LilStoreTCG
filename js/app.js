@@ -193,6 +193,70 @@ function miniCartItemCard(card, item){
   `;
 }
 
+
+function cartOrderItems(){
+  const currentCart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+  return currentCart.map(item=>{
+    const card = (window.__lilstoreCards || []).find(c => keyFor(c) === (item.cardKey || item.publicCode || item.dotggCode || item.id));
+    if(!card) return null;
+
+    const variant = item.variant || 'normal';
+    const isFoil = variant === 'foil';
+    const qty = Number(item.qty || 1);
+    const unitPrice = Number(isFoil ? (card.foilStorePrice || card.storePrice || 0) : (card.storePrice || 0));
+
+    return {
+      cardKey: keyFor(card),
+      name: card.name,
+      code: card.publicCode || card.dotggCode || keyFor(card),
+      variant,
+      qty,
+      unitPrice,
+      subtotal: unitPrice * qty
+    };
+  }).filter(Boolean);
+}
+
+async function createLilStoreOrder(){
+  const items = cartOrderItems();
+  if(!items.length){
+    alert('Tu carrito está vacío.');
+    return null;
+  }
+
+  const res = await fetch('/.netlify/functions/orders', {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json' },
+    body: JSON.stringify({ action:'create', items })
+  });
+
+  const data = await res.json().catch(()=>({}));
+
+  if(!res.ok){
+    alert(data.error || 'No se pudo generar el número de pedido.');
+    return null;
+  }
+
+  return data.order;
+}
+
+function whatsappMessageForOrder(order){
+  const lines = (order.items || []).map(item => {
+    const variantLabel = item.variant === 'foil' ? 'Foil' : 'Normal';
+    return `• ${item.name} (${variantLabel}) x${item.qty}\n  ${item.code || item.cardKey}\n  $${formatPesoGlobal(item.subtotal)} CLP`;
+  });
+
+  return [
+    'Pedido LilStore TCG',
+    `Pedido #${order.id}`,
+    '',
+    ...lines,
+    '',
+    `Total: $${formatPesoGlobal(order.total)} CLP`
+  ].join('\n');
+}
+
 function renderMiniCart(){
   const {items, summary, total, whatsapp} = miniCartElements();
   if(!items) return;
@@ -240,10 +304,18 @@ function renderMiniCart(){
   if(total) total.textContent = `$${formatPesoGlobal(totalValue)} CLP`;
 
   if(whatsapp){
-    const message = ['Pedido LilStore TCG', '', ...whatsappLines, '', `Total: $${formatPesoGlobal(totalValue)} CLP`].join('\n');
-    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    whatsapp.href = url;
-    whatsapp.onclick = (event)=>{ event.preventDefault(); window.open(url, '_blank', 'noopener,noreferrer'); };
+    whatsapp.href = '#';
+    whatsapp.onclick = async (event)=>{
+      event.preventDefault();
+      whatsapp.textContent = 'Generando pedido...';
+      const order = await createLilStoreOrder();
+      whatsapp.textContent = 'Finalizar por WhatsApp';
+      if(!order) return;
+
+      const message = whatsappMessageForOrder(order);
+      const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    };
   }
 }
 

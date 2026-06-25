@@ -279,3 +279,165 @@ td input[data-field="storePrice"]{
     width:100%;
   }
 }
+
+
+/* v8.5 orders + minimum prices */
+.min-price-panel h2,
+.orders-panel h2{
+  margin:0 0 10px;
+  color:#ffd34d;
+  font-size:20px;
+}
+
+.min-price-panel p,
+.orders-panel p{
+  color:#ccc;
+  margin:0 0 14px;
+}
+
+.min-price-grid{
+  display:grid;
+  grid-template-columns: 1fr 150px 150px;
+  gap:10px;
+  align-items:center;
+  margin:14px 0;
+}
+
+.min-price-head{
+  color:#ffd34d;
+  font-weight:900;
+  font-size:13px;
+  text-transform:uppercase;
+}
+
+.min-price-grid label{
+  font-weight:800;
+  color:#fff;
+}
+
+.min-price-grid input,
+.order-confirm-row input{
+  height:38px;
+  border-radius:9px;
+  border:1px solid #333;
+  background:#080808;
+  color:#fff;
+  padding:0 10px;
+}
+
+.admin-actions-row,
+.order-confirm-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+  margin-top:14px;
+}
+
+.admin-actions-row button,
+.order-confirm-row button{
+  width:auto;
+  min-width:170px;
+  border-radius:10px;
+  font-weight:900;
+}
+
+#saveMinPricesBtn{
+  background:#38bdf8;
+  color:#000;
+}
+
+#applyMinPricesBtn{
+  background:#ffb000;
+  color:#000;
+}
+
+#searchOrderBtn{
+  background:#38bdf8;
+  color:#000;
+}
+
+#completeOrderBtn{
+  background:#22c55e;
+  color:#000;
+}
+
+.order-preview{
+  margin-top:14px;
+  border:1px solid #333;
+  border-radius:12px;
+  background:#080808;
+  padding:14px;
+  color:#ccc;
+}
+
+.order-preview-head,
+.order-preview-total{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+}
+
+.order-preview-head strong{
+  color:#ffd34d;
+  font-size:18px;
+}
+
+.order-preview-head span{
+  background:#222;
+  color:#fff;
+  padding:5px 10px;
+  border-radius:999px;
+  font-weight:800;
+}
+
+.order-preview-list{
+  margin:12px 0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.order-preview-item{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:10px;
+  padding:10px;
+  border:1px solid #222;
+  border-radius:10px;
+  background:#111;
+}
+
+.order-preview-item strong{
+  color:#fff;
+}
+
+.order-preview-item span{
+  color:#bbb;
+}
+
+.order-preview-item b,
+.order-preview-total strong{
+  color:#ffd34d;
+}
+
+@media(max-width:700px){
+  .min-price-grid{
+    grid-template-columns:1fr;
+  }
+
+  .min-price-head{
+    display:none;
+  }
+
+  .admin-actions-row button,
+  .order-confirm-row button,
+  .order-confirm-row input{
+    width:100%;
+  }
+
+  .order-preview-item{
+    grid-template-columns:1fr;
+  }
+}
