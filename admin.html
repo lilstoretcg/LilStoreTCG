@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=851">
+  <link rel="stylesheet" href="css/admin.css?v=852">
 </head>
 <body>
   <header class="admin-header">
@@ -160,6 +160,62 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="js/admin.js?v=851"></script>
+  <script src="js/admin.js?v=852"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const debugBtn = document.getElementById("debugDotGGBtn");
+  const message = document.getElementById("message");
+
+  if (!debugBtn) return;
+
+  debugBtn.addEventListener("click", async () => {
+    if (message) {
+      message.textContent = "Probando conexión con DotGG...";
+      message.style.color = "#66ffd1";
+    }
+
+    try {
+      const res = await fetch("/.netlify/functions/sync-riftboundgg-prices?debug=1&v=" + Date.now(), {
+        cache: "no-store"
+      });
+
+      const text = await res.text();
+      let data = null;
+
+      try {
+        data = JSON.parse(text);
+      } catch {}
+
+      console.log("Diagnóstico DotGG:", data || text);
+
+      if (!res.ok) {
+        const errorText = data?.message || data?.error || text || "Error desconocido.";
+        if (message) {
+          message.textContent = "Diagnóstico DotGG falló: " + errorText;
+          message.style.color = "#ff9b9b";
+        }
+        return;
+      }
+
+      const status = data?.status ?? res.status;
+      const type = data?.contentType || "sin content-type";
+      const preview = String(data?.textPreview || text || "").slice(0, 220).replace(/\s+/g, " ");
+
+      if (message) {
+        message.textContent = `Diagnóstico DotGG OK · status ${status} · ${type} · ${preview}`;
+        message.style.color = "#66ffd1";
+      }
+    } catch (error) {
+      console.error(error);
+      if (message) {
+        message.textContent = "No se pudo ejecutar diagnóstico DotGG: " + (error.message || error);
+        message.style.color = "#ff9b9b";
+      }
+    }
+  });
+});
+</script>
+
 </body>
 </html>
