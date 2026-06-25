@@ -398,3 +398,122 @@ td input[data-field="storePrice"]{
     grid-template-columns:1fr;
   }
 }
+
+
+/* v9.1 DotGG audit */
+.dotgg-audit-panel h2{
+  margin:0 0 10px;
+  color:#ffd34d;
+  font-size:20px;
+}
+
+.dotgg-audit-panel p{
+  color:#ccc;
+  margin:0 0 14px;
+}
+
+.audit-controls{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:end;
+}
+
+.audit-controls div{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.audit-controls label{
+  color:#ffd34d;
+  font-weight:800;
+}
+
+.audit-controls input{
+  height:38px;
+  border-radius:9px;
+  border:1px solid #333;
+  background:#080808;
+  color:#fff;
+  padding:0 10px;
+  width:120px;
+}
+
+#auditDotGGBtn{
+  width:auto;
+  min-width:180px;
+  border-radius:10px;
+  font-weight:900;
+  background:#38bdf8;
+  color:#000;
+}
+
+.audit-result{
+  margin-top:14px;
+  border:1px solid #333;
+  background:#080808;
+  border-radius:12px;
+  padding:14px;
+  color:#ddd;
+}
+
+.audit-summary{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.audit-summary strong,
+.audit-summary span{
+  background:#111;
+  border:1px solid #333;
+  border-radius:999px;
+  padding:6px 10px;
+}
+
+.audit-result h3{
+  color:#ffd34d;
+  margin:12px 0 8px;
+}
+
+.audit-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.audit-row{
+  display:grid;
+  grid-template-columns:1.3fr 1fr 1fr .7fr .7fr;
+  gap:8px;
+  padding:8px;
+  border:1px solid #222;
+  border-radius:8px;
+  background:#111;
+  font-size:13px;
+}
+
+.audit-row strong{
+  color:#fff;
+}
+
+.audit-row span{
+  color:#ccc;
+}
+
+@media(max-width:800px){
+  .audit-row{
+    grid-template-columns:1fr;
+  }
+
+  .audit-controls input,
+  #auditDotGGBtn{
+    width:100%;
+  }
+
+  .audit-controls div{
+    width:100%;
+  }
+}

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=90">
+  <link rel="stylesheet" href="css/admin.css?v=91">
 </head>
 <body>
   <header class="admin-header">
@@ -50,6 +50,28 @@
 
     
     
+    
+    <section class="panel dotgg-audit-panel">
+      <h2>Auditoría de códigos DotGG</h2>
+      <p>Revisa qué códigos del catálogo está reconociendo DotGG. Útil para detectar diferencias entre el código local y el código esperado por la API.</p>
+
+      <div class="audit-controls">
+        <div>
+          <label>Inicio</label>
+          <input id="auditOffsetInput" type="number" min="0" step="1" value="0">
+        </div>
+        <div>
+          <label>Cantidad</label>
+          <input id="auditLimitInput" type="number" min="1" max="200" step="1" value="80">
+        </div>
+        <button id="auditDotGGBtn" type="button">Auditar códigos</button>
+      </div>
+
+      <div id="auditResult" class="audit-result">
+        Ejecuta una auditoría para ver los resultados.
+      </div>
+    </section>
+
     <section class="panel orders-panel">
       <h2>Confirmar pedido y descontar stock</h2>
       <p>Ingresa el número de pedido enviado por WhatsApp. El stock se descuenta solo cuando confirmas el pedido.</p>
@@ -123,7 +145,7 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="js/admin.js?v=90"></script>
+  <script src="js/admin.js?v=91"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {

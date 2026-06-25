@@ -8,6 +8,10 @@ const saveBtn = document.getElementById("saveBtn");
 const syncPricesBtn = document.getElementById("syncPricesBtn");
 const syncCatalogBtn = document.getElementById("syncCatalogBtn");
 const message = document.getElementById("message");
+const auditDotGGBtn = document.getElementById("auditDotGGBtn");
+const auditOffsetInput = document.getElementById("auditOffsetInput");
+const auditLimitInput = document.getElementById("auditLimitInput");
+const auditResult = document.getElementById("auditResult");
 const exportBackupExcelBtn = document.getElementById("exportBackupExcelBtn");
 const exportBackupJsonBtn = document.getElementById("exportBackupJsonBtn");
 const exportBackupBothBtn = document.getElementById("exportBackupBothBtn");
@@ -427,6 +431,112 @@ async function completeOrder(){
   showMessage(data.message || `Pedido #${id} descontado correctamente.`);
 }
 
+
+function escapeCsv(value){
+  const text = String(value ?? "");
+  if(/[",\n;]/.test(text)){
+    return `"${text.replace(/"/g, '""')}"`;
+  }
+  return text;
+}
+
+function downloadAuditCsv(results){
+  const headers = ["Carta","Codigo local","DotGG local","Codigo enviado","Encontrada","Status","Precio","Payload cardid","Muestra"];
+  const rows = results.map(r => [
+    r.name,
+    r.publicCode,
+    r.dotggCode,
+    r.sentCode,
+    r.found ? "SI" : "NO",
+    r.status,
+    r.price || "",
+    r.payloadCardId || "",
+    String(r.sample || "").replace(/\s+/g, " ").slice(0, 250)
+  ]);
+
+  const csv = [headers, ...rows].map(row => row.map(escapeCsv).join(";")).join("\n");
+  const blob = new Blob([csv], { type:"text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `dotgg_audit_${Date.now()}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function renderAuditResults(data){
+  if(!auditResult) return;
+
+  const missing = (data.missingSamples || []).map(r => `
+    <div class="audit-row">
+      <strong>${r.name || "-"}</strong>
+      <span>Local: ${r.publicCode || r.dotggCode || "-"}</span>
+      <span>Enviado: ${r.sentCode || "-"}</span>
+      <span>Status: ${r.status}</span>
+      <span>Precio: ${r.price || "-"}</span>
+    </div>
+  `).join("");
+
+  auditResult.innerHTML = `
+    <div class="audit-summary">
+      <strong>Revisadas: ${data.checked}</strong>
+      <span>Encontradas: ${data.found}</span>
+      <span>Sin precio: ${data.missing}</span>
+    </div>
+    <h3>Primeras fallidas</h3>
+    <div class="audit-list">${missing || "<p>Sin fallidas en este rango.</p>"}</div>
+  `;
+}
+
+async function auditDotGGCodes(){
+  if(!cards.length){
+    showMessage("El catálogo aún no está cargado.", true);
+    return;
+  }
+
+  const offset = Number(auditOffsetInput?.value || 0);
+  const limit = Number(auditLimitInput?.value || 80);
+
+  showMessage(`Auditando códigos DotGG desde ${offset}, cantidad ${limit}...`);
+
+  try{
+    const res = await fetch("/.netlify/functions/audit-dotgg-codes", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        offset,
+        limit,
+        cards: cards.map(card => ({
+          name: card.name,
+          publicCode: card.publicCode,
+          dotggCode: card.dotggCode,
+          cardid: card.cardid,
+          cardId: card.cardId,
+          code: card.code,
+          number: card.number
+        }))
+      })
+    });
+
+    const data = await res.json().catch(()=>({}));
+
+    if(!res.ok){
+      showMessage(data.error || data.message || "No se pudo auditar DotGG.", true);
+      return;
+    }
+
+    console.log("DotGG audit:", data);
+    renderAuditResults(data);
+    downloadAuditCsv(data.results || []);
+
+    showMessage(`Auditoría lista: ${data.found}/${data.checked} encontradas. Se descargó CSV.`);
+  }catch(error){
+    showMessage("Error auditando DotGG: " + (error.message || error), true);
+  }
+}
+
 function backupDateStamp(){
   const now = new Date();
   const date = now.toISOString().slice(0,10);
@@ -559,4 +669,5 @@ exportBackupBothBtn?.addEventListener("click", exportBackupBoth);
 searchOrderBtn?.addEventListener("click", searchOrder);
 completeOrderBtn?.addEventListener("click", completeOrder);
 
+auditDotGGBtn?.addEventListener("click", auditDotGGCodes);
 load();
