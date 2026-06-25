@@ -13,7 +13,7 @@ const exportBackupJsonBtn = document.getElementById("exportBackupJsonBtn");
 const exportBackupBothBtn = document.getElementById("exportBackupBothBtn");
 
 const saveMinPricesBtn = document.getElementById("saveMinPricesBtn");
-const applyBasePricesBtn = document.getElementById("applyBasePricesBtn");
+const applyMinPricesBtn = document.getElementById("applyMinPricesBtn");
 const orderIdInput = document.getElementById("orderIdInput");
 const searchOrderBtn = document.getElementById("searchOrderBtn");
 const completeOrderBtn = document.getElementById("completeOrderBtn");
@@ -104,14 +104,6 @@ function render(){
     const foilDisabled = hasFoil ? "" : "disabled";
     const foilTitle = hasFoil ? "Stock foil" : "Foil no aplica para esta rareza";
 
-    const marketNormalClp = marketClpForUsd(entry.marketPrice);
-    const baseNormal = basePriceForCard(card, "normal");
-    const finalNormal = Math.max(Number(entry.storePrice || 0), baseNormal, marketNormalClp);
-
-    const marketFoilClp = hasFoil ? marketClpForUsd(entry.foilMarketPrice) : 0;
-    const baseFoil = hasFoil ? basePriceForCard(card, "foil") : 0;
-    const finalFoil = hasFoil ? Math.max(Number(entry.foilStorePrice || 0), baseFoil, marketFoilClp) : 0;
-
     return `
       <tr>
         <td>
@@ -123,16 +115,10 @@ function render(){
         <td>${card.publicCode || card.dotggCode || "-"}</td>
         <td><input type="number" min="0" value="${entry.stock}" data-field="stock" data-card-key="${key}"></td>
         <td><input type="number" min="0" value="${hasFoil ? entry.foilStock : 0}" data-field="foilStock" data-card-key="${key}" ${foilDisabled} title="${foilTitle}"></td>
-
         <td><input type="number" min="0" step="0.01" value="${entry.marketPrice}" data-field="marketPrice" data-card-key="${key}"></td>
-        <td class="readonly-price">$${Number(marketNormalClp).toLocaleString("es-CL")}</td>
-        <td class="readonly-price">$${Number(baseNormal).toLocaleString("es-CL")}</td>
-        <td><input type="number" min="0" step="1" value="${finalNormal}" data-field="storePrice" data-card-key="${key}"></td>
-
+        <td><input type="number" min="0" step="1" value="${entry.storePrice}" data-field="storePrice" data-card-key="${key}"></td>
         <td><input type="number" min="0" step="0.01" value="${hasFoil ? entry.foilMarketPrice : 0}" data-field="foilMarketPrice" data-card-key="${key}" ${foilDisabled} title="${foilTitle}"></td>
-        <td class="readonly-price">${hasFoil ? "$" + Number(marketFoilClp).toLocaleString("es-CL") : "-"}</td>
-        <td class="readonly-price">${hasFoil ? "$" + Number(baseFoil).toLocaleString("es-CL") : "-"}</td>
-        <td><input type="number" min="0" step="1" value="${hasFoil ? finalFoil : 0}" data-field="foilStorePrice" data-card-key="${key}" ${foilDisabled} title="${foilTitle}"></td>
+        <td><input type="number" min="0" step="1" value="${hasFoil ? entry.foilStorePrice : 0}" data-field="foilStorePrice" data-card-key="${key}" ${foilDisabled} title="${foilTitle}"></td>
       </tr>
     `;
   }).join("");
@@ -346,7 +332,7 @@ function rarityKey(card){
   return String(card.rarity || "").toLowerCase();
 }
 
-function basePriceInputs(){
+function minPriceInputs(){
   return {
     common: {
       normal: document.getElementById("minCommonNormal"),
@@ -372,7 +358,7 @@ function basePriceInputs(){
 }
 
 function readMinPriceRules(){
-  const inputs = basePriceInputs();
+  const inputs = minPriceInputs();
   const rules = {};
 
   Object.keys(inputs).forEach(rarity=>{
@@ -385,22 +371,8 @@ function readMinPriceRules(){
   return rules;
 }
 
-
-function basePriceForCard(card, variant = "normal"){
-  const rules = readMinPriceRules();
-  const rarity = rarityKey(card);
-  const rule = rules[rarity] || {};
-  return Math.max(0, Math.round(Number(variant === "foil" ? rule.foil : rule.normal || 0)));
-}
-
-function marketClpForUsd(usd){
-  const dollar = Number(document.getElementById("dollarInput")?.value || 900);
-  const margin = Number(document.getElementById("marginInput")?.value || 1);
-  return Math.round(Number(usd || 0) * dollar * margin);
-}
-
 function fillMinPriceRules(rules = {}){
-  const inputs = basePriceInputs();
+  const inputs = minPriceInputs();
 
   Object.keys(inputs).forEach(rarity=>{
     if(inputs[rarity].normal) inputs[rarity].normal.value = Number(rules[rarity]?.normal ?? inputs[rarity].normal.value ?? 0);
@@ -417,10 +389,10 @@ async function loadMinPriceRules(){
   }catch(e){}
 }
 
-async function saveBasePriceRules(){
+async function saveMinPriceRules(){
   const pin = document.getElementById("adminPin").value.trim();
   if(!pin){
-    showMessage("Ingresa el PIN administrador para guardar precios base.", true);
+    showMessage("Ingresa el PIN administrador para guardar mínimos.", true);
     return;
   }
 
@@ -438,15 +410,15 @@ async function saveBasePriceRules(){
   const data = await res.json().catch(()=>({}));
 
   if(!res.ok){
-    showMessage(data.error || "No se pudieron guardar los precios base.", true);
+    showMessage(data.error || "No se pudieron guardar los precios mínimos.", true);
     return;
   }
 
   fillMinPriceRules(data.rules);
-  showMessage("Precios base guardados correctamente.");
+  showMessage("Precios mínimos guardados correctamente.");
 }
 
-function applyBasePricesLocal(){
+function applyMinPricesLocal(){
   const rules = readMinPriceRules();
   let changed = 0;
 
@@ -491,14 +463,14 @@ function applyBasePricesLocal(){
   return changed;
 }
 
-async function applyBasePricesAndSave(){
+async function applyMinPricesAndSave(){
   const pin = document.getElementById("adminPin").value.trim();
   if(!pin){
-    showMessage("Ingresa el PIN administrador para aplicar precios base.", true);
+    showMessage("Ingresa el PIN administrador para aplicar mínimos.", true);
     return;
   }
 
-  const changed = applyBasePricesLocal();
+  const changed = applyMinPricesLocal();
 
   const res = await fetch("/.netlify/functions/stock", {
     method:"POST",
@@ -512,11 +484,11 @@ async function applyBasePricesAndSave(){
   const data = await res.json().catch(()=>({}));
 
   if(!res.ok){
-    showMessage(data.error || "No se pudo guardar el inventario con precios base.", true);
+    showMessage(data.error || "No se pudo guardar el inventario con mínimos.", true);
     return;
   }
 
-  showMessage(`Precios base aplicados. Cambios realizados: ${changed}. Inventario guardado.`);
+  showMessage(`Precios mínimos aplicados. Cambios realizados: ${changed}. Inventario guardado.`);
 }
 
 function cleanOrderId(value){
@@ -751,18 +723,10 @@ if(syncCatalogBtn) syncCatalogBtn.addEventListener("click", syncDotGGCatalog);
 exportBackupExcelBtn?.addEventListener("click", exportBackupExcel);
 exportBackupJsonBtn?.addEventListener("click", exportBackupJson);
 exportBackupBothBtn?.addEventListener("click", exportBackupBoth);
-saveMinPricesBtn?.addEventListener("click", saveBasePriceRules);
-applyBasePricesBtn?.addEventListener("click", applyBasePricesAndSave);
+saveMinPricesBtn?.addEventListener("click", saveMinPriceRules);
+applyMinPricesBtn?.addEventListener("click", applyMinPricesAndSave);
 searchOrderBtn?.addEventListener("click", searchOrder);
 completeOrderBtn?.addEventListener("click", completeOrder);
-
-
-// v8.6.1 base price live re-render
-["minCommonNormal","minCommonFoil","minUncommonNormal","minUncommonFoil","minRareNormal","minRareFoil","minEpicNormal","minEpicFoil","minShowcaseNormal","minShowcaseFoil","dollarInput","marginInput"].forEach(id=>{
-  document.getElementById(id)?.addEventListener("input", ()=>{
-    if(cards.length) render();
-  });
-});
 
 load();
 loadMinPriceRules();

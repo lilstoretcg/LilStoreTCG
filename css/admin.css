@@ -443,78 +443,15 @@ td input[data-field="storePrice"]{
 }
 
 
-/* v8.6.1 Precio Base layout + admin table columns */
-.base-price-panel{
-  max-width:100%;
+/* v8.6 compact base price panel */
+.min-price-grid{
+display:grid;
+grid-template-columns:1fr 140px 140px;
+gap:10px 12px;
+max-width:620px;
+align-items:center;
 }
-
-.base-price-panel h2{
-  margin:0 0 10px;
-  color:#ffd34d;
-  font-size:22px;
-}
-
-.base-price-panel p{
-  color:#ddd;
-  margin:0 0 16px;
-}
-
-.base-price-grid{
-  display:grid;
-  grid-template-columns: 1fr 150px 150px;
-  gap:10px 12px;
-  align-items:center;
-  margin:14px 0;
-  max-width:650px;
-}
-
-.base-price-head{
-  color:#ffd34d;
-  font-weight:900;
-  font-size:13px;
-  text-transform:uppercase;
-}
-
-.base-price-grid label{
-  font-weight:800;
-  color:#fff;
-}
-
-.base-price-grid input{
-  height:38px;
-  border-radius:9px;
-  border:1px solid #333;
-  background:#080808;
-  color:#fff;
-  padding:0 10px;
-}
-
-.table-panel{
-  overflow-x:auto;
-}
-
-.table-panel table{
-  min-width:1650px;
-}
-
-.table-panel th{
-  white-space:nowrap;
-}
-
-.readonly-price{
-  white-space:nowrap;
-  color:#ffd34d;
-  font-weight:800;
-  text-align:right;
-}
-
+.min-price-grid input{height:38px}
 @media(max-width:700px){
-  .base-price-grid{
-    grid-template-columns:1fr;
-    max-width:none;
-  }
-
-  .base-price-head{
-    display:none;
-  }
+.min-price-grid{grid-template-columns:1fr;}
 }

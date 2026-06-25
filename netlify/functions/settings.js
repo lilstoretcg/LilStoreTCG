@@ -1,7 +1,7 @@
 const { getStore, connectLambda } = require("@netlify/blobs");
 
 const STORE_NAME = "lilstore-settings";
-const BASE_PRICES_KEY = "minimum-prices";
+const MIN_PRICES_KEY = "minimum-prices";
 
 const DEFAULT_MIN_PRICES = {
   common: { normal: 100, foil: 200 },
@@ -44,7 +44,7 @@ exports.handler = async (event) => {
     const store = getStore(STORE_NAME);
 
     if (event.httpMethod === "GET") {
-      const current = await store.get(BASE_PRICES_KEY, { type: "json" });
+      const current = await store.get(MIN_PRICES_KEY, { type: "json" });
       return json(200, current || DEFAULT_MIN_PRICES);
     }
 
@@ -62,8 +62,8 @@ exports.handler = async (event) => {
         return json(400, { error: "JSON inválido." });
       }
 
-      const rules = normalizeRules(payload.rules || payload.basePrices || payload || {});
-      await store.setJSON(BASE_PRICES_KEY, rules);
+      const rules = normalizeRules(payload.rules || payload.minimumPrices || payload || {});
+      await store.setJSON(MIN_PRICES_KEY, rules);
 
       return json(200, { ok: true, rules });
     }
