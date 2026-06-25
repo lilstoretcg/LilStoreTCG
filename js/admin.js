@@ -13,7 +13,7 @@ const exportBackupJsonBtn = document.getElementById("exportBackupJsonBtn");
 const exportBackupBothBtn = document.getElementById("exportBackupBothBtn");
 
 const saveMinPricesBtn = document.getElementById("saveMinPricesBtn");
-const applyMinPricesBtn = document.getElementById("applyMinPricesBtn");
+const applyBasePricesBtn = document.getElementById("applyBasePricesBtn");
 const orderIdInput = document.getElementById("orderIdInput");
 const searchOrderBtn = document.getElementById("searchOrderBtn");
 const completeOrderBtn = document.getElementById("completeOrderBtn");
@@ -332,7 +332,7 @@ function rarityKey(card){
   return String(card.rarity || "").toLowerCase();
 }
 
-function minPriceInputs(){
+function basePriceInputs(){
   return {
     common: {
       normal: document.getElementById("minCommonNormal"),
@@ -358,7 +358,7 @@ function minPriceInputs(){
 }
 
 function readMinPriceRules(){
-  const inputs = minPriceInputs();
+  const inputs = basePriceInputs();
   const rules = {};
 
   Object.keys(inputs).forEach(rarity=>{
@@ -372,7 +372,7 @@ function readMinPriceRules(){
 }
 
 function fillMinPriceRules(rules = {}){
-  const inputs = minPriceInputs();
+  const inputs = basePriceInputs();
 
   Object.keys(inputs).forEach(rarity=>{
     if(inputs[rarity].normal) inputs[rarity].normal.value = Number(rules[rarity]?.normal ?? inputs[rarity].normal.value ?? 0);
@@ -389,7 +389,7 @@ async function loadMinPriceRules(){
   }catch(e){}
 }
 
-async function saveMinPriceRules(){
+async function saveBasePriceRules(){
   const pin = document.getElementById("adminPin").value.trim();
   if(!pin){
     showMessage("Ingresa el PIN administrador para guardar mínimos.", true);
@@ -410,7 +410,7 @@ async function saveMinPriceRules(){
   const data = await res.json().catch(()=>({}));
 
   if(!res.ok){
-    showMessage(data.error || "No se pudieron guardar los precios mínimos.", true);
+    showMessage(data.error || "No se pudieron guardar los precios base.", true);
     return;
   }
 
@@ -418,7 +418,7 @@ async function saveMinPriceRules(){
   showMessage("Precios mínimos guardados correctamente.");
 }
 
-function applyMinPricesLocal(){
+function applyBasePricesLocal(){
   const rules = readMinPriceRules();
   let changed = 0;
 
@@ -463,14 +463,14 @@ function applyMinPricesLocal(){
   return changed;
 }
 
-async function applyMinPricesAndSave(){
+async function applyBasePricesAndSave(){
   const pin = document.getElementById("adminPin").value.trim();
   if(!pin){
     showMessage("Ingresa el PIN administrador para aplicar mínimos.", true);
     return;
   }
 
-  const changed = applyMinPricesLocal();
+  const changed = applyBasePricesLocal();
 
   const res = await fetch("/.netlify/functions/stock", {
     method:"POST",
@@ -723,8 +723,8 @@ if(syncCatalogBtn) syncCatalogBtn.addEventListener("click", syncDotGGCatalog);
 exportBackupExcelBtn?.addEventListener("click", exportBackupExcel);
 exportBackupJsonBtn?.addEventListener("click", exportBackupJson);
 exportBackupBothBtn?.addEventListener("click", exportBackupBoth);
-saveMinPricesBtn?.addEventListener("click", saveMinPriceRules);
-applyMinPricesBtn?.addEventListener("click", applyMinPricesAndSave);
+saveMinPricesBtn?.addEventListener("click", saveBasePriceRules);
+applyBasePricesBtn?.addEventListener("click", applyBasePricesAndSave);
 searchOrderBtn?.addEventListener("click", searchOrder);
 completeOrderBtn?.addEventListener("click", completeOrder);
 

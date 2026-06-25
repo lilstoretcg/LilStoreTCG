@@ -3,7 +3,7 @@ const { getStore, connectLambda } = require("@netlify/blobs");
 const STORE_NAME = "lilstore-inventory";
 const INVENTORY_KEY = "inventory";
 const SETTINGS_STORE = "lilstore-settings";
-const MIN_PRICES_KEY = "minimum-prices";
+const BASE_PRICES_KEY = "minimum-prices";
 const DOTGG_PRICE_URL = "https://api.dotgg.gg/cgfw/getcardprices";
 
 function json(statusCode, body) {
@@ -237,7 +237,7 @@ function defaultMinPrices() {
 async function getMinPriceRules() {
   try {
     const settingsStore = getStore(SETTINGS_STORE);
-    return await settingsStore.get(MIN_PRICES_KEY, { type: "json" }) || defaultMinPrices();
+    return await settingsStore.get(BASE_PRICES_KEY, { type: "json" }) || defaultMinPrices();
   } catch {
     return defaultMinPrices();
   }
@@ -349,7 +349,7 @@ exports.handler = async (event) => {
         inventory[key].foilStorePrice = Math.round(priceData.foilPrice * dollar * margin);
       }
 
-      applyMinimumPriceToEntry(card, inventory[key], minPriceRules);
+      applyMinimumPriceToEntry(card, inventory[key], basePriceRules);
       updated++;
     }
 

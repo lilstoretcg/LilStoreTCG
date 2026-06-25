@@ -50,14 +50,14 @@
 
     
     
-    <section class="panel min-price-panel">
-      <h2>Precios mínimos por rareza</h2>
-      <p>Define un piso mínimo para evitar vender cartas demasiado baratas. El precio final queda como el mayor entre DotGG y el mínimo definido.</p>
+    <section class="panel base-price-panel">
+      <h2>Precio base por rareza</h2>
+      <p>Define el precio base de cada rareza. Si el precio de mercado es inferior, se utilizará este valor como precio final.</p>
 
-      <div class="min-price-grid">
-        <div class="min-price-head">Rareza</div>
-        <div class="min-price-head">Normal CLP</div>
-        <div class="min-price-head">Foil CLP</div>
+      <div class="base-price-grid">
+        <div class="base-price-head">Rareza</div>
+        <div class="base-price-head">Normal CLP</div>
+        <div class="base-price-head">Foil CLP</div>
 
         <label>Common</label>
         <input id="minCommonNormal" type="number" min="0" step="1" value="100">
@@ -81,8 +81,8 @@
       </div>
 
       <div class="admin-actions-row">
-        <button id="saveMinPricesBtn" type="button">Guardar mínimos</button>
-        <button id="applyMinPricesBtn" type="button">Aplicar mínimos al inventario</button>
+        <button id="saveMinPricesBtn" type="button">Guardar precios base</button>
+        <button id="applyBasePricesBtn" type="button">Aplicar precios base</button>
       </div>
 
       <small>Nota: Rare, Epic y Showcase no usan stock foil en la tienda. Puedes dejar su mínimo foil en 0.</small>
