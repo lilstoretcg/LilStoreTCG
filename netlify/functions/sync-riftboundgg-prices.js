@@ -47,6 +47,7 @@ function extractRows(payload) {
   if (payload && Array.isArray(payload.history)) return payload.history;
   if (payload && Array.isArray(payload.result)) return payload.result;
   if (payload && Array.isArray(payload.rows)) return payload.rows;
+  if (payload && Array.isArray(payload.lines)) return payload.lines;
 
   if (payload && typeof payload === "object") {
     for (const value of Object.values(payload)) {
@@ -114,8 +115,8 @@ function latestPriceFromHistory(payload) {
 
 function priceFromCandidates(values) {
   for (const value of values) {
-    const price = Number(value);
-    if (Number.isFinite(price) && price > 0) return price;
+    const price = toNumber(value);
+    if (price) return price;
   }
   return null;
 }
@@ -168,7 +169,12 @@ function latestNormalFoilPrices(payload) {
   return { normalPrice, foilPrice };
 }
 
-async function getDotGGPrice(cardId) {
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function fetchDotGGPayload(cardId, attempt = 1) {
   const url = `${DOTGG_PRICE_URL}?game=riftbound&cardid=${encodeURIComponent(cardId)}&cache=${Date.now()}`;
 
   const response = await fetch(url, {
@@ -178,13 +184,53 @@ async function getDotGGPrice(cardId) {
     }
   });
 
+  const text = await response.text();
+
   if (!response.ok) {
-    return { ok: false, cardId, status: response.status };
+    return {
+      ok: false,
+      cardId,
+      status: response.status,
+      statusText: response.statusText,
+      sample: text.slice(0, 500)
+    };
   }
 
-  const payload = await response.json();
+  let payload;
+  try {
+    payload = JSON.parse(text);
+  } catch (error) {
+    return {
+      ok: false,
+      cardId,
+      status: "BAD_JSON",
+      sample: text.slice(0, 500),
+      message: error.message || String(error)
+    };
+  }
+
+  const rows = extractRows(payload);
+  const looksEmpty = !rows.length || rows.every(row => !findPriceDeep(row));
+
+  if (looksEmpty && attempt < 3) {
+    await sleep(250 * attempt);
+    return fetchDotGGPayload(cardId, attempt + 1);
+  }
+
+  return { ok: true, cardId, payload };
+}
+
+async function getDotGGPrice(cardId) {
+  const fetched = await fetchDotGGPayload(cardId);
+
+  if (!fetched.ok) {
+    return fetched;
+  }
+
+  const payload = fetched.payload;
   const { normalPrice, foilPrice } = latestNormalFoilPrices(payload);
-  const price = normalPrice || foilPrice || null;
+  const fallbackPrice = latestPriceFromHistory(payload);
+  const price = normalPrice || fallbackPrice || foilPrice || null;
 
   if (!price) {
     return {
@@ -199,7 +245,7 @@ async function getDotGGPrice(cardId) {
     ok: true,
     cardId,
     price,
-    normalPrice,
+    normalPrice: normalPrice || fallbackPrice || null,
     foilPrice
   };
 }
@@ -259,8 +305,8 @@ function applyMinimumPriceToEntry(card, entry, rules) {
 
 
 // DEBUG_DOTGG_DIAGNOSTIC
-async function debugDotGG() {
-  const testCardId = "OGN-001";
+async function debugDotGG(event = {}) {
+  const testCardId = event.queryStringParameters?.cardid || "OGN-001";
   const url = `${DOTGG_PRICE_URL}?game=riftbound&cardid=${encodeURIComponent(testCardId)}&cache=${Date.now()}`;
 
   try {
@@ -301,7 +347,7 @@ async function debugDotGG() {
 
 exports.handler = async (event) => {
   if (event.httpMethod === "GET" && event.queryStringParameters?.debug) {
-    return await debugDotGG();
+    return await debugDotGG(event);
   }
   if (event.httpMethod === "OPTIONS") return json(200, { ok: true });
   if (event.httpMethod !== "POST") return json(405, { error: "Método no permitido." });
@@ -335,7 +381,7 @@ exports.handler = async (event) => {
       .filter(card => card.dotggId);
 
     const uniqueCodes = [...new Set(cardsWithCodes.map(card => card.dotggId))];
-    const priceResults = await asyncPool(8, uniqueCodes, getDotGGPrice);
+    const priceResults = await asyncPool(3, uniqueCodes, getDotGGPrice);
 
     const priceMap = {};
     const failed = [];
@@ -408,6 +454,7 @@ exports.handler = async (event) => {
       failedCount: failed.length,
       notFoundCount: notFound.length,
       failed: failed.slice(0, 10),
+      failedSamples: failed.slice(0, 5).map(f => ({ cardId: f.cardId, status: f.status, sample: f.sample })),
       notFound: notFound.slice(0, 10),
       dollar,
       margin
