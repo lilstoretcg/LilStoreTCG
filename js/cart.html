@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito - LilStore TCG</title>
+  <link rel="stylesheet" href="css/style.css?v=775">
+</head>
+<body>
+<header class="cart-page-header">
+  <a href="index.html" class="brand-header">
+    <img class="site-logo" src="assets/logo.png" alt="LilStore TCG">
+    <div class="brand-text">
+      <h1>LilStore TCG</h1>
+      <span>Riftbound Singles Chile</span>
+    </div>
+  </a>
+</header>
+
+<main class="cart-page">
+  <a class="back-btn" href="index.html">🏠 Volver a la tienda</a>
+
+  <h1>Carrito</h1>
+
+  <div id="cartItems"></div>
+
+  <p class="cart-total-line">Total: <strong id="cartTotal">$0 CLP</strong></p>
+
+  <button class="danger-btn" onclick="clearCart()">🗑 Vaciar carrito</button>
+  <a id="whatsappBtn" class="whatsapp-btn" href="#">Finalizar por WhatsApp</a>
+</main>
+
+<script src="js/cart.js?v=775"></script>
+</body>
+</html>

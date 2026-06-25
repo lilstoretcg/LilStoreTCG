@@ -1,0 +1,443 @@
+body{
+  margin:0;
+  background:#050505;
+  color:#f5f5f5;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+.admin-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  padding:24px;
+  background:#111;
+  border-bottom:1px solid #333;
+}
+
+.admin-header h1{
+  margin:0;
+  font-size:28px;
+}
+
+.admin-header p{
+  margin:6px 0 0;
+  color:#bbb;
+}
+
+.back-link{
+  color:#ffd34d;
+  text-decoration:none;
+  font-weight:700;
+}
+
+.admin-wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:24px;
+}
+
+.panel,
+.table-panel{
+  background:#111;
+  border:1px solid #333;
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:18px;
+}
+
+.grid-controls{
+  display:grid;
+  grid-template-columns:1fr 220px 180px;
+  gap:14px;
+  align-items:end;
+}
+
+label{
+  display:block;
+  margin-bottom:8px;
+  color:#ddd;
+  font-weight:700;
+}
+
+input, select{
+  width:100%;
+  box-sizing:border-box;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #444;
+  background:#050505;
+  color:#fff;
+}
+
+small{
+  display:block;
+  margin-top:8px;
+  color:#999;
+}
+
+button{
+  padding:13px 18px;
+  border:0;
+  border-radius:10px;
+  background:#ffd34d;
+  color:#111;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-bottom:18px;
+}
+
+.stats div{
+  background:#151515;
+  border:1px solid #333;
+  border-radius:14px;
+  padding:18px;
+}
+
+.stats strong{
+  display:block;
+  font-size:28px;
+  color:#ffd34d;
+}
+
+.stats span{
+  color:#ccc;
+}
+
+.message{
+  min-height:24px;
+  margin-bottom:12px;
+  color:#a7f3d0;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th, td{
+  padding:12px;
+  border-bottom:1px solid #2a2a2a;
+  text-align:left;
+}
+
+th{
+  color:#ffd34d;
+}
+
+td input{
+  max-width:90px;
+}
+
+.card-name{
+  font-weight:700;
+}
+
+.card-code{
+  color:#aaa;
+}
+
+@media(max-width:800px){
+  .admin-header,
+  .grid-controls{
+    grid-template-columns:1fr;
+    display:grid;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  table{
+    font-size:13px;
+  }
+}
+
+
+/* v6.6 price inputs */
+td input[data-field="marketPrice"],
+td input[data-field="storePrice"]{
+  max-width:120px;
+}
+
+
+/* v6.7 riftbound price sync */
+.price-sync-panel h2{
+  margin:0 0 14px;
+  color:#ffd34d;
+  font-size:20px;
+}
+
+.price-sync-grid{
+  display:grid;
+  grid-template-columns:180px 220px 260px;
+  gap:14px;
+  align-items:end;
+}
+
+.price-sync-grid button{
+  height:44px;
+}
+
+@media(max-width:900px){
+  .price-sync-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+
+/* v7.1 catalog sync */
+.catalog-sync-panel h2{
+  margin:0 0 10px;
+  color:#ffd34d;
+  font-size:20px;
+}
+
+.catalog-sync-panel p{
+  margin:0 0 14px;
+  color:#ccc;
+}
+
+.catalog-sync-panel button{
+  width:auto;
+  min-width:240px;
+}
+
+/* v7.7.2 foil common uncommon only */
+.table-panel input:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+  background:#222;
+}
+
+/* v7.7.3 admin foil fix */
+.table-panel{overflow-x:auto}
+.table-panel table{min-width:1180px}
+.table-panel input{max-width:110px}
+.table-panel input:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+  background:#222;
+}
+
+
+/* v8.0 backup buttons */
+.backup-panel h2{
+  margin:0 0 10px;
+  color:#ffd34d;
+  font-size:20px;
+}
+
+.backup-panel p{
+  margin:0 0 14px;
+  color:#ccc;
+}
+
+.backup-actions{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.backup-actions button{
+  width:auto;
+  min-width:190px;
+  border-radius:10px;
+  font-weight:900;
+}
+
+#exportBackupExcelBtn{
+  background:#22c55e;
+  color:#000;
+}
+
+#exportBackupJsonBtn{
+  background:#38bdf8;
+  color:#000;
+}
+
+#exportBackupBothBtn{
+  background:#ffb000;
+  color:#000;
+}
+
+@media(max-width:700px){
+  .backup-actions{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .backup-actions button{
+    width:100%;
+  }
+}
+
+
+/* v8.5 orders + minimum prices */
+.min-price-panel h2,
+.orders-panel h2{
+  margin:0 0 10px;
+  color:#ffd34d;
+  font-size:20px;
+}
+
+.min-price-panel p,
+.orders-panel p{
+  color:#ccc;
+  margin:0 0 14px;
+}
+
+.min-price-grid{
+  display:grid;
+  grid-template-columns: 1fr 150px 150px;
+  gap:10px;
+  align-items:center;
+  margin:14px 0;
+}
+
+.min-price-head{
+  color:#ffd34d;
+  font-weight:900;
+  font-size:13px;
+  text-transform:uppercase;
+}
+
+.min-price-grid label{
+  font-weight:800;
+  color:#fff;
+}
+
+.min-price-grid input,
+.order-confirm-row input{
+  height:38px;
+  border-radius:9px;
+  border:1px solid #333;
+  background:#080808;
+  color:#fff;
+  padding:0 10px;
+}
+
+.admin-actions-row,
+.order-confirm-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+  margin-top:14px;
+}
+
+.admin-actions-row button,
+.order-confirm-row button{
+  width:auto;
+  min-width:170px;
+  border-radius:10px;
+  font-weight:900;
+}
+
+#saveMinPricesBtn{
+  background:#38bdf8;
+  color:#000;
+}
+
+#applyMinPricesBtn{
+  background:#ffb000;
+  color:#000;
+}
+
+#searchOrderBtn{
+  background:#38bdf8;
+  color:#000;
+}
+
+#completeOrderBtn{
+  background:#22c55e;
+  color:#000;
+}
+
+.order-preview{
+  margin-top:14px;
+  border:1px solid #333;
+  border-radius:12px;
+  background:#080808;
+  padding:14px;
+  color:#ccc;
+}
+
+.order-preview-head,
+.order-preview-total{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+}
+
+.order-preview-head strong{
+  color:#ffd34d;
+  font-size:18px;
+}
+
+.order-preview-head span{
+  background:#222;
+  color:#fff;
+  padding:5px 10px;
+  border-radius:999px;
+  font-weight:800;
+}
+
+.order-preview-list{
+  margin:12px 0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.order-preview-item{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:10px;
+  padding:10px;
+  border:1px solid #222;
+  border-radius:10px;
+  background:#111;
+}
+
+.order-preview-item strong{
+  color:#fff;
+}
+
+.order-preview-item span{
+  color:#bbb;
+}
+
+.order-preview-item b,
+.order-preview-total strong{
+  color:#ffd34d;
+}
+
+@media(max-width:700px){
+  .min-price-grid{
+    grid-template-columns:1fr;
+  }
+
+  .min-price-head{
+    display:none;
+  }
+
+  .admin-actions-row button,
+  .order-confirm-row button,
+  .order-confirm-row input{
+    width:100%;
+  }
+
+  .order-preview-item{
+    grid-template-columns:1fr;
+  }
+}

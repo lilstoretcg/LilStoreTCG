@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Stock - LilStore TCG</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/admin.css?v=855">
+</head>
+<body>
+  <header class="admin-header">
+    <div>
+      <h1>Panel de Stock</h1>
+      <p>LilStore TCG · Actualización en vivo</p>
+    </div>
+    <a href="index.html" class="back-link">Volver a la tienda</a>
+  </header>
+
+  <main class="admin-wrap">
+    <section class="panel">
+      <label>PIN administrador</label>
+      <input id="adminPin" type="password" placeholder="Ingresa tu PIN privado">
+      <small>Este PIN se configura en Netlify como variable privada ADMIN_PIN.</small>
+    </section>
+
+    <section class="panel grid-controls">
+      <div>
+        <label>Buscar carta</label>
+        <input id="searchInput" type="text" placeholder="Buscar por nombre o código">
+      </div>
+      <div>
+        <label>Filtro</label>
+        <select id="stockFilter">
+          <option value="">Todas</option>
+          <option value="available">Con stock</option>
+          <option value="soldout">Sin stock</option>
+        </select>
+      </div>
+      <button id="saveBtn">Guardar stock</button>
+    </section>
+
+    <section class="stats">
+      <div><strong id="totalCards">0</strong><span>Cartas</span></div>
+      <div><strong id="availableCards">0</strong><span>Con stock</span></div>
+      <div><strong id="totalUnits">0</strong><span>Unidades</span></div>
+    </section>
+
+    <section id="message" class="message"></section>
+
+
+
+    
+    
+    <section class="panel min-price-panel">
+      <h2>Precios mínimos por rareza</h2>
+      <p>Define un piso mínimo para evitar vender cartas demasiado baratas. El precio final queda como el mayor entre DotGG y el mínimo definido.</p>
+
+      <div class="min-price-grid">
+        <div class="min-price-head">Rareza</div>
+        <div class="min-price-head">Normal CLP</div>
+        <div class="min-price-head">Foil CLP</div>
+
+        <label>Common</label>
+        <input id="minCommonNormal" type="number" min="0" step="1" value="100">
+        <input id="minCommonFoil" type="number" min="0" step="1" value="200">
+
+        <label>Uncommon</label>
+        <input id="minUncommonNormal" type="number" min="0" step="1" value="150">
+        <input id="minUncommonFoil" type="number" min="0" step="1" value="300">
+
+        <label>Rare</label>
+        <input id="minRareNormal" type="number" min="0" step="1" value="500">
+        <input id="minRareFoil" type="number" min="0" step="1" value="0">
+
+        <label>Epic</label>
+        <input id="minEpicNormal" type="number" min="0" step="1" value="1000">
+        <input id="minEpicFoil" type="number" min="0" step="1" value="0">
+
+        <label>Showcase</label>
+        <input id="minShowcaseNormal" type="number" min="0" step="1" value="2000">
+        <input id="minShowcaseFoil" type="number" min="0" step="1" value="0">
+      </div>
+
+      <div class="admin-actions-row">
+        <button id="saveMinPricesBtn" type="button">Guardar mínimos</button>
+        <button id="applyMinPricesBtn" type="button">Aplicar mínimos al inventario</button>
+      </div>
+
+      <small>Nota: Rare, Epic y Showcase no usan stock foil en la tienda. Puedes dejar su mínimo foil en 0.</small>
+    </section>
+
+    <section class="panel orders-panel">
+      <h2>Confirmar pedido y descontar stock</h2>
+      <p>Ingresa el número de pedido enviado por WhatsApp. El stock se descuenta solo cuando confirmas el pedido.</p>
+
+      <div class="order-confirm-row">
+        <input id="orderIdInput" type="text" placeholder="Ej: 00001 o #00001">
+        <button id="searchOrderBtn" type="button">Buscar pedido</button>
+        <button id="completeOrderBtn" type="button">Descontar stock</button>
+      </div>
+
+      <div id="orderPreview" class="order-preview">
+        Ingresa un número de pedido para revisar sus cartas.
+      </div>
+    </section>
+<section class="panel backup-panel">
+      <h2>Respaldos de inventario</h2>
+      <p>Descarga una copia de emergencia de tu stock actual en Excel y JSON.</p>
+      <div class="backup-actions">
+        <button id="exportBackupExcelBtn" type="button">📊 Exportar Excel</button>
+        <button id="exportBackupJsonBtn" type="button">🧾 Exportar JSON</button>
+        <button id="exportBackupBothBtn" type="button">⬇️ Descargar ambos</button>
+      </div>
+      <small>El Excel es cómodo para revisar stock. El JSON sirve para restaurar el inventario técnico si ocurre una emergencia.</small>
+    </section>
+
+    <section class="panel catalog-sync-panel">
+      <h2>Sincronización de catálogo</h2>
+      <p>Actualiza cartas, sets, rarezas e imágenes desde DotGG.</p>
+      <button id="syncCatalogBtn" type="button">Actualizar catálogo DotGG</button>
+      <small>Luego puedes usar “Actualizar precios DotGG” para traer los precios.</small>
+    </section>
+
+    <section class="panel price-sync-panel">
+      <h2>Sincronización de precios</h2>
+      <div class="price-sync-grid">
+        <div>
+          <label>Dólar CLP</label>
+          <input id="dollarInput" type="number" min="1" step="1" value="900">
+        </div>
+        <div>
+          <label>Multiplicador LilStore</label>
+          <input id="marginInput" type="number" min="0" step="0.01" value="1">
+          <small>Ejemplo: 0.95 = 5% más barato que mercado.</small>
+        </div>
+        <button id="syncPricesBtn" type="button">Actualizar precios DotGG</button>
+        <button id="debugDotGGBtn" type="button">Diagnóstico DotGG</button>
+      </div>
+      <small>Usa la API DotGG getcardprices como Market USD.</small>
+    </section>
+
+    <section class="table-panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Carta</th>
+            <th>Set</th>
+            <th>Rareza</th>
+            <th>Código</th>
+            <th>Stock Normal</th>
+            <th>Stock Foil</th>
+            <th>Mercado Normal USD</th>
+            <th>LilStore Normal CLP</th>
+            <th>Mercado Foil USD</th>
+            <th>LilStore Foil CLP</th>
+          </tr>
+        </thead>
+        <tbody id="stockRows"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="js/admin.js?v=855"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const debugBtn = document.getElementById("debugDotGGBtn");
+  const message = document.getElementById("message");
+
+  if (!debugBtn) return;
+
+  debugBtn.addEventListener("click", async () => {
+    if (message) {
+      message.textContent = "Probando conexión con DotGG...";
+      message.style.color = "#66ffd1";
+    }
+
+    try {
+      const res = await fetch("/.netlify/functions/sync-riftboundgg-prices?debug=1&v=" + Date.now(), {
+        cache: "no-store"
+      });
+
+      const text = await res.text();
+      let data = null;
+
+      try {
+        data = JSON.parse(text);
+      } catch {}
+
+      console.log("Diagnóstico DotGG:", data || text);
+
+      if (!res.ok) {
+        const errorText = data?.message || data?.error || text || "Error desconocido.";
+        if (message) {
+          message.textContent = "Diagnóstico DotGG falló: " + errorText;
+          message.style.color = "#ff9b9b";
+        }
+        return;
+      }
+
+      const status = data?.status ?? res.status;
+      const type = data?.contentType || "sin content-type";
+      const preview = String(data?.textPreview || text || "").slice(0, 220).replace(/\s+/g, " ");
+
+      if (message) {
+        message.textContent = `Diagnóstico DotGG OK · status ${status} · ${type} · ${preview}`;
+        message.style.color = "#66ffd1";
+      }
+    } catch (error) {
+      console.error(error);
+      if (message) {
+        message.textContent = "No se pudo ejecutar diagnóstico DotGG: " + (error.message || error);
+        message.style.color = "#ff9b9b";
+      }
+    }
+  });
+});
+</script>
+
+</body>
+</html>

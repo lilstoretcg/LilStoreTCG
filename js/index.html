@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LilStore TCG</title>
+<link rel="stylesheet" href="css/style.css?v=85">
+<link rel="icon" href="assets/logo.png">
+</head>
+<body>
+<header class="header">
+  <a href="index.html" class="brand-header">
+    <img class="site-logo" src="assets/logo.png" alt="LilStore TCG">
+    <div class="brand-text">
+      <h1>LilStore TCG</h1>
+      <span>Riftbound Singles Chile</span>
+    </div>
+  </a>
+  <a class="cart-header-btn" href="cart.html" data-open-cart="true">🛒 <span>Carrito</span> <strong id="cartCount">0</strong></a>
+</header>
+
+<div class="filters">
+  <div class="filter-group search-group">
+    <label for="search">Buscar carta</label>
+    <input id="search" type="text" placeholder="Buscar carta">
+  </div>
+
+  <div class="filter-group">
+    <label for="setFilter">Set</label>
+    <select id="setFilter">
+      <option value="">Todos los Sets</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="rarityFilter">Rareza</label>
+    <select id="rarityFilter">
+      <option value="">Todas</option>
+      <option value="Common">Common</option>
+      <option value="Uncommon">Uncommon</option>
+      <option value="Rare">Rare</option>
+      <option value="Epic">Epic</option>
+      <option value="Showcase">Showcase</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="statusFilter">Stock</label>
+    <select id="statusFilter">
+      <option value="">Todas</option>
+      <option value="available">Disponible</option>
+      <option value="soldout">Agotado</option>
+    </select>
+  </div>
+</div>
+
+<main id="catalog"></main>
+
+<footer>WhatsApp +56 9 3382 3890 • © LilStore TCG</footer>
+<script src="js/app.js?v=85"></script>
+
+  <div id="miniCartOverlay" class="mini-cart-overlay" aria-hidden="true"></div>
+
+  <aside id="miniCartDrawer" class="mini-cart-drawer" aria-hidden="true">
+    <div class="mini-cart-header">
+      <div>
+        <h2>🛒 Mi carrito</h2>
+        <span id="miniCartSummary">0 productos en tu carrito</span>
+      </div>
+      <button id="miniCartClose" class="mini-cart-close" type="button" aria-label="Cerrar carrito">×</button>
+    </div>
+
+    <div id="miniCartItems" class="mini-cart-items">
+      <p class="mini-cart-empty">Tu carrito está vacío.</p>
+    </div>
+
+    <div class="mini-cart-footer">
+      <div class="mini-cart-total-row">
+        <span>Total</span>
+        <strong id="miniCartTotal">$0 CLP</strong>
+      </div>
+      <a id="miniCartWhatsappBtn" class="mini-cart-whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer">Finalizar por WhatsApp</a>
+      <button id="miniCartClearBtn" class="mini-cart-clear-btn" type="button">Vaciar carrito</button>
+    </div>
+  </aside>
+
+</body>
+</html>
