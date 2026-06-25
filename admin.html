@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=102">
+  <link rel="stylesheet" href="css/admin.css?v=103">
 </head>
 <body>
   <header class="admin-header">
@@ -51,6 +51,52 @@
     
     
     
+    
+    <section class="panel restore-backup-panel">
+      <h2>Restaurar stock desde Excel respaldo</h2>
+      <p>Restaura el inventario desde el respaldo Excel cargado en esta versión. Incluye 901 cartas de Origins, Spiritforged y Unleashed con 1820 unidades.</p>
+      <button id="restoreExcelBackupBtn" type="button">Restaurar stock desde respaldo</button>
+      <small>Usa este botón después de actualizar el catálogo DotGG en la cuenta nueva de Netlify.</small>
+    </section>
+
+    <section class="panel base-price-panel">
+      <h2>Precio base por rareza</h2>
+      <p>Define el precio base de cada rareza. Si el precio de mercado es inferior, se utilizará este valor como precio final.</p>
+
+      <div class="base-price-grid">
+        <div class="base-price-head">Rareza</div>
+        <div class="base-price-head">Normal CLP</div>
+        <div class="base-price-head">Foil CLP</div>
+
+        <label>Common</label>
+        <input id="baseCommonNormal" type="number" min="0" step="1" value="100">
+        <input id="baseCommonFoil" type="number" min="0" step="1" value="200">
+
+        <label>Uncommon</label>
+        <input id="baseUncommonNormal" type="number" min="0" step="1" value="300">
+        <input id="baseUncommonFoil" type="number" min="0" step="1" value="400">
+
+        <label>Rare</label>
+        <input id="baseRareNormal" type="number" min="0" step="1" value="500">
+        <input id="baseRareFoil" type="number" min="0" step="1" value="0">
+
+        <label>Epic</label>
+        <input id="baseEpicNormal" type="number" min="0" step="1" value="1000">
+        <input id="baseEpicFoil" type="number" min="0" step="1" value="0">
+
+        <label>Showcase</label>
+        <input id="baseShowcaseNormal" type="number" min="0" step="1" value="2000">
+        <input id="baseShowcaseFoil" type="number" min="0" step="1" value="0">
+      </div>
+
+      <div class="base-price-actions">
+        <button id="saveBasePricesBtn" type="button">Guardar precios base</button>
+        <button id="applyBasePricesBtn" type="button">Aplicar precios base</button>
+      </div>
+
+      <small>Rare, Epic y Showcase no usan stock foil. Puedes dejar su precio base foil en 0.</small>
+    </section>
+
     <section class="panel dotgg-audit-panel">
       <h2>Auditoría de códigos DotGG</h2>
       <p>Revisa qué códigos del catálogo está reconociendo DotGG. Útil para detectar diferencias entre el código local y el código esperado por la API.</p>
@@ -158,7 +204,7 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="js/admin.js?v=102"></script>
+  <script src="js/admin.js?v=103"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {

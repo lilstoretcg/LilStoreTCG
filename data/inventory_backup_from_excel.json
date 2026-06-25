@@ -1,0 +1,7210 @@
+{
+  "OGN-001": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "OGN-002": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.17,
+    "foilStorePrice": 153
+  },
+  "OGN-003": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.13,
+    "foilStorePrice": 117
+  },
+  "OGN-004": {
+    "stock": 5,
+    "foilStock": 2,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "OGN-005": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "OGN-006": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "OGN-007": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.3,
+    "foilStorePrice": 270
+  },
+  "OGN-007A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.01,
+    "storePrice": 2709,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-008": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.43,
+    "foilStorePrice": 387
+  },
+  "OGN-009": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.77,
+    "foilStorePrice": 693
+  },
+  "OGN-010": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.32,
+    "foilStorePrice": 288
+  },
+  "OGN-011": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "OGN-012": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.32,
+    "storePrice": 288,
+    "foilMarketPrice": 3.4,
+    "foilStorePrice": 3060
+  },
+  "OGN-013": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 0.47,
+    "foilStorePrice": 423
+  },
+  "OGN-014": {
+    "stock": 3,
+    "foilStock": 1,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.38,
+    "foilStorePrice": 342
+  },
+  "OGN-015": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "OGN-016": {
+    "stock": 3,
+    "foilStock": 1,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "OGN-017": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.49,
+    "foilStorePrice": 441
+  },
+  "OGN-018": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "OGN-019": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "OGN-020": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.35,
+    "foilStorePrice": 315
+  },
+  "OGN-021": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 0.82,
+    "foilStorePrice": 738
+  },
+  "OGN-022": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.38,
+    "storePrice": 342,
+    "foilMarketPrice": 2.43,
+    "foilStorePrice": 2187
+  },
+  "OGN-023": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.35,
+    "foilStorePrice": 315
+  },
+  "OGN-024": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 0.51,
+    "foilStorePrice": 459
+  },
+  "OGN-025": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-026": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.58,
+    "storePrice": 1422,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-027": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.47,
+    "storePrice": 1323,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-027A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 5.31,
+    "storePrice": 4779,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-028": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.39,
+    "storePrice": 351,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-029": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 6.65,
+    "storePrice": 5985,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-030": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.27,
+    "storePrice": 243,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-030A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.98,
+    "storePrice": 1782,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-031": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.24,
+    "storePrice": 216,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-032": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-033": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.31,
+    "storePrice": 279,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-034": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-035": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.42,
+    "storePrice": 378,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-036": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.33,
+    "storePrice": 297,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-037": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 5.79,
+    "storePrice": 5211,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-038": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 10.97,
+    "storePrice": 9873,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-039": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 54.36,
+    "storePrice": 48924,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-039A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 61.28,
+    "storePrice": 55152,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-040": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 12.56,
+    "storePrice": 11304,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-041": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.09,
+    "storePrice": 981,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-041A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.11,
+    "storePrice": 1899,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-042": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 0.5,
+    "foilStorePrice": 450
+  },
+  "OGN-042A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 6.35,
+    "storePrice": 5715,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-043": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.77,
+    "storePrice": 693,
+    "foilMarketPrice": 5.62,
+    "foilStorePrice": 5058
+  },
+  "OGN-044": {
+    "stock": 7,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "OGN-045": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 3.03,
+    "storePrice": 2727,
+    "foilMarketPrice": 6.6,
+    "foilStorePrice": 5940
+  },
+  "OGN-046": {
+    "stock": 7,
+    "foilStock": 1,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.58,
+    "foilStorePrice": 522
+  },
+  "OGN-047": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.7,
+    "foilStorePrice": 630
+  },
+  "OGN-048": {
+    "stock": 7,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.34,
+    "foilStorePrice": 306
+  },
+  "OGN-049": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.18,
+    "foilStorePrice": 162
+  },
+  "OGN-050": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.51,
+    "foilStorePrice": 459
+  },
+  "OGN-051": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.28,
+    "foilStorePrice": 252
+  },
+  "OGN-052": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.38,
+    "foilStorePrice": 342
+  },
+  "OGN-053": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.18,
+    "foilStorePrice": 162
+  },
+  "OGN-054": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.3,
+    "foilStorePrice": 270
+  },
+  "OGN-055": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.27,
+    "foilStorePrice": 243
+  },
+  "OGN-056": {
+    "stock": 1,
+    "foilStock": 1,
+    "marketPrice": 0.34,
+    "storePrice": 306,
+    "foilMarketPrice": 4.15,
+    "foilStorePrice": 3735
+  },
+  "OGN-057": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.65,
+    "foilStorePrice": 585
+  },
+  "OGN-058": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 2.01,
+    "storePrice": 1809,
+    "foilMarketPrice": 3.15,
+    "foilStorePrice": 2835
+  },
+  "OGN-059": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.3,
+    "foilStorePrice": 270
+  },
+  "OGN-060": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.25,
+    "storePrice": 225,
+    "foilMarketPrice": 1.2,
+    "foilStorePrice": 1080
+  },
+  "OGN-061": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.43,
+    "foilStorePrice": 387
+  },
+  "OGN-062": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.42,
+    "foilStorePrice": 378
+  },
+  "OGN-063": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.58,
+    "foilStorePrice": 522
+  },
+  "OGN-064": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.39,
+    "storePrice": 351,
+    "foilMarketPrice": 2.17,
+    "foilStorePrice": 1953
+  },
+  "OGN-065": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.35,
+    "foilStorePrice": 315
+  },
+  "OGN-066": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.91,
+    "storePrice": 819,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-066A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 5.07,
+    "storePrice": 4563,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-067": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.74,
+    "storePrice": 666,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-068": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.34,
+    "storePrice": 306,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-069": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.28,
+    "storePrice": 252,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-070": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.29,
+    "storePrice": 261,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-071": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.26,
+    "storePrice": 234,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-072": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-073": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 8.37,
+    "storePrice": 7533,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-074": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.23,
+    "storePrice": 207,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-075": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.9,
+    "storePrice": 810,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-076": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.36,
+    "storePrice": 324,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-076A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.51,
+    "storePrice": 2259,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-077": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 8.46,
+    "storePrice": 7614,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-078": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.92,
+    "storePrice": 828,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-078A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.21,
+    "storePrice": 1989,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-079": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.05,
+    "storePrice": 1845,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-079A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.91,
+    "storePrice": 4419,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-080": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.19,
+    "storePrice": 1071,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-081": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 8.81,
+    "storePrice": 7929,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-082": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 5.26,
+    "storePrice": 4734,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-083": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.46,
+    "foilStorePrice": 414
+  },
+  "OGN-084": {
+    "stock": 7,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "OGN-085": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.36,
+    "foilStorePrice": 324
+  },
+  "OGN-086": {
+    "stock": 5,
+    "foilStock": 1,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.2,
+    "foilStorePrice": 180
+  },
+  "OGN-087": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.82,
+    "foilStorePrice": 738
+  },
+  "OGN-088": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "OGN-089": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 23.0,
+    "foilStorePrice": 20700
+  },
+  "OGN-089A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 5.5,
+    "storePrice": 4950,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-090": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "OGN-091": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.35,
+    "foilStorePrice": 315
+  },
+  "OGN-092": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "OGN-093": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.9,
+    "foilStorePrice": 810
+  },
+  "OGN-094": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.38,
+    "foilStorePrice": 342
+  },
+  "OGN-095": {
+    "stock": 5,
+    "foilStock": 3,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.98,
+    "foilStorePrice": 882
+  },
+  "OGN-096": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 2.1,
+    "foilStorePrice": 1890
+  },
+  "OGN-097": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.4,
+    "foilStorePrice": 360
+  },
+  "OGN-098": {
+    "stock": 1,
+    "foilStock": 1,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.35,
+    "foilStorePrice": 315
+  },
+  "OGN-099": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.39,
+    "foilStorePrice": 351
+  },
+  "OGN-100": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.35,
+    "foilStorePrice": 315
+  },
+  "OGN-101": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "OGN-102": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 0.48,
+    "foilStorePrice": 432
+  },
+  "OGN-103": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.25,
+    "storePrice": 225,
+    "foilMarketPrice": 0.62,
+    "foilStorePrice": 558
+  },
+  "OGN-104": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.75,
+    "storePrice": 675,
+    "foilMarketPrice": 2.67,
+    "foilStorePrice": 2403
+  },
+  "OGN-105": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.99,
+    "storePrice": 891,
+    "foilMarketPrice": 6.02,
+    "foilStorePrice": 5418
+  },
+  "OGN-106": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.33,
+    "storePrice": 297,
+    "foilMarketPrice": 0.76,
+    "foilStorePrice": 684
+  },
+  "OGN-107": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-108": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-109": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.32,
+    "storePrice": 288,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-110": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 1.31,
+    "storePrice": 1179,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-111": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.35,
+    "storePrice": 315,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-112": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.38,
+    "storePrice": 342,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-112A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.53,
+    "storePrice": 1377,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-113": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.35,
+    "storePrice": 315,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-114": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.89,
+    "storePrice": 801,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-115": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.31,
+    "storePrice": 279,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-116": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 20.35,
+    "storePrice": 18315,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-117": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-117A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.24,
+    "storePrice": 1116,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-118": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-119": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.87,
+    "storePrice": 2583,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-119A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 6.7,
+    "storePrice": 6030,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-120": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 6.11,
+    "storePrice": 5499,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-121": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 5.85,
+    "storePrice": 5265,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-121A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 10.45,
+    "storePrice": 9405,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-122": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 29.28,
+    "storePrice": 26352,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-123": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 35.73,
+    "storePrice": 32157,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-124": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "OGN-125": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.16,
+    "foilStorePrice": 144
+  },
+  "OGN-126": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.3,
+    "foilStorePrice": 270
+  },
+  "OGN-126A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.3,
+    "storePrice": 3870,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-127": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.31,
+    "foilStorePrice": 279
+  },
+  "OGN-128": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.23,
+    "storePrice": 207,
+    "foilMarketPrice": 0.55,
+    "foilStorePrice": 495
+  },
+  "OGN-129": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.27,
+    "foilStorePrice": 243
+  },
+  "OGN-130": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "OGN-131": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "OGN-132": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 1.97,
+    "foilStorePrice": 1773
+  },
+  "OGN-133": {
+    "stock": 7,
+    "foilStock": 1,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.25,
+    "foilStorePrice": 225
+  },
+  "OGN-134": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.69,
+    "foilStorePrice": 621
+  },
+  "OGN-135": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "OGN-136": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 1.01,
+    "foilStorePrice": 909
+  },
+  "OGN-137": {
+    "stock": 5,
+    "foilStock": 1,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "OGN-138": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.47,
+    "storePrice": 423,
+    "foilMarketPrice": 4.03,
+    "foilStorePrice": 3627
+  },
+  "OGN-139": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.28,
+    "foilStorePrice": 252
+  },
+  "OGN-140": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.89,
+    "foilStorePrice": 801
+  },
+  "OGN-141": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.61,
+    "foilStorePrice": 549
+  },
+  "OGN-142": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.49,
+    "foilStorePrice": 441
+  },
+  "OGN-143": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.32,
+    "foilStorePrice": 288
+  },
+  "OGN-144": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 0.45,
+    "foilStorePrice": 405
+  },
+  "OGN-145": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.75,
+    "storePrice": 675,
+    "foilMarketPrice": 3.24,
+    "foilStorePrice": 2916
+  },
+  "OGN-146": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.7,
+    "foilStorePrice": 630
+  },
+  "OGN-147": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.31,
+    "foilStorePrice": 279
+  },
+  "OGN-148": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.32,
+    "storePrice": 288,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-149": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.33,
+    "storePrice": 297,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-150": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-151": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.22,
+    "storePrice": 198,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-151A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.14,
+    "storePrice": 1026,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-152": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-153": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.22,
+    "storePrice": 198,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-154": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.32,
+    "storePrice": 288,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-155": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.81,
+    "storePrice": 729,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-156": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 14.3,
+    "storePrice": 12870,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-157": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.28,
+    "storePrice": 252,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-158": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.22,
+    "storePrice": 198,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-158A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.71,
+    "storePrice": 1539,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-159": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.4,
+    "storePrice": 360,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-160": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 40.87,
+    "storePrice": 36783,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-161": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 6.69,
+    "storePrice": 6021,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-162": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.76,
+    "storePrice": 2484,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-162A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 8.35,
+    "storePrice": 7515,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-163": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 5.1,
+    "storePrice": 4590,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-164": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 13.01,
+    "storePrice": 11709,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-164A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 14.48,
+    "storePrice": 13032,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-165": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.28,
+    "foilStorePrice": 252
+  },
+  "OGN-166": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 11.17,
+    "foilStorePrice": 10053
+  },
+  "OGN-166A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 6.25,
+    "storePrice": 5625,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-167": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.31,
+    "foilStorePrice": 279
+  },
+  "OGN-168": {
+    "stock": 6,
+    "foilStock": 2,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.54,
+    "foilStorePrice": 486
+  },
+  "OGN-169": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 1.71,
+    "foilStorePrice": 1539
+  },
+  "OGN-170": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.29,
+    "foilStorePrice": 261
+  },
+  "OGN-171": {
+    "stock": 7,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.3,
+    "foilStorePrice": 270
+  },
+  "OGN-172": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.3,
+    "storePrice": 270,
+    "foilMarketPrice": 1.14,
+    "foilStorePrice": 1026
+  },
+  "OGN-173": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.66,
+    "storePrice": 594,
+    "foilMarketPrice": 4.29,
+    "foilStorePrice": 3861
+  },
+  "OGN-174": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.16,
+    "foilStorePrice": 144
+  },
+  "OGN-175": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.21,
+    "foilStorePrice": 189
+  },
+  "OGN-176": {
+    "stock": 3,
+    "foilStock": 1,
+    "marketPrice": 0.24,
+    "storePrice": 216,
+    "foilMarketPrice": 2.0,
+    "foilStorePrice": 1800
+  },
+  "OGN-177": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.2,
+    "foilStorePrice": 180
+  },
+  "OGN-178": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "OGN-179": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.43,
+    "storePrice": 387,
+    "foilMarketPrice": 2.84,
+    "foilStorePrice": 2556
+  },
+  "OGN-180": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 1.18,
+    "foilStorePrice": 1062
+  },
+  "OGN-181": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.35,
+    "storePrice": 315,
+    "foilMarketPrice": 3.56,
+    "foilStorePrice": 3204
+  },
+  "OGN-182": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 1.25,
+    "foilStorePrice": 1125
+  },
+  "OGN-183": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 7.74,
+    "storePrice": 6966,
+    "foilMarketPrice": 9.31,
+    "foilStorePrice": 8379
+  },
+  "OGN-184": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 1.55,
+    "foilStorePrice": 1395
+  },
+  "OGN-185": {
+    "stock": 5,
+    "foilStock": 1,
+    "marketPrice": 0.22,
+    "storePrice": 198,
+    "foilMarketPrice": 1.25,
+    "foilStorePrice": 1125
+  },
+  "OGN-186": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.4,
+    "storePrice": 360,
+    "foilMarketPrice": 4.43,
+    "foilStorePrice": 3987
+  },
+  "OGN-187": {
+    "stock": 1,
+    "foilStock": 1,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "OGN-188": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.29,
+    "foilStorePrice": 261
+  },
+  "OGN-189": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.32,
+    "storePrice": 288,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-190": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.37,
+    "storePrice": 333,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-191": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.24,
+    "storePrice": 216,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-192": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.26,
+    "storePrice": 2934,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-193": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.33,
+    "storePrice": 297,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-193A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.99,
+    "storePrice": 2691,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-194": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 1.26,
+    "storePrice": 1134,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-195": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.48,
+    "storePrice": 432,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-196": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.22,
+    "storePrice": 198,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-197": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.92,
+    "storePrice": 1728,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-197A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 11.18,
+    "storePrice": 10062,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-198": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.29,
+    "storePrice": 261,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-199": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 2.95,
+    "storePrice": 2655,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-200": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.24,
+    "storePrice": 216,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-201": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 13.75,
+    "storePrice": 12375,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-202": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.8,
+    "storePrice": 2520,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-202A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.75,
+    "storePrice": 2475,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-203": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.03,
+    "storePrice": 927,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-204": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 10.47,
+    "storePrice": 9423,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-205": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.41,
+    "storePrice": 1269,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-205A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.85,
+    "storePrice": 2565,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-206": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "OGN-207": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.67,
+    "foilStorePrice": 603
+  },
+  "OGN-208": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "OGN-209": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.29,
+    "storePrice": 261,
+    "foilMarketPrice": 1.88,
+    "foilStorePrice": 1692
+  },
+  "OGN-210": {
+    "stock": 5,
+    "foilStock": 1,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "OGN-211": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.54,
+    "foilStorePrice": 486
+  },
+  "OGN-212": {
+    "stock": 8,
+    "foilStock": 1,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.23,
+    "foilStorePrice": 207
+  },
+  "OGN-213": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.99,
+    "storePrice": 891,
+    "foilMarketPrice": 4.2,
+    "foilStorePrice": 3780
+  },
+  "OGN-214": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 4.79,
+    "foilStorePrice": 4311
+  },
+  "OGN-214A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 5.79,
+    "storePrice": 5211,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-215": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.18,
+    "foilStorePrice": 162
+  },
+  "OGN-216": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 1.58,
+    "foilStorePrice": 1422
+  },
+  "OGN-217": {
+    "stock": 5,
+    "foilStock": 1,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.29,
+    "foilStorePrice": 261
+  },
+  "OGN-218": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.32,
+    "foilStorePrice": 288
+  },
+  "OGN-219": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.2,
+    "foilStorePrice": 180
+  },
+  "OGN-220": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.52,
+    "foilStorePrice": 468
+  },
+  "OGN-221": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.82,
+    "storePrice": 738,
+    "foilMarketPrice": 1.73,
+    "foilStorePrice": 1557
+  },
+  "OGN-222": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.46,
+    "foilStorePrice": 414
+  },
+  "OGN-223": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.27,
+    "foilStorePrice": 243
+  },
+  "OGN-224": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.45,
+    "storePrice": 3105,
+    "foilMarketPrice": 5.58,
+    "foilStorePrice": 5022
+  },
+  "OGN-225": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.36,
+    "foilStorePrice": 324
+  },
+  "OGN-226": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.3,
+    "storePrice": 270,
+    "foilMarketPrice": 2.16,
+    "foilStorePrice": 1944
+  },
+  "OGN-227": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.3,
+    "foilStorePrice": 270
+  },
+  "OGN-228": {
+    "stock": 1,
+    "foilStock": 1,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.32,
+    "foilStorePrice": 288
+  },
+  "OGN-229": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 0.54,
+    "foilStorePrice": 486
+  },
+  "OGN-230": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-231": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.23,
+    "storePrice": 207,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-232": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 1.86,
+    "storePrice": 1674,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-233": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.35,
+    "storePrice": 315,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-234": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.85,
+    "storePrice": 1665,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-235": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.24,
+    "storePrice": 216,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-236": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.2,
+    "storePrice": 1980,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-237": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-238": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.35,
+    "storePrice": 315,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-238A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.58,
+    "storePrice": 2322,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-239": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.32,
+    "storePrice": 288,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-240": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.25,
+    "storePrice": 225,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-240A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.93,
+    "storePrice": 837,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-241": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.69,
+    "storePrice": 621,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-242": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 54.85,
+    "storePrice": 49365,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-243": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.91,
+    "storePrice": 819,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-243A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.0,
+    "storePrice": 1800,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-244": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.4,
+    "storePrice": 2160,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-245": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 15.09,
+    "storePrice": 13581,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-246": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.48,
+    "storePrice": 1332,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-246A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.54,
+    "storePrice": 2286,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-247": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.41,
+    "storePrice": 369,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-248": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.57,
+    "storePrice": 1413,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-249": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.23,
+    "storePrice": 207,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-250": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.72,
+    "storePrice": 3348,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-251": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.25,
+    "storePrice": 225,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-252": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.9,
+    "storePrice": 4410,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-253": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.26,
+    "storePrice": 234,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-254": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.2,
+    "storePrice": 1080,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-255": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.18,
+    "storePrice": 1062,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-256": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.24,
+    "storePrice": 2916,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-257": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-258": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.26,
+    "storePrice": 1134,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-259": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.24,
+    "storePrice": 216,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-260": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.69,
+    "storePrice": 1521,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-261": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.29,
+    "storePrice": 261,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-262": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 7.23,
+    "storePrice": 6507,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-263": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.42,
+    "storePrice": 378,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-264": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 9.82,
+    "storePrice": 8838,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-265": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.24,
+    "storePrice": 216,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-266": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.44,
+    "storePrice": 1296,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-267": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.36,
+    "storePrice": 324,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-268": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 5.47,
+    "storePrice": 4923,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-269": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.26,
+    "storePrice": 234,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-270": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 10.83,
+    "storePrice": 9747,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-271": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-272": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-273": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-274": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.38,
+    "foilStorePrice": 342
+  },
+  "OGN-275": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.38,
+    "foilStorePrice": 342
+  },
+  "OGN-276": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.24,
+    "storePrice": 216,
+    "foilMarketPrice": 2.06,
+    "foilStorePrice": 1854
+  },
+  "OGN-277": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.41,
+    "foilStorePrice": 369
+  },
+  "OGN-278": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.48,
+    "foilStorePrice": 432
+  },
+  "OGN-279": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.55,
+    "foilStorePrice": 495
+  },
+  "OGN-280": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.26,
+    "storePrice": 234,
+    "foilMarketPrice": 1.41,
+    "foilStorePrice": 1269
+  },
+  "OGN-281": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.45,
+    "foilStorePrice": 405
+  },
+  "OGN-282": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.23,
+    "storePrice": 207,
+    "foilMarketPrice": 0.63,
+    "foilStorePrice": 567
+  },
+  "OGN-283": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.4,
+    "foilStorePrice": 360
+  },
+  "OGN-284": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 1.03,
+    "foilStorePrice": 927
+  },
+  "OGN-285": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 1.03,
+    "foilStorePrice": 927
+  },
+  "OGN-286": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.34,
+    "foilStorePrice": 306
+  },
+  "OGN-287": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.91,
+    "foilStorePrice": 819
+  },
+  "OGN-288": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.24,
+    "storePrice": 216,
+    "foilMarketPrice": 0.65,
+    "foilStorePrice": 585
+  },
+  "OGN-289": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.22,
+    "storePrice": 198,
+    "foilMarketPrice": 1.94,
+    "foilStorePrice": 1746
+  },
+  "OGN-290": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.43,
+    "storePrice": 387,
+    "foilMarketPrice": 3.76,
+    "foilStorePrice": 3384
+  },
+  "OGN-291": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 0.86,
+    "foilStorePrice": 774
+  },
+  "OGN-292": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.23,
+    "storePrice": 207,
+    "foilMarketPrice": 1.33,
+    "foilStorePrice": 1197
+  },
+  "OGN-293": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.36,
+    "foilStorePrice": 324
+  },
+  "OGN-294": {
+    "stock": 1,
+    "foilStock": 1,
+    "marketPrice": 0.26,
+    "storePrice": 234,
+    "foilMarketPrice": 1.47,
+    "foilStorePrice": 1323
+  },
+  "OGN-295": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.3,
+    "storePrice": 270,
+    "foilMarketPrice": 3.19,
+    "foilStorePrice": 2871
+  },
+  "OGN-296": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 0.88,
+    "foilStorePrice": 792
+  },
+  "OGN-297": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.25,
+    "storePrice": 225,
+    "foilMarketPrice": 1.2,
+    "foilStorePrice": 1080
+  },
+  "OGN-298": {
+    "stock": 1,
+    "foilStock": 1,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 1.85,
+    "foilStorePrice": 1665
+  },
+  "OGN-299": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 140.43,
+    "storePrice": 126387,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-300": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 50.12,
+    "storePrice": 45108,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-301": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 71.42,
+    "storePrice": 64278,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-302": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 40.8,
+    "storePrice": 36720,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-303": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 171.98,
+    "storePrice": 154782,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-304": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 59.51,
+    "storePrice": 53559,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-305": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 48.41,
+    "storePrice": 43569,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-306": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 62.59,
+    "storePrice": 56331,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-307": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 74.09,
+    "storePrice": 66681,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-308": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 84.09,
+    "storePrice": 75681,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-309": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 96.12,
+    "storePrice": 86508,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-310": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 65.0,
+    "storePrice": 58500,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-020": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-020A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.96,
+    "storePrice": 864,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-022": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.3,
+    "storePrice": 270,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-033": {
+    "stock": 3,
+    "foilStock": 1,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.27,
+    "foilStorePrice": 243
+  },
+  "SFD-051": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.44,
+    "storePrice": 1296,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-056": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.28,
+    "storePrice": 252,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-059": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 12.14,
+    "storePrice": 10926,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-113": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.3,
+    "storePrice": 270,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-113A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.08,
+    "storePrice": 3672,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-115": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.3,
+    "storePrice": 270,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-128": {
+    "stock": 3,
+    "foilStock": 1,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.36,
+    "foilStorePrice": 324
+  },
+  "SFD-178": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.72,
+    "storePrice": 1548,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-185": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-186": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.14,
+    "storePrice": 1026,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-195": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-197": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.22,
+    "storePrice": 198,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-201": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-203": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-007B": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.17,
+    "storePrice": 2853,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-036A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 75.99,
+    "storePrice": 68391,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-042B": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.82,
+    "storePrice": 4338,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-068A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 28.73,
+    "storePrice": 25857,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-089B": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 6.36,
+    "storePrice": 5724,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-111A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 20.41,
+    "storePrice": 18369,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-126B": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.46,
+    "storePrice": 3114,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-151B": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 33.67,
+    "storePrice": 30303,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-159A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 16.69,
+    "storePrice": 15021,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-166B": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 6.65,
+    "storePrice": 5985,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-197B": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 681.6,
+    "storePrice": 613440,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-202B": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 60.38,
+    "storePrice": 54342,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-214B": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.35,
+    "storePrice": 3015,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-246B": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 47.43,
+    "storePrice": 42687,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-275A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-276A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 44.32,
+    "storePrice": 39888,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-278A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 22.67,
+    "storePrice": 20403,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "OGN-293A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 14.32,
+    "storePrice": 12888,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-001": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.27,
+    "foilStorePrice": 243
+  },
+  "SFD-002": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.16,
+    "foilStorePrice": 144
+  },
+  "SFD-003": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.25,
+    "foilStorePrice": 225
+  },
+  "SFD-004": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "SFD-005": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.21,
+    "foilStorePrice": 189
+  },
+  "SFD-006": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.21,
+    "foilStorePrice": 189
+  },
+  "SFD-007": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "SFD-008": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "SFD-009": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.17,
+    "foilStorePrice": 153
+  },
+  "SFD-010": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.2,
+    "foilStorePrice": 180
+  },
+  "SFD-011": {
+    "stock": 1,
+    "foilStock": 1,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 0.25,
+    "foilStorePrice": 225
+  },
+  "SFD-012": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.5,
+    "foilStorePrice": 450
+  },
+  "SFD-013": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.2,
+    "foilStorePrice": 180
+  },
+  "SFD-014": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.37,
+    "foilStorePrice": 333
+  },
+  "SFD-015": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.25,
+    "foilStorePrice": 225
+  },
+  "SFD-016": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "SFD-017": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.32,
+    "foilStorePrice": 288
+  },
+  "SFD-018": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.3,
+    "foilStorePrice": 270
+  },
+  "SFD-019": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-021": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.95,
+    "storePrice": 855,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-023": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.32,
+    "storePrice": 288,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-024": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-025": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.58,
+    "storePrice": 522,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-026": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-026A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.37,
+    "storePrice": 1233,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-027": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.44,
+    "storePrice": 1296,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-028": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.94,
+    "storePrice": 846,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-028A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.06,
+    "storePrice": 954,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-029": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.7,
+    "storePrice": 4230,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-029A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 6.45,
+    "storePrice": 5805,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-030": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 5.76,
+    "storePrice": 5184,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-031": {
+    "stock": 3,
+    "foilStock": 1,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.31,
+    "foilStorePrice": 279
+  },
+  "SFD-032": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.3,
+    "foilStorePrice": 270
+  },
+  "SFD-034": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "SFD-035": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.27,
+    "foilStorePrice": 243
+  },
+  "SFD-036": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.52,
+    "foilStorePrice": 468
+  },
+  "SFD-037": {
+    "stock": 3,
+    "foilStock": 1,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.18,
+    "foilStorePrice": 162
+  },
+  "SFD-038": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.18,
+    "foilStorePrice": 162
+  },
+  "SFD-039": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "SFD-040": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.35,
+    "foilStorePrice": 315
+  },
+  "SFD-041": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.25,
+    "foilStorePrice": 225
+  },
+  "SFD-042": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.26,
+    "storePrice": 234,
+    "foilMarketPrice": 1.03,
+    "foilStorePrice": 927
+  },
+  "SFD-043": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.28,
+    "storePrice": 252,
+    "foilMarketPrice": 0.73,
+    "foilStorePrice": 657
+  },
+  "SFD-044": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "SFD-045": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.04,
+    "storePrice": 2736,
+    "foilMarketPrice": 5.45,
+    "foilStorePrice": 4905
+  },
+  "SFD-046": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.45,
+    "foilStorePrice": 405
+  },
+  "SFD-047": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.2,
+    "foilStorePrice": 180
+  },
+  "SFD-048": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.5,
+    "storePrice": 450,
+    "foilMarketPrice": 1.08,
+    "foilStorePrice": 972
+  },
+  "SFD-049": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.23,
+    "storePrice": 207,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-050": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-050A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.65,
+    "storePrice": 585,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-052": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.23,
+    "storePrice": 207,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-053": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.38,
+    "storePrice": 342,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-054": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-054A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.83,
+    "storePrice": 747,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-055": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-057": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 9.35,
+    "storePrice": 8415,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-057A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 11.04,
+    "storePrice": 9936,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-058": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.69,
+    "storePrice": 621,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-058A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.3,
+    "storePrice": 1170,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-060": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.65,
+    "storePrice": 2385,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-061": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.16,
+    "foilStorePrice": 144
+  },
+  "SFD-062": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.16,
+    "foilStorePrice": 144
+  },
+  "SFD-063": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.03,
+    "storePrice": 27,
+    "foilMarketPrice": 0.18,
+    "foilStorePrice": 162
+  },
+  "SFD-064": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.17,
+    "foilStorePrice": 153
+  },
+  "SFD-065": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.18,
+    "foilStorePrice": 162
+  },
+  "SFD-066": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "SFD-067": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "SFD-068": {
+    "stock": 3,
+    "foilStock": 1,
+    "marketPrice": 0.03,
+    "storePrice": 27,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "SFD-069": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.55,
+    "foilStorePrice": 495
+  },
+  "SFD-070": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.72,
+    "foilStorePrice": 648
+  },
+  "SFD-071": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.36,
+    "foilStorePrice": 324
+  },
+  "SFD-072": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "SFD-073": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "SFD-074": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 1.57,
+    "foilStorePrice": 1413
+  },
+  "SFD-075": {
+    "stock": 1,
+    "foilStock": 1,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "SFD-076": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.34,
+    "foilStorePrice": 306
+  },
+  "SFD-077": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.81,
+    "foilStorePrice": 729
+  },
+  "SFD-078": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "SFD-079": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-080": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.23,
+    "storePrice": 1107,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-081": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.29,
+    "storePrice": 261,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-082": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-082A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.21,
+    "storePrice": 1089,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-083": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-084": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.26,
+    "storePrice": 234,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-085": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.25,
+    "storePrice": 225,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-085A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.07,
+    "storePrice": 1863,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-086": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-087": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.81,
+    "storePrice": 1629,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-088": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.88,
+    "storePrice": 792,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-088A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.41,
+    "storePrice": 2169,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-089": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.72,
+    "storePrice": 648,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-089A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.95,
+    "storePrice": 1755,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-090": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.21,
+    "storePrice": 1089,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-091": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.16,
+    "foilStorePrice": 144
+  },
+  "SFD-092": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.17,
+    "foilStorePrice": 153
+  },
+  "SFD-093": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.18,
+    "foilStorePrice": 162
+  },
+  "SFD-094": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.27,
+    "foilStorePrice": 243
+  },
+  "SFD-095": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "SFD-096": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.13,
+    "foilStorePrice": 117
+  },
+  "SFD-097": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.99,
+    "foilStorePrice": 891
+  },
+  "SFD-098": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "SFD-099": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.23,
+    "foilStorePrice": 207
+  },
+  "SFD-100": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.03,
+    "storePrice": 27,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "SFD-101": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.29,
+    "foilStorePrice": 261
+  },
+  "SFD-102": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.29,
+    "foilStorePrice": 261
+  },
+  "SFD-103": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "SFD-104": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.28,
+    "foilStorePrice": 252
+  },
+  "SFD-105": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.27,
+    "storePrice": 243,
+    "foilMarketPrice": 2.0,
+    "foilStorePrice": 1800
+  },
+  "SFD-106": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.51,
+    "foilStorePrice": 459
+  },
+  "SFD-107": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.32,
+    "foilStorePrice": 288
+  },
+  "SFD-108": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.34,
+    "foilStorePrice": 306
+  },
+  "SFD-109": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.65,
+    "storePrice": 2385,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-110": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-110A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.36,
+    "storePrice": 1224,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-111": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.26,
+    "storePrice": 234,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-112": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-114": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-116": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-117": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.68,
+    "storePrice": 1512,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-118": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.32,
+    "storePrice": 3888,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-119": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.87,
+    "storePrice": 783,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-119A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.21,
+    "storePrice": 1089,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-120": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.52,
+    "storePrice": 468,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-120A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.2,
+    "storePrice": 1080,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-121": {
+    "stock": 3,
+    "foilStock": 1,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.17,
+    "foilStorePrice": 153
+  },
+  "SFD-122": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.55,
+    "foilStorePrice": 495
+  },
+  "SFD-123": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.2,
+    "foilStorePrice": 180
+  },
+  "SFD-124": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.17,
+    "foilStorePrice": 153
+  },
+  "SFD-125": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.15,
+    "foilStorePrice": 135
+  },
+  "SFD-126": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "SFD-127": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.03,
+    "storePrice": 27,
+    "foilMarketPrice": 0.17,
+    "foilStorePrice": 153
+  },
+  "SFD-129": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.15,
+    "foilStorePrice": 135
+  },
+  "SFD-130": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.27,
+    "foilStorePrice": 243
+  },
+  "SFD-131": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "SFD-132": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.38,
+    "foilStorePrice": 342
+  },
+  "SFD-133": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.31,
+    "storePrice": 279,
+    "foilMarketPrice": 2.24,
+    "foilStorePrice": 2016
+  },
+  "SFD-134": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "SFD-135": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 0.42,
+    "foilStorePrice": 378
+  },
+  "SFD-136": {
+    "stock": 1,
+    "foilStock": 1,
+    "marketPrice": 0.97,
+    "storePrice": 873,
+    "foilMarketPrice": 5.2,
+    "foilStorePrice": 4680
+  },
+  "SFD-137": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.25,
+    "foilStorePrice": 225
+  },
+  "SFD-138": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.49,
+    "foilStorePrice": 441
+  },
+  "SFD-139": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.3,
+    "storePrice": 270,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-140": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 5.76,
+    "storePrice": 5184,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-141": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-141A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.1,
+    "storePrice": 990,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-142": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-143": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-143A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.47,
+    "storePrice": 1323,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-144": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-145": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.77,
+    "storePrice": 693,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-146": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.6,
+    "storePrice": 540,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-147": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 9.09,
+    "storePrice": 8181,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-148": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.33,
+    "storePrice": 2097,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-148A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.48,
+    "storePrice": 2232,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-149": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 7.59,
+    "storePrice": 6831,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-149A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 8.88,
+    "storePrice": 7992,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-150": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 29.93,
+    "storePrice": 26937,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-151": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.13,
+    "foilStorePrice": 117
+  },
+  "SFD-152": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.15,
+    "foilStorePrice": 135
+  },
+  "SFD-153": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.25,
+    "foilStorePrice": 225
+  },
+  "SFD-154": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.21,
+    "foilStorePrice": 189
+  },
+  "SFD-155": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.35,
+    "foilStorePrice": 315
+  },
+  "SFD-156": {
+    "stock": 3,
+    "foilStock": 1,
+    "marketPrice": 0.03,
+    "storePrice": 27,
+    "foilMarketPrice": 0.16,
+    "foilStorePrice": 144
+  },
+  "SFD-157": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.17,
+    "foilStorePrice": 153
+  },
+  "SFD-158": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.2,
+    "foilStorePrice": 180
+  },
+  "SFD-159": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "SFD-160": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.21,
+    "foilStorePrice": 189
+  },
+  "SFD-161": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.25,
+    "storePrice": 225,
+    "foilMarketPrice": 2.08,
+    "foilStorePrice": 1872
+  },
+  "SFD-162": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.35,
+    "foilStorePrice": 315
+  },
+  "SFD-163": {
+    "stock": 1,
+    "foilStock": 1,
+    "marketPrice": 0.33,
+    "storePrice": 297,
+    "foilMarketPrice": 2.59,
+    "foilStorePrice": 2331
+  },
+  "SFD-164": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.61,
+    "foilStorePrice": 549
+  },
+  "SFD-165": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.24,
+    "storePrice": 216,
+    "foilMarketPrice": 4.05,
+    "foilStorePrice": 3645
+  },
+  "SFD-166": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.38,
+    "foilStorePrice": 342
+  },
+  "SFD-167": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.46,
+    "foilStorePrice": 414
+  },
+  "SFD-168": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.24,
+    "storePrice": 216,
+    "foilMarketPrice": 1.16,
+    "foilStorePrice": 1044
+  },
+  "SFD-169": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-170": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-170A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.07,
+    "storePrice": 963,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-171": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.22,
+    "storePrice": 198,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-171A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.25,
+    "storePrice": 1125,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-172": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-173": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.28,
+    "storePrice": 252,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-174": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-175": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.22,
+    "storePrice": 198,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-176": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.38,
+    "storePrice": 342,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-177": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.34,
+    "storePrice": 3906,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-177A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 5.21,
+    "storePrice": 4689,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-179": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.04,
+    "storePrice": 936,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-180": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.64,
+    "storePrice": 576,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-180A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.46,
+    "storePrice": 4014,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-181": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-182": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.39,
+    "storePrice": 351,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-183": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-184": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.32,
+    "storePrice": 1188,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-187": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-188": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.93,
+    "storePrice": 3537,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-189": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-190": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.44,
+    "storePrice": 396,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-191": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.33,
+    "storePrice": 297,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-192": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.47,
+    "storePrice": 423,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-193": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-194": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.81,
+    "storePrice": 729,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-196": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 21.72,
+    "storePrice": 19548,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-198": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 23.48,
+    "storePrice": 21132,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-199": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-200": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.12,
+    "storePrice": 1908,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-202": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.83,
+    "storePrice": 747,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-204": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.62,
+    "storePrice": 558,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-205": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.23,
+    "storePrice": 207,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-206": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.71,
+    "storePrice": 1539,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-207": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.28,
+    "foilStorePrice": 252
+  },
+  "SFD-208": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.31,
+    "foilStorePrice": 279
+  },
+  "SFD-209": {
+    "stock": 1,
+    "foilStock": 1,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.34,
+    "foilStorePrice": 306
+  },
+  "SFD-210": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.32,
+    "foilStorePrice": 288
+  },
+  "SFD-211": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.28,
+    "foilStorePrice": 252
+  },
+  "SFD-212": {
+    "stock": 1,
+    "foilStock": 1,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.23,
+    "foilStorePrice": 207
+  },
+  "SFD-213": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "SFD-214": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.34,
+    "foilStorePrice": 306
+  },
+  "SFD-215": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.45,
+    "foilStorePrice": 405
+  },
+  "SFD-216": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.4,
+    "foilStorePrice": 360
+  },
+  "SFD-217": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "SFD-218": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.44,
+    "foilStorePrice": 396
+  },
+  "SFD-219": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.34,
+    "foilStorePrice": 306
+  },
+  "SFD-220": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.32,
+    "foilStorePrice": 288
+  },
+  "SFD-221": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "SFD-222": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 46.16,
+    "storePrice": 41544,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-223": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 75.36,
+    "storePrice": 67824,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-224": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 42.98,
+    "storePrice": 38682,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-225": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 159.5,
+    "storePrice": 143550,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-226": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 44.75,
+    "storePrice": 40275,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-227": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 316.33,
+    "storePrice": 284697,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-228": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 34.71,
+    "storePrice": 31239,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-229": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 49.04,
+    "storePrice": 44136,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-230": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 63.39,
+    "storePrice": 57051,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-231": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 39.26,
+    "storePrice": 35334,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-232": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 72.8,
+    "storePrice": 65520,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-233": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 40.77,
+    "storePrice": 36693,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-234": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 57.45,
+    "storePrice": 51705,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-235": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 35.08,
+    "storePrice": 31572,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-236": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 25.58,
+    "storePrice": 23022,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-237": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 29.62,
+    "storePrice": 26658,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-238": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 62.51,
+    "storePrice": 56259,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-239": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 50.69,
+    "storePrice": 45621,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-240": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 29.78,
+    "storePrice": 26802,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-241": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 36.65,
+    "storePrice": 32985,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-242": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 43.1,
+    "storePrice": 38790,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-243": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 43.26,
+    "storePrice": 38934,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-244": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 43.52,
+    "storePrice": 39168,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-245": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 38.54,
+    "storePrice": 34686,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-246": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 94.92,
+    "storePrice": 85428,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-247": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 76.34,
+    "storePrice": 68706,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-248": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 73.76,
+    "storePrice": 66384,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-249": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 33.28,
+    "storePrice": 29952,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-250": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 42.89,
+    "storePrice": 38601,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "SFD-251": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 68.98,
+    "storePrice": 62082,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-001": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.14,
+    "foilStorePrice": 126
+  },
+  "UNL-002": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.3,
+    "foilStorePrice": 270
+  },
+  "UNL-003": {
+    "stock": 7,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.12,
+    "foilStorePrice": 108
+  },
+  "UNL-004": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.13,
+    "foilStorePrice": 117
+  },
+  "UNL-005": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.14,
+    "foilStorePrice": 126
+  },
+  "UNL-006": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.23,
+    "foilStorePrice": 207
+  },
+  "UNL-007": {
+    "stock": 4,
+    "foilStock": 2,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.16,
+    "foilStorePrice": 144
+  },
+  "UNL-008": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.11,
+    "foilStorePrice": 99
+  },
+  "UNL-009": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.3,
+    "foilStorePrice": 270
+  },
+  "UNL-010": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "UNL-011": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.23,
+    "foilStorePrice": 207
+  },
+  "UNL-012": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "UNL-013": {
+    "stock": 0,
+    "foilStock": 1,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.41,
+    "foilStorePrice": 369
+  },
+  "UNL-014": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.23,
+    "foilStorePrice": 207
+  },
+  "UNL-015": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.23,
+    "foilStorePrice": 207
+  },
+  "UNL-016": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.18,
+    "foilStorePrice": 162
+  },
+  "UNL-017": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.57,
+    "foilStorePrice": 513
+  },
+  "UNL-018": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.34,
+    "foilStorePrice": 306
+  },
+  "UNL-019": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-020": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-021": {
+    "stock": 10,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-022": {
+    "stock": 10,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-022A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 7.38,
+    "storePrice": 6642,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-023": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.23,
+    "storePrice": 207,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-024": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.23,
+    "storePrice": 207,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-024A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.06,
+    "storePrice": 1854,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-025": {
+    "stock": 10,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-026": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-027": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.74,
+    "storePrice": 666,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-028": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 15.49,
+    "storePrice": 13941,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-028A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 19.5,
+    "storePrice": 17550,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-029": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.74,
+    "storePrice": 666,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-029A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.55,
+    "storePrice": 1395,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-030": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.37,
+    "storePrice": 333,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-030A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.53,
+    "storePrice": 1377,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-031": {
+    "stock": 7,
+    "foilStock": 1,
+    "marketPrice": 0.03,
+    "storePrice": 27,
+    "foilMarketPrice": 0.13,
+    "foilStorePrice": 117
+  },
+  "UNL-032": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.11,
+    "foilStorePrice": 99
+  },
+  "UNL-033": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "UNL-034": {
+    "stock": 6,
+    "foilStock": 2,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.14,
+    "foilStorePrice": 126
+  },
+  "UNL-035": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.12,
+    "foilStorePrice": 108
+  },
+  "UNL-036": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.25,
+    "foilStorePrice": 225
+  },
+  "UNL-037": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.15,
+    "foilStorePrice": 135
+  },
+  "UNL-038": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.28,
+    "foilStorePrice": 252
+  },
+  "UNL-039": {
+    "stock": 7,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.27,
+    "foilStorePrice": 243
+  },
+  "UNL-040": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "UNL-041": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.52,
+    "foilStorePrice": 468
+  },
+  "UNL-042": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 1.04,
+    "foilStorePrice": 936
+  },
+  "UNL-043": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "UNL-044": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 0.45,
+    "foilStorePrice": 405
+  },
+  "UNL-045": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "UNL-046": {
+    "stock": 1,
+    "foilStock": 1,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.34,
+    "foilStorePrice": 306
+  },
+  "UNL-047": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.28,
+    "foilStorePrice": 252
+  },
+  "UNL-048": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.23,
+    "foilStorePrice": 207
+  },
+  "UNL-049": {
+    "stock": 9,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-050": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-051": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-051A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.16,
+    "storePrice": 1044,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-052": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.3,
+    "storePrice": 270,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-053": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 1.12,
+    "storePrice": 1008,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-054": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-055": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.22,
+    "storePrice": 198,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-055A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.33,
+    "storePrice": 1197,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-056": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-057": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.96,
+    "storePrice": 864,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-058": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.58,
+    "storePrice": 522,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-058A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.85,
+    "storePrice": 3465,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-059": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.14,
+    "storePrice": 1026,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-059A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.8,
+    "storePrice": 2520,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-060": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 15.14,
+    "storePrice": 13626,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-060A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 18.71,
+    "storePrice": 16839,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-061": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.29,
+    "foilStorePrice": 261
+  },
+  "UNL-062": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.16,
+    "foilStorePrice": 144
+  },
+  "UNL-063": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "UNL-064": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.15,
+    "foilStorePrice": 135
+  },
+  "UNL-065": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.18,
+    "foilStorePrice": 162
+  },
+  "UNL-066": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.15,
+    "foilStorePrice": 135
+  },
+  "UNL-067": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.23,
+    "foilStorePrice": 207
+  },
+  "UNL-068": {
+    "stock": 7,
+    "foilStock": 1,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.14,
+    "foilStorePrice": 126
+  },
+  "UNL-069": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.3,
+    "foilStorePrice": 270
+  },
+  "UNL-070": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.64,
+    "foilStorePrice": 576
+  },
+  "UNL-071": {
+    "stock": 3,
+    "foilStock": 1,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "UNL-072": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "UNL-073": {
+    "stock": 0,
+    "foilStock": 1,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 1.37,
+    "foilStorePrice": 1233
+  },
+  "UNL-074": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.54,
+    "foilStorePrice": 486
+  },
+  "UNL-075": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.35,
+    "foilStorePrice": 315
+  },
+  "UNL-076": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.32,
+    "foilStorePrice": 288
+  },
+  "UNL-077": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.4,
+    "foilStorePrice": 360
+  },
+  "UNL-078": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.1,
+    "storePrice": 990,
+    "foilMarketPrice": 4.46,
+    "foilStorePrice": 4014
+  },
+  "UNL-079": {
+    "stock": 9,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-079A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 7.06,
+    "storePrice": 6354,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-080": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.66,
+    "storePrice": 2394,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-081": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-082": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.27,
+    "storePrice": 243,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-082A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.6,
+    "storePrice": 4140,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-083": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.44,
+    "storePrice": 396,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-084": {
+    "stock": 10,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-085": {
+    "stock": 10,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-086": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-087": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.17,
+    "storePrice": 1953,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-087A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.8,
+    "storePrice": 4320,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-088": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.42,
+    "storePrice": 378,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-089": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.58,
+    "storePrice": 2322,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-089A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.51,
+    "storePrice": 4059,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-090": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.95,
+    "storePrice": 1755,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-090A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.74,
+    "storePrice": 4266,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-091": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.29,
+    "foilStorePrice": 261
+  },
+  "UNL-092": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.2,
+    "foilStorePrice": 180
+  },
+  "UNL-093": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.29,
+    "foilStorePrice": 261
+  },
+  "UNL-094": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.21,
+    "foilStorePrice": 189
+  },
+  "UNL-095": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "UNL-096": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "UNL-097": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "UNL-098": {
+    "stock": 8,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.29,
+    "foilStorePrice": 261
+  },
+  "UNL-099": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.17,
+    "foilStorePrice": 153
+  },
+  "UNL-100": {
+    "stock": 7,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "UNL-101": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.2,
+    "foilStorePrice": 180
+  },
+  "UNL-102": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.21,
+    "foilStorePrice": 189
+  },
+  "UNL-103": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.29,
+    "foilStorePrice": 261
+  },
+  "UNL-104": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.28,
+    "foilStorePrice": 252
+  },
+  "UNL-105": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.37,
+    "foilStorePrice": 333
+  },
+  "UNL-106": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.29,
+    "storePrice": 261,
+    "foilMarketPrice": 2.37,
+    "foilStorePrice": 2133
+  },
+  "UNL-107": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.42,
+    "foilStorePrice": 378
+  },
+  "UNL-108": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.31,
+    "foilStorePrice": 279
+  },
+  "UNL-109": {
+    "stock": 9,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-110": {
+    "stock": 8,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-111": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-112": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.92,
+    "storePrice": 2628,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-113": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-113A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.75,
+    "storePrice": 2475,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-114": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.25,
+    "storePrice": 1125,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-115": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.26,
+    "storePrice": 234,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-116": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-116A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.01,
+    "storePrice": 909,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-117": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.9,
+    "storePrice": 1710,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-118": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 13.73,
+    "storePrice": 12357,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-118A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 17.91,
+    "storePrice": 16119,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-119": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.62,
+    "storePrice": 558,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-119A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.6,
+    "storePrice": 1440,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-120": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 18.69,
+    "storePrice": 16821,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-120A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 23.91,
+    "storePrice": 21519,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-121": {
+    "stock": 8,
+    "foilStock": 1,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "UNL-122": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.11,
+    "foilStorePrice": 99
+  },
+  "UNL-123": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "UNL-124": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.25,
+    "foilStorePrice": 225
+  },
+  "UNL-125": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.32,
+    "foilStorePrice": 288
+  },
+  "UNL-126": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.03,
+    "storePrice": 27,
+    "foilMarketPrice": 0.08,
+    "foilStorePrice": 72
+  },
+  "UNL-127": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "UNL-128": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.57,
+    "foilStorePrice": 513
+  },
+  "UNL-129": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.03,
+    "storePrice": 27,
+    "foilMarketPrice": 0.2,
+    "foilStorePrice": 180
+  },
+  "UNL-130": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.03,
+    "storePrice": 27,
+    "foilMarketPrice": 0.14,
+    "foilStorePrice": 126
+  },
+  "UNL-131": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.3,
+    "storePrice": 270,
+    "foilMarketPrice": 3.89,
+    "foilStorePrice": 3501
+  },
+  "UNL-132": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.16,
+    "storePrice": 144,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "UNL-133": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.21,
+    "foilStorePrice": 189
+  },
+  "UNL-134": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.36,
+    "storePrice": 324,
+    "foilMarketPrice": 1.78,
+    "foilStorePrice": 1602
+  },
+  "UNL-135": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.33,
+    "foilStorePrice": 297
+  },
+  "UNL-136": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.35,
+    "foilStorePrice": 315
+  },
+  "UNL-137": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 0.14,
+    "storePrice": 126,
+    "foilMarketPrice": 0.38,
+    "foilStorePrice": 342
+  },
+  "UNL-138": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.19,
+    "storePrice": 171,
+    "foilMarketPrice": 0.61,
+    "foilStorePrice": 549
+  },
+  "UNL-139": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.36,
+    "storePrice": 324,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-140": {
+    "stock": 8,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-141": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.64,
+    "storePrice": 576,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-142": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.23,
+    "storePrice": 207,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-143": {
+    "stock": 8,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-143A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 6.5,
+    "storePrice": 5850,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-144": {
+    "stock": 11,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-145": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.33,
+    "storePrice": 297,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-145A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.29,
+    "storePrice": 2961,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-146": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.22,
+    "storePrice": 198,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-147": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 15.35,
+    "storePrice": 13815,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-147A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 21.55,
+    "storePrice": 19395,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-148": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.6,
+    "storePrice": 540,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-149": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.12,
+    "storePrice": 1008,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-149A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 5.43,
+    "storePrice": 4887,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-150": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 14.06,
+    "storePrice": 12654,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-150A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 25.42,
+    "storePrice": 22878,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-151": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.03,
+    "storePrice": 27,
+    "foilMarketPrice": 0.11,
+    "foilStorePrice": 99
+  },
+  "UNL-152": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.2,
+    "foilStorePrice": 180
+  },
+  "UNL-153": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "UNL-154": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "UNL-155": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.25,
+    "foilStorePrice": 225
+  },
+  "UNL-156": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.08,
+    "storePrice": 72,
+    "foilMarketPrice": 0.23,
+    "foilStorePrice": 207
+  },
+  "UNL-157": {
+    "stock": 6,
+    "foilStock": 1,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.11,
+    "foilStorePrice": 99
+  },
+  "UNL-158": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "UNL-159": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.14,
+    "foilStorePrice": 126
+  },
+  "UNL-160": {
+    "stock": 3,
+    "foilStock": 1,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.25,
+    "foilStorePrice": 225
+  },
+  "UNL-161": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "UNL-162": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.23,
+    "foilStorePrice": 207
+  },
+  "UNL-163": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.19,
+    "foilStorePrice": 171
+  },
+  "UNL-164": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.49,
+    "foilStorePrice": 441
+  },
+  "UNL-165": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.34,
+    "storePrice": 306,
+    "foilMarketPrice": 1.02,
+    "foilStorePrice": 918
+  },
+  "UNL-166": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "UNL-167": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.09,
+    "storePrice": 81,
+    "foilMarketPrice": 0.27,
+    "foilStorePrice": 243
+  },
+  "UNL-168": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.13,
+    "storePrice": 117,
+    "foilMarketPrice": 0.31,
+    "foilStorePrice": 279
+  },
+  "UNL-169": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.46,
+    "storePrice": 414,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-170": {
+    "stock": 8,
+    "foilStock": 0,
+    "marketPrice": 0.21,
+    "storePrice": 189,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-171": {
+    "stock": 7,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-172": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.47,
+    "storePrice": 423,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-172A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.17,
+    "storePrice": 3753,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-173": {
+    "stock": 1,
+    "foilStock": 0,
+    "marketPrice": 4.13,
+    "storePrice": 3717,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-174": {
+    "stock": 5,
+    "foilStock": 0,
+    "marketPrice": 0.2,
+    "storePrice": 180,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-175": {
+    "stock": 8,
+    "foilStock": 0,
+    "marketPrice": 0.18,
+    "storePrice": 162,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-176": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.36,
+    "storePrice": 3024,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-176A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 13.46,
+    "storePrice": 12114,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-177": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.04,
+    "storePrice": 936,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-177A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.45,
+    "storePrice": 1305,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-178": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.49,
+    "storePrice": 441,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-178A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.76,
+    "storePrice": 1584,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-179": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 4.89,
+    "storePrice": 4401,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-179A": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 9.23,
+    "storePrice": 8307,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-180": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 7.58,
+    "storePrice": 6822,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-181": {
+    "stock": 9,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-182": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.92,
+    "storePrice": 828,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-183": {
+    "stock": 8,
+    "foilStock": 0,
+    "marketPrice": 0.15,
+    "storePrice": 135,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-184": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.92,
+    "storePrice": 3528,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-185": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-186": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.17,
+    "storePrice": 1053,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-187": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-188": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.67,
+    "storePrice": 603,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-189": {
+    "stock": 7,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-190": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 2.24,
+    "storePrice": 2016,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-191": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-192": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.63,
+    "storePrice": 1467,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-193": {
+    "stock": 8,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-194": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.51,
+    "storePrice": 459,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-195": {
+    "stock": 8,
+    "foilStock": 0,
+    "marketPrice": 0.12,
+    "storePrice": 108,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-196": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1.12,
+    "storePrice": 1008,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-197": {
+    "stock": 6,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-198": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 19.36,
+    "storePrice": 17424,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-199": {
+    "stock": 8,
+    "foilStock": 0,
+    "marketPrice": 0.17,
+    "storePrice": 153,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-200": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 10.78,
+    "storePrice": 9702,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-201": {
+    "stock": 7,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-202": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 3.67,
+    "storePrice": 3303,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-203": {
+    "stock": 8,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-204": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 0.73,
+    "storePrice": 657,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-205": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.11,
+    "storePrice": 99,
+    "foilMarketPrice": 0.43,
+    "foilStorePrice": 387
+  },
+  "UNL-206": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.21,
+    "foilStorePrice": 189
+  },
+  "UNL-207": {
+    "stock": 4,
+    "foilStock": 1,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.23,
+    "foilStorePrice": 207
+  },
+  "UNL-208": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.22,
+    "foilStorePrice": 198
+  },
+  "UNL-209": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.27,
+    "foilStorePrice": 243
+  },
+  "UNL-210": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.29,
+    "foilStorePrice": 261
+  },
+  "UNL-211": {
+    "stock": 3,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.21,
+    "foilStorePrice": 189
+  },
+  "UNL-212": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.24,
+    "foilStorePrice": 216
+  },
+  "UNL-213": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.04,
+    "storePrice": 36,
+    "foilMarketPrice": 0.35,
+    "foilStorePrice": 315
+  },
+  "UNL-214": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.07,
+    "storePrice": 63,
+    "foilMarketPrice": 0.27,
+    "foilStorePrice": 243
+  },
+  "UNL-215": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.1,
+    "storePrice": 90,
+    "foilMarketPrice": 0.42,
+    "foilStorePrice": 378
+  },
+  "UNL-216": {
+    "stock": 2,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.3,
+    "foilStorePrice": 270
+  },
+  "UNL-217": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.06,
+    "storePrice": 54,
+    "foilMarketPrice": 0.2,
+    "foilStorePrice": 180
+  },
+  "UNL-218": {
+    "stock": 2,
+    "foilStock": 1,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.26,
+    "foilStorePrice": 234
+  },
+  "UNL-219": {
+    "stock": 4,
+    "foilStock": 0,
+    "marketPrice": 0.05,
+    "storePrice": 45,
+    "foilMarketPrice": 0.31,
+    "foilStorePrice": 279
+  },
+  "UNL-220": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 63.83,
+    "storePrice": 57447,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-221": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 129.4,
+    "storePrice": 116460,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-222": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 111.95,
+    "storePrice": 100755,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-223": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 61.65,
+    "storePrice": 55485,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-224": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 52.53,
+    "storePrice": 47277,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-225": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 56.57,
+    "storePrice": 50913,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-226": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 42.02,
+    "storePrice": 37818,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-227": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 69.12,
+    "storePrice": 62208,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-228": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 68.82,
+    "storePrice": 61938,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-229": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 60.52,
+    "storePrice": 54468,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-230": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 67.53,
+    "storePrice": 60777,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-231": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 34.44,
+    "storePrice": 30996,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-232": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 103.66,
+    "storePrice": 93294,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-233": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 43.66,
+    "storePrice": 39294,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-234": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 181.48,
+    "storePrice": 163332,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-235": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 124.45,
+    "storePrice": 112005,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-236": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 55.88,
+    "storePrice": 50292,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-237": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 34.59,
+    "storePrice": 31131,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  },
+  "UNL-238": {
+    "stock": 0,
+    "foilStock": 0,
+    "marketPrice": 1283.08,
+    "storePrice": 1154772,
+    "foilMarketPrice": 0.0,
+    "foilStorePrice": 0
+  }
+}

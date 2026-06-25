@@ -19,6 +19,9 @@ const orderIdInput = document.getElementById("orderIdInput");
 const searchOrderBtn = document.getElementById("searchOrderBtn");
 const completeOrderBtn = document.getElementById("completeOrderBtn");
 const orderPreview = document.getElementById("orderPreview");
+const restoreExcelBackupBtn = document.getElementById("restoreExcelBackupBtn");
+const saveBasePricesBtn = document.getElementById("saveBasePricesBtn");
+const applyBasePricesBtn = document.getElementById("applyBasePricesBtn");
 
 function keyFor(card){
   return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
@@ -537,6 +540,182 @@ async function auditDotGGCodes(){
   }
 }
 
+
+function rarityKey(card){
+  return String(card.rarity || "").toLowerCase();
+}
+
+function basePriceInputs(){
+  return {
+    common: {
+      normal: document.getElementById("baseCommonNormal"),
+      foil: document.getElementById("baseCommonFoil")
+    },
+    uncommon: {
+      normal: document.getElementById("baseUncommonNormal"),
+      foil: document.getElementById("baseUncommonFoil")
+    },
+    rare: {
+      normal: document.getElementById("baseRareNormal"),
+      foil: document.getElementById("baseRareFoil")
+    },
+    epic: {
+      normal: document.getElementById("baseEpicNormal"),
+      foil: document.getElementById("baseEpicFoil")
+    },
+    showcase: {
+      normal: document.getElementById("baseShowcaseNormal"),
+      foil: document.getElementById("baseShowcaseFoil")
+    }
+  };
+}
+
+function readBasePrices(){
+  const inputs = basePriceInputs();
+  const rules = {};
+  Object.keys(inputs).forEach(rarity=>{
+    rules[rarity] = {
+      normal: Math.max(0, Math.round(Number(inputs[rarity].normal?.value || 0))),
+      foil: Math.max(0, Math.round(Number(inputs[rarity].foil?.value || 0)))
+    };
+  });
+  return rules;
+}
+
+function fillBasePrices(rules = {}){
+  const inputs = basePriceInputs();
+  Object.keys(inputs).forEach(rarity=>{
+    if(inputs[rarity].normal) inputs[rarity].normal.value = Number(rules[rarity]?.normal ?? inputs[rarity].normal.value ?? 0);
+    if(inputs[rarity].foil) inputs[rarity].foil.value = Number(rules[rarity]?.foil ?? inputs[rarity].foil.value ?? 0);
+  });
+}
+
+async function loadBasePrices(){
+  try{
+    const res = await fetch("/.netlify/functions/settings?v=" + Date.now(), { cache:"no-store" });
+    if(!res.ok) return;
+    const rules = await res.json();
+    fillBasePrices(rules);
+  }catch(e){}
+}
+
+async function saveBasePrices(){
+  const pin = document.getElementById("adminPin").value.trim();
+  if(!pin){
+    showMessage("Ingresa el PIN administrador para guardar precios base.", true);
+    return;
+  }
+
+  const res = await fetch("/.netlify/functions/settings", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "x-admin-pin": pin
+    },
+    body: JSON.stringify({ basePrices: readBasePrices() })
+  });
+
+  const data = await res.json().catch(()=>({}));
+
+  if(!res.ok){
+    showMessage(data.error || "No se pudieron guardar los precios base.", true);
+    return;
+  }
+
+  fillBasePrices(data.basePrices);
+  showMessage("Precios base guardados correctamente.");
+}
+
+function basePriceForCard(card, variant="normal"){
+  const rules = readBasePrices();
+  const rarity = rarityKey(card);
+  const rule = rules[rarity] || {};
+  return Math.max(0, Math.round(Number(variant === "foil" ? rule.foil : rule.normal || 0)));
+}
+
+async function saveInventoryToRemote(successMessage){
+  const pin = document.getElementById("adminPin").value.trim();
+  if(!pin){
+    showMessage("Ingresa el PIN administrador.", true);
+    return false;
+  }
+
+  const res = await fetch("/.netlify/functions/stock", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "x-admin-pin": pin
+    },
+    body: JSON.stringify({ inventory })
+  });
+
+  const data = await res.json().catch(()=>({}));
+
+  if(!res.ok){
+    showMessage(data.error || "No se pudo guardar inventario.", true);
+    return false;
+  }
+
+  showMessage(successMessage || `Inventario guardado. Registros: ${data.updated}`);
+  return true;
+}
+
+async function applyBasePrices(){
+  let changed = 0;
+
+  cards.forEach(card=>{
+    const key = keyFor(card);
+    const entry = normalizeEntry(card);
+    inventory[key] = inventory[key] || {};
+    if(typeof inventory[key] === "number") inventory[key] = { stock: inventory[key] };
+
+    const normalBase = basePriceForCard(card, "normal");
+    const normalFinal = Math.max(Number(entry.storePrice || 0), normalBase);
+    if(normalFinal !== Number(entry.storePrice || 0)) changed++;
+    inventory[key].stock = Number(entry.stock || 0);
+    inventory[key].marketPrice = Number(entry.marketPrice || 0);
+    inventory[key].storePrice = normalFinal;
+
+    if(supportsFoil(card)){
+      const foilBase = basePriceForCard(card, "foil");
+      const foilFinal = Math.max(Number(entry.foilStorePrice || 0), foilBase);
+      if(foilFinal !== Number(entry.foilStorePrice || 0)) changed++;
+      inventory[key].foilStock = Number(entry.foilStock || 0);
+      inventory[key].foilMarketPrice = Number(entry.foilMarketPrice || 0);
+      inventory[key].foilStorePrice = foilFinal;
+    }
+  });
+
+  render();
+  await saveInventoryToRemote(`Precios base aplicados. Cambios realizados: ${changed}.`);
+}
+
+async function restoreExcelBackup(){
+  const pin = document.getElementById("adminPin").value.trim();
+  if(!pin){
+    showMessage("Ingresa el PIN administrador para restaurar respaldo.", true);
+    return;
+  }
+
+  if(!confirm("¿Restaurar el stock desde el respaldo Excel? Esto reemplazará el inventario remoto actual.")){
+    return;
+  }
+
+  const resBackup = await fetch("data/inventory_backup_from_excel.json?v=" + Date.now(), { cache:"no-store" });
+  if(!resBackup.ok){
+    showMessage("No se pudo leer el respaldo de inventario.", true);
+    return;
+  }
+
+  const backupInventory = await resBackup.json();
+  inventory = backupInventory;
+
+  const ok = await saveInventoryToRemote(`Stock restaurado desde respaldo. Registros: ${Object.keys(inventory).length}.`);
+  if(ok){
+    render();
+  }
+}
+
 function backupDateStamp(){
   const now = new Date();
   const date = now.toISOString().slice(0,10);
@@ -670,6 +849,10 @@ searchOrderBtn?.addEventListener("click", searchOrder);
 completeOrderBtn?.addEventListener("click", completeOrder);
 
 auditDotGGBtn?.addEventListener("click", auditDotGGCodes);
+restoreExcelBackupBtn?.addEventListener("click", restoreExcelBackup);
+saveBasePricesBtn?.addEventListener("click", saveBasePrices);
+applyBasePricesBtn?.addEventListener("click", applyBasePrices);
+loadBasePrices();
 load();
 
 // v10 batch sync: no se encontró syncRiftboundPrices para reemplazar.

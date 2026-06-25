@@ -2,6 +2,8 @@ const { getStore, connectLambda } = require("@netlify/blobs");
 
 const STORE_NAME = "lilstore-inventory";
 const INVENTORY_KEY = "inventory";
+const SETTINGS_STORE = "lilstore-settings";
+const BASE_PRICES_KEY = "base-prices";
 const DOTGG_PRICE_URL = "https://api.dotgg.gg/cgfw/getcardprices";
 
 function json(statusCode, body) {
@@ -226,6 +228,33 @@ async function fetchDotGG(cardId, attempt = 1) {
   }
 }
 
+
+function defaultBasePrices() {
+  return {
+    common: { normal: 100, foil: 200 },
+    uncommon: { normal: 300, foil: 400 },
+    rare: { normal: 500, foil: 0 },
+    epic: { normal: 1000, foil: 0 },
+    showcase: { normal: 2000, foil: 0 }
+  };
+}
+
+async function getBasePrices() {
+  try {
+    const settingsStore = getStore(SETTINGS_STORE);
+    return await settingsStore.get(BASE_PRICES_KEY, { type: "json" }) || defaultBasePrices();
+  } catch {
+    return defaultBasePrices();
+  }
+}
+
+function basePriceForCard(card, rules, variant = "normal") {
+  const rarity = String(card.rarity || "").toLowerCase();
+  const rule = rules[rarity];
+  if (!rule) return 0;
+  return Math.max(0, Math.round(Number(variant === "foil" ? rule.foil : rule.normal || 0)));
+}
+
 async function debugDotGG(event = {}) {
   const cardId = event.queryStringParameters?.cardid || "OGN-001";
   const result = await fetchDotGG(cardId);
@@ -291,6 +320,7 @@ exports.handler = async (event) => {
 
     const store = getStore(STORE_NAME);
     const inventory = await store.get(INVENTORY_KEY, { type: "json" }) || {};
+    const basePrices = await getBasePrices();
 
     let updated = 0;
     const failed = [];
@@ -328,12 +358,12 @@ exports.handler = async (event) => {
 
       if (market) {
         inventory[key].marketPrice = Number(market.toFixed(2));
-        inventory[key].storePrice = Math.round(market * dollar * margin);
+        inventory[key].storePrice = Math.max(Math.round(market * dollar * margin), basePriceForCard(item.card, basePrices, "normal"));
       }
 
       if (supportsFoil(item.card) && priceData.foilPrice) {
         inventory[key].foilMarketPrice = Number(priceData.foilPrice.toFixed(2));
-        inventory[key].foilStorePrice = Math.round(priceData.foilPrice * dollar * margin);
+        inventory[key].foilStorePrice = Math.max(Math.round(priceData.foilPrice * dollar * margin), basePriceForCard(item.card, basePrices, "foil"));
       }
 
       updated++;
