@@ -3,7 +3,7 @@ const { getStore, connectLambda } = require("@netlify/blobs");
 const STORE_NAME = "lilstore-inventory";
 const INVENTORY_KEY = "inventory";
 const SETTINGS_STORE = "lilstore-settings";
-const BASE_PRICES_KEY = "minimum-prices";
+const BASE_PRICES_KEY = "minimum-prices"; // se mantiene por compatibilidad con datos ya guardados
 const DOTGG_PRICE_URL = "https://api.dotgg.gg/cgfw/getcardprices";
 
 function json(statusCode, body) {
@@ -290,6 +290,7 @@ exports.handler = async (event) => {
       .filter(card => card.dotggId);
 
     const uniqueCodes = [...new Set(cardsWithCodes.map(card => card.dotggId))];
+    const basePriceRules = await getMinPriceRules();
     const priceResults = await asyncPool(8, uniqueCodes, getDotGGPrice);
 
     const priceMap = {};
@@ -370,7 +371,8 @@ exports.handler = async (event) => {
   } catch (error) {
     return json(500, {
       error: "Error interno sincronizando precios DotGG.",
-      message: error.message || String(error)
+      message: error.message || String(error),
+      stack: error.stack || ""
     });
   }
 };
