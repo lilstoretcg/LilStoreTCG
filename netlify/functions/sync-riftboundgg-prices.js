@@ -142,8 +142,6 @@ function extractPrices(payload) {
       ]);
     }
 
-    // DotGG a veces devuelve only Foil para cartas no common/uncommon.
-    // Si normal no existe, foil sirve como precio de mercado principal.
     if (normalPrice && foilPrice) break;
   }
 
@@ -160,17 +158,15 @@ async function fetchDotGG(cardId, attempt = 1) {
   try {
     const response = await fetch(url, {
       headers: {
-        "User-Agent": "LilStoreTCG/2.0 price sync slow",
+        "User-Agent": "LilStoreTCG/3.0 batch sync",
         "Accept": "application/json"
       }
     });
 
     const text = await response.text();
 
-    // DotGG puede responder 429 como HTML.
-    if (response.status === 429 && attempt <= 4) {
-      const waitMs = 2500 * attempt;
-      await sleep(waitMs);
+    if (response.status === 429 && attempt <= 2) {
+      await sleep(1200 * attempt);
       return fetchDotGG(cardId, attempt + 1);
     }
 
@@ -179,8 +175,7 @@ async function fetchDotGG(cardId, attempt = 1) {
         ok: false,
         cardId,
         status: response.status,
-        statusText: response.statusText,
-        sample: text.slice(0, 600)
+        sample: text.slice(0, 500)
       };
     }
 
@@ -188,10 +183,8 @@ async function fetchDotGG(cardId, attempt = 1) {
     try {
       payload = JSON.parse(text);
     } catch (error) {
-      // Si aparece HTML 429 aunque status venga raro.
-      if (/429|too many requests/i.test(text) && attempt <= 4) {
-        const waitMs = 2500 * attempt;
-        await sleep(waitMs);
+      if (/429|too many requests/i.test(text) && attempt <= 2) {
+        await sleep(1200 * attempt);
         return fetchDotGG(cardId, attempt + 1);
       }
 
@@ -200,7 +193,7 @@ async function fetchDotGG(cardId, attempt = 1) {
         cardId,
         status: "BAD_JSON",
         message: error.message || String(error),
-        sample: text.slice(0, 600)
+        sample: text.slice(0, 500)
       };
     }
 
@@ -211,7 +204,7 @@ async function fetchDotGG(cardId, attempt = 1) {
         ok: false,
         cardId,
         status: "NO_PRICE",
-        sample: JSON.stringify(payload).slice(0, 700)
+        sample: JSON.stringify(payload).slice(0, 500)
       };
     }
 
@@ -224,11 +217,6 @@ async function fetchDotGG(cardId, attempt = 1) {
       payloadCardId: payload?.cardid || payload?.cardId || null
     };
   } catch (error) {
-    if (attempt <= 3) {
-      await sleep(1000 * attempt);
-      return fetchDotGG(cardId, attempt + 1);
-    }
-
     return {
       ok: false,
       cardId,
@@ -276,13 +264,17 @@ exports.handler = async (event) => {
       return json(400, { error: "JSON inválido." });
     }
 
-    const cards = Array.isArray(payload.cards) ? payload.cards : [];
+    const allCards = Array.isArray(payload.cards) ? payload.cards : [];
+    const offset = Math.max(0, Number(payload.offset || 0));
+    const limit = Math.min(Math.max(1, Number(payload.limit || 25)), 40);
     const dollar = Number(payload.dollar || 900);
     const margin = Number(payload.margin || 1);
 
-    if (!cards.length) {
+    if (!allCards.length) {
       return json(400, { error: "No se recibieron cartas para actualizar." });
     }
+
+    const cards = allCards.slice(offset, offset + limit);
 
     const candidates = [];
 
@@ -297,48 +289,25 @@ exports.handler = async (event) => {
       });
     }
 
-    const uniqueByCode = new Map();
-    for (const item of candidates) {
-      if (!uniqueByCode.has(item.cardId)) uniqueByCode.set(item.cardId, item);
-    }
-
-    const uniqueItems = Array.from(uniqueByCode.values());
-
     const store = getStore(STORE_NAME);
     const inventory = await store.get(INVENTORY_KEY, { type: "json" }) || {};
 
-    const resultMap = {};
-    const failed = [];
-
-    // Modo lento: 1 consulta a la vez + pausa.
-    // Esto evita 429 y prioriza completitud por sobre velocidad.
-    for (let i = 0; i < uniqueItems.length; i++) {
-      const item = uniqueItems[i];
-      const result = await fetchDotGG(item.cardId);
-
-      if (result.ok) {
-        resultMap[item.cardId] = result;
-      } else {
-        failed.push(result);
-      }
-
-      await sleep(350);
-    }
-
     let updated = 0;
+    const failed = [];
     const notFound = [];
-    const touched = new Set();
 
     for (const item of candidates) {
-      const priceData = resultMap[item.cardId];
+      const priceData = await fetchDotGG(item.cardId);
 
-      if (!priceData) {
+      if (!priceData.ok) {
+        failed.push(priceData);
         notFound.push({
           publicCode: item.card.publicCode,
           dotggCode: item.card.dotggCode,
           cardid: item.cardId,
           name: item.card.name
         });
+        await sleep(150);
         continue;
       }
 
@@ -355,40 +324,42 @@ exports.handler = async (event) => {
         inventory[key].foilStock = Number(inventory[key].foilStock ?? item.card.foilStock ?? 0);
       }
 
-      // Precio principal:
-      // - normal si existe
-      // - si normal no existe, usar foil como respaldo de mercado
       const market = priceData.normalPrice || priceData.effectivePrice;
+
       if (market) {
         inventory[key].marketPrice = Number(market.toFixed(2));
         inventory[key].storePrice = Math.round(market * dollar * margin);
       }
 
-      // Precio foil solo aplica a common/uncommon.
       if (supportsFoil(item.card) && priceData.foilPrice) {
         inventory[key].foilMarketPrice = Number(priceData.foilPrice.toFixed(2));
         inventory[key].foilStorePrice = Math.round(priceData.foilPrice * dollar * margin);
       }
 
-      if (!touched.has(key)) {
-        updated++;
-        touched.add(key);
-      }
+      updated++;
+      await sleep(150);
     }
 
     await store.setJSON(INVENTORY_KEY, inventory);
 
+    const nextOffset = offset + limit;
+    const done = nextOffset >= allCards.length;
+
     return json(200, {
       ok: true,
-      source: DOTGG_PRICE_URL,
-      mode: "slow-429-safe",
-      uniqueCodes: uniqueItems.length,
+      mode: "batch",
+      offset,
+      limit,
+      nextOffset,
+      done,
+      total: allCards.length,
+      processed: cards.length,
       updated,
       failedCount: failed.length,
       notFoundCount: notFound.length,
-      failed: failed.slice(0, 10),
-      notFound: notFound.slice(0, 10),
-      debugFailed: failed.slice(0, 10).map(f => ({
+      failed: failed.slice(0, 8),
+      notFound: notFound.slice(0, 8),
+      debugFailed: failed.slice(0, 8).map(f => ({
         cardId: f.cardId,
         status: f.status,
         message: f.message,

@@ -671,3 +671,5 @@ completeOrderBtn?.addEventListener("click", completeOrder);
 
 auditDotGGBtn?.addEventListener("click", auditDotGGCodes);
 load();
+
+// v10 batch sync: no se encontró syncRiftboundPrices para reemplazar.
