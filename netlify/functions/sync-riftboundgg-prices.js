@@ -354,6 +354,7 @@ exports.handler = async (event) => {
       done,
       total: allCards.length,
       processed: cards.length,
+      uniqueCodes: cards.length,
       updated,
       failedCount: failed.length,
       notFoundCount: notFound.length,

@@ -673,3 +673,162 @@ auditDotGGBtn?.addEventListener("click", auditDotGGCodes);
 load();
 
 // v10 batch sync: no se encontró syncRiftboundPrices para reemplazar.
+
+
+// v10.1 DotGG batch progress override
+let __dotggSyncCancelRequested = false;
+
+function setDotGGProgress(done, total, details = ""){
+  const fill = document.getElementById("dotggProgressFill");
+  const text = document.getElementById("dotggProgressText");
+  const percent = total > 0 ? Math.min(100, Math.round((done / total) * 100)) : 0;
+
+  if(fill) fill.style.width = percent + "%";
+  if(text){
+    text.innerHTML = `
+      <strong>${percent}%</strong> · ${done}/${total} cartas procesadas<br>
+      ${details || ""}
+    `;
+  }
+}
+
+async function syncRiftboundPricesBatchV101(){
+  const pin = document.getElementById("adminPin").value.trim();
+  if(!pin){
+    showMessage("Ingresa el PIN administrador antes de actualizar precios.", true);
+    return;
+  }
+
+  const dollar = Number(document.getElementById("dollarInput")?.value || 900);
+  const margin = Number(document.getElementById("marginInput")?.value || 1);
+  const batchSize = 25;
+
+  const payloadCards = cards.map(card => ({
+    name: card.name,
+    publicCode: card.publicCode || card.dotggCode,
+    dotggCode: card.dotggCode,
+    set: card.set,
+    setCode: card.setCode,
+    rarity: card.rarity,
+    stock: currentStockFor(card),
+    foilStock: supportsFoil(card) ? currentFoilStockFor(card) : 0,
+    marketPrice: normalizeEntry(card).marketPrice,
+    storePrice: normalizeEntry(card).storePrice,
+    foilMarketPrice: supportsFoil(card) ? normalizeEntry(card).foilMarketPrice : 0,
+    foilStorePrice: supportsFoil(card) ? normalizeEntry(card).foilStorePrice : 0
+  }));
+
+  if(!payloadCards.length){
+    showMessage("No hay cartas cargadas para sincronizar.", true);
+    return;
+  }
+
+  __dotggSyncCancelRequested = false;
+
+  let offset = 0;
+  let totalUpdated = 0;
+  let totalFailed = 0;
+  let totalNotFound = 0;
+  let totalProcessed = 0;
+  let lote = 1;
+  const totalLotes = Math.ceil(payloadCards.length / batchSize);
+  let lastData = null;
+
+  setDotGGProgress(0, payloadCards.length, "Iniciando sincronización por lotes...");
+  showMessage(`Iniciando sincronización por lotes DotGG: 0/${payloadCards.length}...`);
+
+  while(offset < payloadCards.length){
+    if(__dotggSyncCancelRequested){
+      showMessage(`Sincronización cancelada. Procesadas: ${totalProcessed}. Actualizadas: ${totalUpdated}.`, true);
+      setDotGGProgress(totalProcessed, payloadCards.length, "Sincronización cancelada por el usuario.");
+      return;
+    }
+
+    const loteDesde = offset + 1;
+    const loteHasta = Math.min(offset + batchSize, payloadCards.length);
+
+    setDotGGProgress(
+      totalProcessed,
+      payloadCards.length,
+      `Lote ${lote} de ${totalLotes} · Cartas ${loteDesde}-${loteHasta} · Actualizadas: ${totalUpdated} · Sin precio: ${totalNotFound} · Fallidas: ${totalFailed}`
+    );
+
+    showMessage(`Actualizando lote DotGG ${lote}/${totalLotes}: ${loteDesde}-${loteHasta} de ${payloadCards.length}...`);
+
+    const res = await fetch("/.netlify/functions/sync-riftboundgg-prices", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "x-admin-pin": pin
+      },
+      body: JSON.stringify({
+        cards: payloadCards,
+        offset,
+        limit: batchSize,
+        dollar,
+        margin
+      })
+    });
+
+    const data = await res.json().catch(()=>({}));
+    lastData = data;
+
+    if(!res.ok){
+      console.error("DotGG batch error:", data);
+      const detail = data.message || data.error || "No se pudieron sincronizar los precios.";
+      showMessage(detail, true);
+      setDotGGProgress(totalProcessed, payloadCards.length, `Error en lote ${lote}: ${detail}`);
+      return;
+    }
+
+    const processed = Number(data.processed || data.uniqueCodes || batchSize || 0);
+    totalUpdated += Number(data.updated || 0);
+    totalFailed += Number(data.failedCount || 0);
+    totalNotFound += Number(data.notFoundCount || 0);
+    totalProcessed += processed;
+
+    offset = Number(data.nextOffset || (offset + batchSize));
+    lote++;
+
+    setDotGGProgress(
+      Math.min(offset, payloadCards.length),
+      payloadCards.length,
+      `Actualizadas: ${totalUpdated} · Sin precio: ${totalNotFound} · Fallidas: ${totalFailed}`
+    );
+
+    await new Promise(resolve => setTimeout(resolve, 800));
+  }
+
+  try{
+    const invRes = await fetch("/.netlify/functions/stock?v=" + Date.now(), { cache:"no-store" });
+    if(invRes.ok){
+      inventory = await invRes.json();
+    }
+  }catch(e){}
+
+  render();
+
+  const finalMessage = `Sincronización completa. Procesadas: ${totalProcessed}. Precios actualizados: ${totalUpdated}. Sin precio: ${totalNotFound}. Fallidos: ${totalFailed}.`;
+  setDotGGProgress(payloadCards.length, payloadCards.length, finalMessage);
+  showMessage(finalMessage);
+  console.log("Último lote DotGG:", lastData);
+}
+
+function bindDotGGBatchV101(){
+  const oldBtn = document.getElementById("syncPricesBtn");
+  if(oldBtn){
+    const newBtn = oldBtn.cloneNode(true);
+    oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+    newBtn.addEventListener("click", syncRiftboundPricesBatchV101);
+  }
+
+  const cancelBtn = document.getElementById("cancelDotGGSyncBtn");
+  if(cancelBtn){
+    cancelBtn.addEventListener("click", ()=>{
+      __dotggSyncCancelRequested = true;
+      setDotGGProgress(0, cards.length || 0, "Cancelando al terminar el lote actual...");
+    });
+  }
+}
+
+document.addEventListener("DOMContentLoaded", bindDotGGBatchV101);

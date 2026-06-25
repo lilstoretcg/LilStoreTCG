@@ -517,3 +517,47 @@ td input[data-field="storePrice"]{
     width:100%;
   }
 }
+
+
+/* v10.1 DotGG batch progress */
+.dotgg-progress-panel h2{
+  margin:0 0 12px;
+  color:#ffd34d;
+  font-size:20px;
+}
+
+.dotgg-progress-bar{
+  width:100%;
+  height:18px;
+  background:#080808;
+  border:1px solid #333;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+#dotggProgressFill{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#ffb000,#ffd34d);
+  transition:width .25s ease;
+}
+
+.dotgg-progress-text{
+  margin-top:10px;
+  color:#66ffd1;
+  font-weight:800;
+  line-height:1.5;
+}
+
+.dotgg-progress-actions{
+  margin-top:12px;
+}
+
+#cancelDotGGSyncBtn{
+  width:auto;
+  min-width:190px;
+  border-radius:10px;
+  background:#ef4444;
+  color:#fff;
+  font-weight:900;
+}
