@@ -2,8 +2,6 @@ const { getStore, connectLambda } = require("@netlify/blobs");
 
 const STORE_NAME = "lilstore-inventory";
 const INVENTORY_KEY = "inventory";
-const SETTINGS_STORE = "lilstore-settings";
-const MIN_PRICES_KEY = "minimum-prices";
 const DOTGG_PRICE_URL = "https://api.dotgg.gg/cgfw/getcardprices";
 
 function json(statusCode, body) {
@@ -47,7 +45,6 @@ function extractRows(payload) {
   if (payload && Array.isArray(payload.history)) return payload.history;
   if (payload && Array.isArray(payload.result)) return payload.result;
   if (payload && Array.isArray(payload.rows)) return payload.rows;
-  if (payload && Array.isArray(payload.lines)) return payload.lines;
 
   if (payload && typeof payload === "object") {
     for (const value of Object.values(payload)) {
@@ -115,8 +112,8 @@ function latestPriceFromHistory(payload) {
 
 function priceFromCandidates(values) {
   for (const value of values) {
-    const price = toNumber(value);
-    if (price) return price;
+    const price = Number(value);
+    if (Number.isFinite(price) && price > 0) return price;
   }
   return null;
 }
@@ -169,12 +166,7 @@ function latestNormalFoilPrices(payload) {
   return { normalPrice, foilPrice };
 }
 
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function fetchDotGGPayload(cardId, attempt = 1) {
+async function getDotGGPrice(cardId) {
   const url = `${DOTGG_PRICE_URL}?game=riftbound&cardid=${encodeURIComponent(cardId)}&cache=${Date.now()}`;
 
   const response = await fetch(url, {
@@ -184,53 +176,13 @@ async function fetchDotGGPayload(cardId, attempt = 1) {
     }
   });
 
-  const text = await response.text();
-
   if (!response.ok) {
-    return {
-      ok: false,
-      cardId,
-      status: response.status,
-      statusText: response.statusText,
-      sample: text.slice(0, 500)
-    };
+    return { ok: false, cardId, status: response.status };
   }
 
-  let payload;
-  try {
-    payload = JSON.parse(text);
-  } catch (error) {
-    return {
-      ok: false,
-      cardId,
-      status: "BAD_JSON",
-      sample: text.slice(0, 500),
-      message: error.message || String(error)
-    };
-  }
-
-  const rows = extractRows(payload);
-  const looksEmpty = !rows.length || rows.every(row => !findPriceDeep(row));
-
-  if (looksEmpty && attempt < 3) {
-    await sleep(250 * attempt);
-    return fetchDotGGPayload(cardId, attempt + 1);
-  }
-
-  return { ok: true, cardId, payload };
-}
-
-async function getDotGGPrice(cardId) {
-  const fetched = await fetchDotGGPayload(cardId);
-
-  if (!fetched.ok) {
-    return fetched;
-  }
-
-  const payload = fetched.payload;
+  const payload = await response.json();
   const { normalPrice, foilPrice } = latestNormalFoilPrices(payload);
-  const fallbackPrice = latestPriceFromHistory(payload);
-  const price = normalPrice || fallbackPrice || foilPrice || null;
+  const price = normalPrice || foilPrice || null;
 
   if (!price) {
     return {
@@ -245,7 +197,7 @@ async function getDotGGPrice(cardId) {
     ok: true,
     cardId,
     price,
-    normalPrice: normalPrice || fallbackPrice || null,
+    normalPrice,
     foilPrice
   };
 }
@@ -269,86 +221,7 @@ async function asyncPool(limit, items, iteratorFn) {
   return Promise.all(ret);
 }
 
-
-function defaultMinPrices() {
-  return {
-    common: { normal: 100, foil: 200 },
-    uncommon: { normal: 150, foil: 300 },
-    rare: { normal: 500, foil: 0 },
-    epic: { normal: 1000, foil: 0 },
-    showcase: { normal: 2000, foil: 0 }
-  };
-}
-
-async function getMinPriceRules() {
-  try {
-    const settingsStore = getStore(SETTINGS_STORE);
-    return await settingsStore.get(MIN_PRICES_KEY, { type: "json" }) || defaultMinPrices();
-  } catch {
-    return defaultMinPrices();
-  }
-}
-
-function applyMinimumPriceToEntry(card, entry, rules) {
-  const rarity = String(card.rarity || "").toLowerCase();
-  const rule = rules[rarity];
-  if (!rule) return entry;
-
-  entry.storePrice = Math.max(Number(entry.storePrice || 0), Number(rule.normal || 0));
-
-  if (["common", "uncommon"].includes(rarity)) {
-    entry.foilStorePrice = Math.max(Number(entry.foilStorePrice || 0), Number(rule.foil || 0));
-  }
-
-  return entry;
-}
-
-
-// DEBUG_DOTGG_DIAGNOSTIC
-async function debugDotGG(event = {}) {
-  const testCardId = event.queryStringParameters?.cardid || "OGN-001";
-  const url = `${DOTGG_PRICE_URL}?game=riftbound&cardid=${encodeURIComponent(testCardId)}&cache=${Date.now()}`;
-
-  try {
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent": "LilStoreTCG/1.0 diagnostic",
-        "Accept": "application/json"
-      }
-    });
-
-    const text = await response.text();
-    let parsed = null;
-
-    try {
-      parsed = JSON.parse(text);
-    } catch {}
-
-    return json(200, {
-      ok: response.ok,
-      status: response.status,
-      statusText: response.statusText,
-      url,
-      contentType: response.headers.get("content-type"),
-      textPreview: text.slice(0, 1200),
-      parsedPreview: parsed
-    });
-  } catch (error) {
-    return json(500, {
-      ok: false,
-      error: "No se pudo conectar con DotGG.",
-      message: error.message || String(error),
-      stack: error.stack || "",
-      name: error.name || "Error",
-      url
-    });
-  }
-}
-
 exports.handler = async (event) => {
-  if (event.httpMethod === "GET" && event.queryStringParameters?.debug) {
-    return await debugDotGG(event);
-  }
   if (event.httpMethod === "OPTIONS") return json(200, { ok: true });
   if (event.httpMethod !== "POST") return json(405, { error: "Método no permitido." });
 
@@ -376,14 +249,12 @@ exports.handler = async (event) => {
       return json(400, { error: "No se recibieron cartas para actualizar." });
     }
 
-    const minPriceRules = await getMinPriceRules();
-
     const cardsWithCodes = cards
       .map(card => ({ ...card, dotggId: shortCode(card.publicCode) }))
       .filter(card => card.dotggId);
 
     const uniqueCodes = [...new Set(cardsWithCodes.map(card => card.dotggId))];
-    const priceResults = await asyncPool(3, uniqueCodes, getDotGGPrice);
+    const priceResults = await asyncPool(8, uniqueCodes, getDotGGPrice);
 
     const priceMap = {};
     const failed = [];
@@ -442,7 +313,6 @@ exports.handler = async (event) => {
         inventory[key].foilStorePrice = Math.round(priceData.foilPrice * dollar * margin);
       }
 
-      applyMinimumPriceToEntry(card, inventory[key], minPriceRules);
       updated++;
     }
 
@@ -456,7 +326,6 @@ exports.handler = async (event) => {
       failedCount: failed.length,
       notFoundCount: notFound.length,
       failed: failed.slice(0, 10),
-      failedSamples: failed.slice(0, 5).map(f => ({ cardId: f.cardId, status: f.status, sample: f.sample })),
       notFound: notFound.slice(0, 10),
       dollar,
       margin
@@ -464,9 +333,7 @@ exports.handler = async (event) => {
   } catch (error) {
     return json(500, {
       error: "Error interno sincronizando precios DotGG.",
-      message: error.message || String(error),
-      stack: error.stack || "",
-      name: error.name || "Error"
+      message: error.message || String(error)
     });
   }
 };

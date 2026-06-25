@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=854">
+  <link rel="stylesheet" href="css/admin.css?v=83o">
 </head>
 <body>
   <header class="admin-header">
@@ -50,44 +50,6 @@
 
     
     
-    <section class="panel min-price-panel">
-      <h2>Precios mínimos por rareza</h2>
-      <p>Define un piso mínimo para evitar vender cartas demasiado baratas. El precio final queda como el mayor entre DotGG y el mínimo definido.</p>
-
-      <div class="min-price-grid">
-        <div class="min-price-head">Rareza</div>
-        <div class="min-price-head">Normal CLP</div>
-        <div class="min-price-head">Foil CLP</div>
-
-        <label>Common</label>
-        <input id="minCommonNormal" type="number" min="0" step="1" value="100">
-        <input id="minCommonFoil" type="number" min="0" step="1" value="200">
-
-        <label>Uncommon</label>
-        <input id="minUncommonNormal" type="number" min="0" step="1" value="150">
-        <input id="minUncommonFoil" type="number" min="0" step="1" value="300">
-
-        <label>Rare</label>
-        <input id="minRareNormal" type="number" min="0" step="1" value="500">
-        <input id="minRareFoil" type="number" min="0" step="1" value="0">
-
-        <label>Epic</label>
-        <input id="minEpicNormal" type="number" min="0" step="1" value="1000">
-        <input id="minEpicFoil" type="number" min="0" step="1" value="0">
-
-        <label>Showcase</label>
-        <input id="minShowcaseNormal" type="number" min="0" step="1" value="2000">
-        <input id="minShowcaseFoil" type="number" min="0" step="1" value="0">
-      </div>
-
-      <div class="admin-actions-row">
-        <button id="saveMinPricesBtn" type="button">Guardar mínimos</button>
-        <button id="applyMinPricesBtn" type="button">Aplicar mínimos al inventario</button>
-      </div>
-
-      <small>Nota: Rare, Epic y Showcase no usan stock foil en la tienda. Puedes dejar su mínimo foil en 0.</small>
-    </section>
-
     <section class="panel orders-panel">
       <h2>Confirmar pedido y descontar stock</h2>
       <p>Ingresa el número de pedido enviado por WhatsApp. El stock se descuenta solo cuando confirmas el pedido.</p>
@@ -102,7 +64,8 @@
         Ingresa un número de pedido para revisar sus cartas.
       </div>
     </section>
-<section class="panel backup-panel">
+
+    <section class="panel backup-panel">
       <h2>Respaldos de inventario</h2>
       <p>Descarga una copia de emergencia de tu stock actual en Excel y JSON.</p>
       <div class="backup-actions">
@@ -133,7 +96,6 @@
           <small>Ejemplo: 0.95 = 5% más barato que mercado.</small>
         </div>
         <button id="syncPricesBtn" type="button">Actualizar precios DotGG</button>
-        <button id="debugDotGGBtn" type="button">Diagnóstico DotGG</button>
       </div>
       <small>Usa la API DotGG getcardprices como Market USD.</small>
     </section>
@@ -160,62 +122,6 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="js/admin.js?v=854"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const debugBtn = document.getElementById("debugDotGGBtn");
-  const message = document.getElementById("message");
-
-  if (!debugBtn) return;
-
-  debugBtn.addEventListener("click", async () => {
-    if (message) {
-      message.textContent = "Probando conexión con DotGG...";
-      message.style.color = "#66ffd1";
-    }
-
-    try {
-      const res = await fetch("/.netlify/functions/sync-riftboundgg-prices?debug=1&v=" + Date.now(), {
-        cache: "no-store"
-      });
-
-      const text = await res.text();
-      let data = null;
-
-      try {
-        data = JSON.parse(text);
-      } catch {}
-
-      console.log("Diagnóstico DotGG:", data || text);
-
-      if (!res.ok) {
-        const errorText = data?.message || data?.error || text || "Error desconocido.";
-        if (message) {
-          message.textContent = "Diagnóstico DotGG falló: " + errorText;
-          message.style.color = "#ff9b9b";
-        }
-        return;
-      }
-
-      const status = data?.status ?? res.status;
-      const type = data?.contentType || "sin content-type";
-      const preview = String(data?.textPreview || text || "").slice(0, 220).replace(/\s+/g, " ");
-
-      if (message) {
-        message.textContent = `Diagnóstico DotGG OK · status ${status} · ${type} · ${preview}`;
-        message.style.color = "#66ffd1";
-      }
-    } catch (error) {
-      console.error(error);
-      if (message) {
-        message.textContent = "No se pudo ejecutar diagnóstico DotGG: " + (error.message || error);
-        message.style.color = "#ff9b9b";
-      }
-    }
-  });
-});
-</script>
-
+  <script src="js/admin.js?v=83o"></script>
 </body>
 </html>

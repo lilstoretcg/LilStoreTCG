@@ -1,1 +1,0 @@
-document.getElementById('card').innerHTML='Detalle de carta';

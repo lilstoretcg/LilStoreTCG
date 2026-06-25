@@ -281,51 +281,18 @@ td input[data-field="storePrice"]{
 }
 
 
-/* v8.5 orders + minimum prices */
-.min-price-panel h2,
+/* v8.3 pedidos sin precios base */
 .orders-panel h2{
   margin:0 0 10px;
   color:#ffd34d;
   font-size:20px;
 }
 
-.min-price-panel p,
 .orders-panel p{
   color:#ccc;
   margin:0 0 14px;
 }
 
-.min-price-grid{
-  display:grid;
-  grid-template-columns: 1fr 150px 150px;
-  gap:10px;
-  align-items:center;
-  margin:14px 0;
-}
-
-.min-price-head{
-  color:#ffd34d;
-  font-weight:900;
-  font-size:13px;
-  text-transform:uppercase;
-}
-
-.min-price-grid label{
-  font-weight:800;
-  color:#fff;
-}
-
-.min-price-grid input,
-.order-confirm-row input{
-  height:38px;
-  border-radius:9px;
-  border:1px solid #333;
-  background:#080808;
-  color:#fff;
-  padding:0 10px;
-}
-
-.admin-actions-row,
 .order-confirm-row{
   display:flex;
   flex-wrap:wrap;
@@ -334,22 +301,21 @@ td input[data-field="storePrice"]{
   margin-top:14px;
 }
 
-.admin-actions-row button,
+.order-confirm-row input{
+  height:38px;
+  min-width:220px;
+  border-radius:9px;
+  border:1px solid #333;
+  background:#080808;
+  color:#fff;
+  padding:0 10px;
+}
+
 .order-confirm-row button{
   width:auto;
-  min-width:170px;
+  min-width:160px;
   border-radius:10px;
   font-weight:900;
-}
-
-#saveMinPricesBtn{
-  background:#38bdf8;
-  color:#000;
-}
-
-#applyMinPricesBtn{
-  background:#ffb000;
-  color:#000;
 }
 
 #searchOrderBtn{
@@ -423,15 +389,6 @@ td input[data-field="storePrice"]{
 }
 
 @media(max-width:700px){
-  .min-price-grid{
-    grid-template-columns:1fr;
-  }
-
-  .min-price-head{
-    display:none;
-  }
-
-  .admin-actions-row button,
   .order-confirm-row button,
   .order-confirm-row input{
     width:100%;

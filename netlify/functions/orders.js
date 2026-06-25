@@ -162,7 +162,6 @@ exports.handler = async (event) => {
           source: "LilStore TCG",
           createdAt: new Date().toISOString(),
           completedAt: null,
-          customerNote: payload.customerNote || "",
           items,
           total
         };
@@ -181,24 +180,6 @@ exports.handler = async (event) => {
 
         const result = await completeOrder(orderStore, inventoryStore, payload.orderId);
         return json(result.statusCode, result.body);
-      }
-
-      if (action === "cancel") {
-        const adminPin = process.env.ADMIN_PIN || "";
-        const receivedPin = event.headers["x-admin-pin"] || event.headers["X-Admin-Pin"] || "";
-
-        if (!adminPin) return json(500, { error: "Falta configurar ADMIN_PIN en Netlify." });
-        if (receivedPin !== adminPin) return json(401, { error: "PIN incorrecto." });
-
-        const id = normalizeOrderId(payload.orderId);
-        const key = orderKey(id);
-        const order = await orderStore.get(key, { type: "json" });
-        if (!order) return json(404, { error: `No existe el pedido #${id}.` });
-
-        order.status = "cancelled";
-        order.cancelledAt = new Date().toISOString();
-        await orderStore.setJSON(key, order);
-        return json(200, { ok: true, order });
       }
 
       return json(400, { error: "Acción no válida." });

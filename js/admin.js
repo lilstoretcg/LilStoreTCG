@@ -6,30 +6,15 @@ const searchInput = document.getElementById("searchInput");
 const stockFilter = document.getElementById("stockFilter");
 const saveBtn = document.getElementById("saveBtn");
 const syncPricesBtn = document.getElementById("syncPricesBtn");
-const debugDotGGBtn = document.getElementById("debugDotGGBtn");
 const syncCatalogBtn = document.getElementById("syncCatalogBtn");
 const message = document.getElementById("message");
 const exportBackupExcelBtn = document.getElementById("exportBackupExcelBtn");
 const exportBackupJsonBtn = document.getElementById("exportBackupJsonBtn");
 const exportBackupBothBtn = document.getElementById("exportBackupBothBtn");
-
-const saveMinPricesBtn = document.getElementById("saveMinPricesBtn");
-const applyMinPricesBtn = document.getElementById("applyMinPricesBtn");
 const orderIdInput = document.getElementById("orderIdInput");
 const searchOrderBtn = document.getElementById("searchOrderBtn");
 const completeOrderBtn = document.getElementById("completeOrderBtn");
 const orderPreview = document.getElementById("orderPreview");
-
-
-function detalleErrorDotGG(data){
-  if(!data || typeof data !== "object") return "";
-  const parts = [];
-  if(data.error) parts.push(data.error);
-  if(data.message) parts.push("Detalle: " + data.message);
-  if(data.name) parts.push("Tipo: " + data.name);
-  if(data.status) parts.push("Status: " + data.status);
-  return parts.join(" | ");
-}
 
 function keyFor(card){
   return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
@@ -340,169 +325,6 @@ async function syncRiftboundPrices(){
 
 
 
-function rarityKey(card){
-  return String(card.rarity || "").toLowerCase();
-}
-
-function minPriceInputs(){
-  return {
-    common: {
-      normal: document.getElementById("minCommonNormal"),
-      foil: document.getElementById("minCommonFoil")
-    },
-    uncommon: {
-      normal: document.getElementById("minUncommonNormal"),
-      foil: document.getElementById("minUncommonFoil")
-    },
-    rare: {
-      normal: document.getElementById("minRareNormal"),
-      foil: document.getElementById("minRareFoil")
-    },
-    epic: {
-      normal: document.getElementById("minEpicNormal"),
-      foil: document.getElementById("minEpicFoil")
-    },
-    showcase: {
-      normal: document.getElementById("minShowcaseNormal"),
-      foil: document.getElementById("minShowcaseFoil")
-    }
-  };
-}
-
-function readMinPriceRules(){
-  const inputs = minPriceInputs();
-  const rules = {};
-
-  Object.keys(inputs).forEach(rarity=>{
-    rules[rarity] = {
-      normal: Math.max(0, Math.round(Number(inputs[rarity].normal?.value || 0))),
-      foil: Math.max(0, Math.round(Number(inputs[rarity].foil?.value || 0)))
-    };
-  });
-
-  return rules;
-}
-
-function fillMinPriceRules(rules = {}){
-  const inputs = minPriceInputs();
-
-  Object.keys(inputs).forEach(rarity=>{
-    if(inputs[rarity].normal) inputs[rarity].normal.value = Number(rules[rarity]?.normal ?? inputs[rarity].normal.value ?? 0);
-    if(inputs[rarity].foil) inputs[rarity].foil.value = Number(rules[rarity]?.foil ?? inputs[rarity].foil.value ?? 0);
-  });
-}
-
-async function loadMinPriceRules(){
-  try{
-    const res = await fetch("/.netlify/functions/settings?v=" + Date.now(), { cache:"no-store" });
-    if(!res.ok) return;
-    const rules = await res.json();
-    fillMinPriceRules(rules);
-  }catch(e){}
-}
-
-async function saveMinPriceRules(){
-  const pin = document.getElementById("adminPin").value.trim();
-  if(!pin){
-    showMessage("Ingresa el PIN administrador para guardar mínimos.", true);
-    return;
-  }
-
-  const rules = readMinPriceRules();
-
-  const res = await fetch("/.netlify/functions/settings", {
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json",
-      "x-admin-pin": pin
-    },
-    body: JSON.stringify({ rules })
-  });
-
-  const data = await res.json().catch(()=>({}));
-
-  if(!res.ok){
-    showMessage(data.error || "No se pudieron guardar los precios mínimos.", true);
-    return;
-  }
-
-  fillMinPriceRules(data.rules);
-  showMessage("Precios mínimos guardados correctamente.");
-}
-
-function applyMinPricesLocal(){
-  const rules = readMinPriceRules();
-  let changed = 0;
-
-  cards.forEach(card=>{
-    const key = keyFor(card);
-    const entry = normalizeEntry(card);
-    const rarity = rarityKey(card);
-    const rule = rules[rarity];
-    if(!rule) return;
-
-    inventory[key] = inventory[key] || {};
-    if(typeof inventory[key] === "number"){
-      inventory[key] = { stock: inventory[key] };
-    }
-
-    const newStorePrice = Math.max(Number(entry.storePrice || 0), Number(rule.normal || 0));
-    if(newStorePrice !== Number(entry.storePrice || 0)){
-      inventory[key].storePrice = newStorePrice;
-      changed++;
-    }else{
-      inventory[key].storePrice = Number(entry.storePrice || 0);
-    }
-
-    inventory[key].stock = Number(entry.stock || 0);
-    inventory[key].marketPrice = Number(entry.marketPrice || 0);
-
-    if(supportsFoil(card)){
-      const newFoilPrice = Math.max(Number(entry.foilStorePrice || 0), Number(rule.foil || 0));
-      if(newFoilPrice !== Number(entry.foilStorePrice || 0)){
-        inventory[key].foilStorePrice = newFoilPrice;
-        changed++;
-      }else{
-        inventory[key].foilStorePrice = Number(entry.foilStorePrice || 0);
-      }
-
-      inventory[key].foilStock = Number(entry.foilStock || 0);
-      inventory[key].foilMarketPrice = Number(entry.foilMarketPrice || 0);
-    }
-  });
-
-  render();
-  return changed;
-}
-
-async function applyMinPricesAndSave(){
-  const pin = document.getElementById("adminPin").value.trim();
-  if(!pin){
-    showMessage("Ingresa el PIN administrador para aplicar mínimos.", true);
-    return;
-  }
-
-  const changed = applyMinPricesLocal();
-
-  const res = await fetch("/.netlify/functions/stock", {
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json",
-      "x-admin-pin": pin
-    },
-    body: JSON.stringify({ inventory })
-  });
-
-  const data = await res.json().catch(()=>({}));
-
-  if(!res.ok){
-    showMessage(data.error || "No se pudo guardar el inventario con mínimos.", true);
-    return;
-  }
-
-  showMessage(`Precios mínimos aplicados. Cambios realizados: ${changed}. Inventario guardado.`);
-}
-
 function cleanOrderId(value){
   return String(value || "").replace("#","").trim().padStart(5, "0");
 }
@@ -603,31 +425,6 @@ async function completeOrder(){
   render();
   updateStats();
   showMessage(data.message || `Pedido #${id} descontado correctamente.`);
-}
-
-
-
-async function debugDotGGAdmin(){
-  showMessage("Probando conexión con DotGG...");
-
-  try{
-    const res = await fetch("/.netlify/functions/sync-riftboundgg-prices?debug=1&v=" + Date.now(), { cache:"no-store" });
-    const data = await res.json().catch(()=>({}));
-
-    if(!res.ok){
-      showMessage(detalleErrorDotGG(data) || "Diagnóstico DotGG falló.", true);
-      console.error("DotGG diagnostic error:", data);
-      return;
-    }
-
-    console.log("DotGG diagnostic:", data);
-
-    const preview = data.textPreview ? data.textPreview.slice(0, 180).replace(/\s+/g, " ") : "";
-    showMessage(`Diagnóstico DotGG: status ${data.status}. Content-Type: ${data.contentType || "sin tipo"}. Preview: ${preview}`);
-  }catch(error){
-    showMessage("No se pudo ejecutar diagnóstico DotGG: " + (error.message || error), true);
-    console.error(error);
-  }
 }
 
 function backupDateStamp(){
@@ -759,10 +556,7 @@ if(syncCatalogBtn) syncCatalogBtn.addEventListener("click", syncDotGGCatalog);
 exportBackupExcelBtn?.addEventListener("click", exportBackupExcel);
 exportBackupJsonBtn?.addEventListener("click", exportBackupJson);
 exportBackupBothBtn?.addEventListener("click", exportBackupBoth);
-saveMinPricesBtn?.addEventListener("click", saveMinPriceRules);
-applyMinPricesBtn?.addEventListener("click", applyMinPricesAndSave);
 searchOrderBtn?.addEventListener("click", searchOrder);
 completeOrderBtn?.addEventListener("click", completeOrder);
 
 load();
-loadMinPriceRules();
