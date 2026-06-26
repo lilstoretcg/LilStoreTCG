@@ -656,3 +656,128 @@ td input[data-field="storePrice"]{
     width:100%;
   }
 }
+
+
+/* v11.0 Admin collapsible layout */
+.admin-collapsible{
+  padding:0 !important;
+  overflow:hidden;
+}
+
+.admin-collapsible-header{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:18px 20px;
+  border:0;
+  background:transparent;
+  color:#ffd34d;
+  font-size:20px;
+  font-weight:900;
+  text-align:left;
+  cursor:pointer;
+}
+
+.admin-collapsible-header:hover{
+  background:rgba(255, 211, 77, .05);
+}
+
+.admin-collapsible-icon{
+  font-size:16px;
+  color:#ffd34d;
+  opacity:.9;
+}
+
+.admin-collapsible-content{
+  padding:0 20px 20px;
+}
+
+.admin-collapsible.closed .admin-collapsible-content{
+  display:none;
+}
+
+/* Ajuste del bloque Sincronización de precios */
+.admin-collapsible .admin-collapsible-header span:first-child{
+  line-height:1.2;
+}
+
+/* Hace que los controles dentro de sincronización de precios queden alineados */
+.admin-collapsible-content .sync-grid,
+.admin-collapsible-content .price-sync-grid,
+.admin-collapsible-content .admin-sync-grid{
+  display:grid !important;
+  grid-template-columns:180px 220px 260px;
+  gap:14px;
+  align-items:end;
+  max-width:760px;
+}
+
+.admin-collapsible-content .sync-grid > *,
+.admin-collapsible-content .price-sync-grid > *,
+.admin-collapsible-content .admin-sync-grid > *{
+  min-width:0;
+}
+
+/* Fallback: si el panel de precios usa divs directos sin clase */
+.admin-collapsible-content:has(#dollarInput):has(#marginInput){
+  display:grid;
+  grid-template-columns:180px 220px 260px;
+  gap:14px;
+  align-items:end;
+}
+
+.admin-collapsible-content:has(#dollarInput):has(#marginInput) > p,
+.admin-collapsible-content:has(#dollarInput):has(#marginInput) > small{
+  grid-column:1 / -1;
+}
+
+.admin-collapsible-content:has(#dollarInput):has(#marginInput) button{
+  align-self:end;
+}
+
+/* Evita que Diagnóstico DotGG quede torcido debajo del dólar */
+#debugDotGGBtn{
+  margin-top:0 !important;
+  align-self:end;
+}
+
+#syncPricesBtn{
+  align-self:end;
+}
+
+#dollarInput,
+#marginInput{
+  width:100%;
+  max-width:220px;
+}
+
+/* En móvil, todo apilado y cómodo */
+@media(max-width:800px){
+  .admin-collapsible-header{
+    font-size:18px;
+    padding:16px;
+  }
+
+  .admin-collapsible-content{
+    padding:0 16px 16px;
+  }
+
+  .admin-collapsible-content .sync-grid,
+  .admin-collapsible-content .price-sync-grid,
+  .admin-collapsible-content .admin-sync-grid,
+  .admin-collapsible-content:has(#dollarInput):has(#marginInput){
+    display:flex !important;
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  #dollarInput,
+  #marginInput,
+  #syncPricesBtn,
+  #debugDotGGBtn{
+    width:100%;
+    max-width:none;
+  }
+}

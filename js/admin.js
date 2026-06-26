@@ -1015,3 +1015,60 @@ function bindDotGGBatchV101(){
 }
 
 document.addEventListener("DOMContentLoaded", bindDotGGBatchV101);
+
+
+// v11.0 Admin collapsible sections
+function setupAdminCollapsiblesV11(){
+  const panels = Array.from(document.querySelectorAll("section.panel, .panel"));
+  if(!panels.length) return;
+
+  panels.forEach((panel, index)=>{
+    if(panel.dataset.collapsibleReady === "1") return;
+    panel.dataset.collapsibleReady = "1";
+
+    const title = panel.querySelector("h2, h3");
+    if(!title) return;
+
+    const titleText = title.textContent.trim().toLowerCase();
+
+    // Keep inventory/table visible if it has no h2 or is the main stock table.
+    const shouldOpen =
+      titleText.includes("pin") ||
+      titleText.includes("buscar") ||
+      titleText.includes("inventario") ||
+      titleText.includes("sincronización de precios") ||
+      titleText.includes("precio base");
+
+    panel.classList.add("admin-collapsible");
+    if(shouldOpen) panel.classList.add("open");
+    else panel.classList.add("closed");
+
+    const content = document.createElement("div");
+    content.className = "admin-collapsible-content";
+
+    const children = Array.from(panel.children);
+    children.forEach(child=>{
+      if(child !== title) content.appendChild(child);
+    });
+
+    const header = document.createElement("button");
+    header.type = "button";
+    header.className = "admin-collapsible-header";
+    header.innerHTML = `
+      <span>${title.textContent}</span>
+      <span class="admin-collapsible-icon">${panel.classList.contains("open") ? "▼" : "▶"}</span>
+    `;
+
+    title.replaceWith(header);
+    panel.appendChild(content);
+
+    header.addEventListener("click", ()=>{
+      const isOpen = panel.classList.toggle("open");
+      panel.classList.toggle("closed", !isOpen);
+      const icon = header.querySelector(".admin-collapsible-icon");
+      if(icon) icon.textContent = isOpen ? "▼" : "▶";
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", setupAdminCollapsiblesV11);
