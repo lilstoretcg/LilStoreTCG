@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=120">
+  <link rel="stylesheet" href="css/admin.css?v=121">
 </head>
 <body>
   <header class="admin-header">
@@ -28,11 +28,12 @@
         <input id="searchInput" type="text" placeholder="Buscar por nombre o código">
       </div>
       <div>
-        <label>Filtro</label>
-        <select id="stockFilter">
-          <option value="">Todas</option>
-          <option value="available">Con stock</option>
-          <option value="soldout">Sin stock</option>
+        <label>Set</label>
+        <select id="setFilter">
+          <option value="">Todos los Sets</option>
+          <option value="Origins">Origins</option>
+          <option value="Spiritforged">Spiritforged</option>
+          <option value="Unleashed">Unleashed</option>
         </select>
       </div>
       <button id="saveBtn">Guardar stock</button>
@@ -78,10 +79,15 @@
     </section>
 
     <section class="panel restore-backup-panel">
-      <h2>Restaurar stock desde Excel respaldo</h2>
-      <p>Restaura el inventario desde el respaldo Excel cargado en esta versión. Incluye 901 cartas de Origins, Spiritforged y Unleashed con 1820 unidades.</p>
-      <button id="restoreExcelBackupBtn" type="button">Restaurar stock desde respaldo</button>
-      <small>Usa este botón después de actualizar el catálogo DotGG en la cuenta nueva de Netlify.</small>
+      <h2>Restaurar stock desde respaldo</h2>
+      <p>Sube un respaldo exportado desde LilStore. Acepta Excel (.xlsx), JSON (.json) o ZIP con respaldo adentro.</p>
+
+      <div class="restore-upload-box">
+        <input id="restoreBackupFileInput" type="file" accept=".xlsx,.json,.zip,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip">
+        <button id="restoreUploadedBackupBtn" type="button">Restaurar respaldo subido</button>
+      </div>
+
+      <small>Recomendado: primero actualiza el catálogo DotGG, luego restaura el respaldo y finalmente actualiza precios.</small>
     </section>
 
     <section class="panel base-price-panel">
@@ -229,7 +235,8 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="js/admin.js?v=120"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="js/admin.js?v=121"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {

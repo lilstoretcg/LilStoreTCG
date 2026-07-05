@@ -3,7 +3,8 @@ let inventory = {};
 
 const rowsEl = document.getElementById("stockRows");
 const searchInput = document.getElementById("searchInput");
-const stockFilter = document.getElementById("stockFilter");
+const setFilter = document.getElementById("setFilter");
+const stockFilter = document.getElementById("stockFilter"); // compatibilidad antigua
 const saveBtn = document.getElementById("saveBtn");
 const syncPricesBtn = document.getElementById("syncPricesBtn");
 const syncCatalogBtn = document.getElementById("syncCatalogBtn");
@@ -20,6 +21,8 @@ const searchOrderBtn = document.getElementById("searchOrderBtn");
 const completeOrderBtn = document.getElementById("completeOrderBtn");
 const orderPreview = document.getElementById("orderPreview");
 const restoreExcelBackupBtn = document.getElementById("restoreExcelBackupBtn");
+const restoreBackupFileInput = document.getElementById("restoreBackupFileInput");
+const restoreUploadedBackupBtn = document.getElementById("restoreUploadedBackupBtn");
 const saveBasePricesBtn = document.getElementById("saveBasePricesBtn");
 const applyBasePricesBtn = document.getElementById("applyBasePricesBtn");
 
@@ -83,7 +86,8 @@ function render(){
   if(!rowsEl) return;
 
   const q = (searchInput?.value || "").toLowerCase();
-  const filter = stockFilter?.value || "";
+  const setValue = setFilter?.value || "";
+  const legacyStockFilter = stockFilter?.value || "";
 
   const filtered = cards.filter(card=>{
     const stock = currentStockFor(card);
@@ -93,12 +97,14 @@ function render(){
       String(card.publicCode || "").toLowerCase().includes(q) ||
       String(card.dotggCode || "").toLowerCase().includes(q);
 
-    const matchesStock =
-      !filter ||
-      (filter === "available" && (stock > 0 || foilStock > 0)) ||
-      (filter === "soldout" && stock <= 0 && foilStock <= 0);
+    const matchesSet = !setValue || String(card.set || "") === setValue || String(card.setCode || "") === setValue;
 
-    return matchesText && matchesStock;
+    const matchesStock =
+      !legacyStockFilter ||
+      (legacyStockFilter === "available" && (stock > 0 || foilStock > 0)) ||
+      (legacyStockFilter === "soldout" && stock <= 0 && foilStock <= 0);
+
+    return matchesText && matchesSet && matchesStock;
   });
 
   rowsEl.innerHTML = filtered.map(card=>{
@@ -838,6 +844,7 @@ function exportBackupBoth(){
 
 
 searchInput?.addEventListener("input", render);
+setFilter?.addEventListener("change", render);
 stockFilter?.addEventListener("change", render);
 saveBtn?.addEventListener("click", save);
 if(syncPricesBtn) syncPricesBtn.addEventListener("click", syncRiftboundPrices);
@@ -1216,4 +1223,189 @@ if(__renderOriginalV12){
 document.addEventListener("DOMContentLoaded", ()=>{
   setupAdminCollapsiblesV12();
   setTimeout(updateAdminStatsCenterV12, 500);
+});
+
+
+// v12.1 Restore backup from uploaded XLSX/JSON/ZIP
+function normalizeHeaderV121(value){
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "");
+}
+
+function rowValueV121(row, names){
+  const normalized = {};
+  Object.keys(row || {}).forEach(key=>{
+    normalized[normalizeHeaderV121(key)] = row[key];
+  });
+
+  for(const name of names){
+    const key = normalizeHeaderV121(name);
+    if(Object.prototype.hasOwnProperty.call(normalized, key)) return normalized[key];
+  }
+  return "";
+}
+
+function numberV121(value){
+  const n = Number(String(value ?? "0").replace(",", ".").replace(/[^0-9.\-]/g, ""));
+  return Number.isFinite(n) ? n : 0;
+}
+
+function codeV121(value){
+  const text = String(value || "").toUpperCase();
+  const match = text.match(/([A-Z]{3})[-\s]?(\d{3}[A-Z]?)/);
+  return match ? `${match[1]}-${match[2]}` : text.trim();
+}
+
+function cardKeyFromBackupRowV121(row){
+  const code = codeV121(rowValueV121(row, ["Código", "Codigo", "Code", "publicCode", "dotggCode"]));
+  if(code) return code;
+
+  const set = rowValueV121(row, ["Set"]);
+  const name = rowValueV121(row, ["Carta", "Nombre", "Name"]);
+  return `${set}-${name}`;
+}
+
+function inventoryFromRowsV121(rows){
+  const result = {};
+
+  rows.forEach(row=>{
+    const key = cardKeyFromBackupRowV121(row);
+    if(!key) return;
+
+    const stock = numberV121(rowValueV121(row, ["Stock Normal", "Stock", "Normal Stock", "stock"]));
+    const foilStock = numberV121(rowValueV121(row, ["Stock Foil", "Foil Stock", "foilStock"]));
+    const marketPrice = numberV121(rowValueV121(row, ["Mercado Normal USD", "Mercado USD", "Market USD", "marketPrice"]));
+    const storePrice = numberV121(rowValueV121(row, ["LilStore Normal CLP", "LilStore CLP", "Precio CLP", "storePrice"]));
+    const foilMarketPrice = numberV121(rowValueV121(row, ["Mercado Foil USD", "Foil Market USD", "foilMarketPrice"]));
+    const foilStorePrice = numberV121(rowValueV121(row, ["LilStore Foil CLP", "Foil CLP", "foilStorePrice"]));
+
+    result[key] = {
+      stock: Math.max(0, Math.round(stock)),
+      foilStock: Math.max(0, Math.round(foilStock)),
+      marketPrice: Math.max(0, Number(marketPrice.toFixed ? marketPrice.toFixed(2) : marketPrice)),
+      storePrice: Math.max(0, Math.round(storePrice)),
+      foilMarketPrice: Math.max(0, Number(foilMarketPrice.toFixed ? foilMarketPrice.toFixed(2) : foilMarketPrice)),
+      foilStorePrice: Math.max(0, Math.round(foilStorePrice))
+    };
+  });
+
+  return result;
+}
+
+function looksLikeInventoryObjectV121(obj){
+  if(!obj || typeof obj !== "object" || Array.isArray(obj)) return false;
+  const keys = Object.keys(obj);
+  if(!keys.length) return false;
+  const first = obj[keys[0]];
+  return typeof first === "number" || (first && typeof first === "object" && ("stock" in first || "foilStock" in first || "storePrice" in first));
+}
+
+async function parseBackupFileV121(file){
+  const lower = file.name.toLowerCase();
+
+  if(lower.endsWith(".json")){
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    if(looksLikeInventoryObjectV121(parsed)) return parsed;
+    if(Array.isArray(parsed)) return inventoryFromRowsV121(parsed);
+    if(looksLikeInventoryObjectV121(parsed.inventory)) return parsed.inventory;
+    if(Array.isArray(parsed.rows)) return inventoryFromRowsV121(parsed.rows);
+    throw new Error("El JSON no parece ser un respaldo válido.");
+  }
+
+  if(lower.endsWith(".xlsx")){
+    if(typeof XLSX === "undefined") throw new Error("No se cargó la librería XLSX.");
+    const buffer = await file.arrayBuffer();
+    const workbook = XLSX.read(buffer, { type:"array" });
+    const sheetName = workbook.SheetNames.includes("Inventario") ? "Inventario" : workbook.SheetNames[0];
+    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval:"" });
+    return inventoryFromRowsV121(rows);
+  }
+
+  if(lower.endsWith(".zip")){
+    if(typeof JSZip === "undefined") throw new Error("No se cargó la librería JSZip.");
+    const zip = await JSZip.loadAsync(await file.arrayBuffer());
+    const files = Object.values(zip.files).filter(f=>!f.dir);
+    const preferred = files.find(f=>/\.json$/i.test(f.name)) || files.find(f=>/\.xlsx$/i.test(f.name));
+    if(!preferred) throw new Error("El ZIP no contiene JSON ni Excel de respaldo.");
+
+    const blob = await preferred.async("blob");
+    const nestedFile = new File([blob], preferred.name);
+    return parseBackupFileV121(nestedFile);
+  }
+
+  throw new Error("Formato no soportado. Usa .xlsx, .json o .zip.");
+}
+
+async function restoreUploadedBackupV121(){
+  const pin = document.getElementById("adminPin").value.trim();
+  if(!pin){
+    showMessage("Ingresa el PIN administrador para restaurar respaldo.", true);
+    return;
+  }
+
+  const file = restoreBackupFileInput?.files?.[0];
+  if(!file){
+    showMessage("Selecciona un respaldo Excel, JSON o ZIP.", true);
+    return;
+  }
+
+  if(!confirm("¿Restaurar stock desde el archivo subido? Esto reemplazará el inventario remoto actual.")){
+    return;
+  }
+
+  try{
+    showMessage("Leyendo respaldo...");
+    const parsedInventory = await parseBackupFileV121(file);
+
+    if(!parsedInventory || !Object.keys(parsedInventory).length){
+      showMessage("El respaldo no contiene inventario válido.", true);
+      return;
+    }
+
+    inventory = parsedInventory;
+    const ok = await saveInventoryToRemote(`Stock restaurado desde archivo. Registros: ${Object.keys(inventory).length}.`);
+    if(ok){
+      render();
+      updateStats();
+      if(typeof updateAdminStatsCenterV12 === "function") updateAdminStatsCenterV12();
+    }
+  }catch(error){
+    console.error(error);
+    showMessage("No se pudo restaurar el respaldo: " + (error.message || error), true);
+  }
+}
+
+restoreUploadedBackupBtn?.addEventListener("click", restoreUploadedBackupV121);
+
+
+// v12.1 Reliable collapsible fix
+function fixCollapsiblesV121(){
+  document.querySelectorAll(".admin-collapse-header-v12, .admin-collapsible-header").forEach(header=>{
+    if(header.dataset.v121Fixed === "1") return;
+    header.dataset.v121Fixed = "1";
+
+    header.addEventListener("click", (event)=>{
+      event.preventDefault();
+      event.stopImmediatePropagation();
+
+      const panel = header.closest("section.panel");
+      if(!panel) return;
+
+      const isOpen = panel.classList.contains("open");
+      panel.classList.toggle("open", !isOpen);
+      panel.classList.toggle("closed", isOpen);
+
+      const arrow = header.querySelector(".admin-collapse-arrow-v12, .admin-collapsible-icon");
+      if(arrow) arrow.textContent = !isOpen ? "▼" : "▶";
+    }, true);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  setTimeout(fixCollapsiblesV121, 50);
+  setTimeout(fixCollapsiblesV121, 600);
 });

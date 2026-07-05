@@ -990,3 +990,64 @@ td input[data-field="storePrice"]{
     padding:0 16px 16px;
   }
 }
+
+
+/* v12.1 fixes */
+.admin-collapse-v12.closed > .admin-collapse-body-v12,
+.admin-collapsible.closed > .admin-collapsible-content{
+  display:none !important;
+}
+
+.admin-collapse-v12.open > .admin-collapse-body-v12,
+.admin-collapsible.open > .admin-collapsible-content{
+  display:block !important;
+}
+
+.admin-collapse-header-v12,
+.admin-collapsible-header{
+  user-select:none;
+}
+
+/* Filtro por set */
+#setFilter{
+  min-width:220px;
+}
+
+/* Restaurar respaldo subido */
+.restore-upload-box{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin:14px 0;
+}
+
+#restoreBackupFileInput{
+  background:#080808;
+  border:1px solid #333;
+  color:#fff;
+  border-radius:10px;
+  padding:12px;
+  min-width:280px;
+}
+
+#restoreUploadedBackupBtn{
+  background:#22c55e;
+  color:#000;
+  border-radius:10px;
+  font-weight:900;
+  min-height:46px;
+}
+
+@media(max-width:700px){
+  #setFilter,
+  #restoreBackupFileInput,
+  #restoreUploadedBackupBtn{
+    width:100%;
+  }
+
+  .restore-upload-box{
+    flex-direction:column;
+    align-items:stretch;
+  }
+}
