@@ -1072,3 +1072,148 @@ function setupAdminCollapsiblesV11(){
 }
 
 document.addEventListener("DOMContentLoaded", setupAdminCollapsiblesV11);
+
+
+// v12 Admin UX: reliable collapsibles + statistics center
+function formatCLPV12(value){
+  return "$" + Math.round(Number(value || 0)).toLocaleString("es-CL") + " CLP";
+}
+
+function calculateAdminStatsV12(){
+  if(!Array.isArray(cards) || !cards.length) return null;
+
+  const bySet = {};
+  let totalValue = 0;
+  let normalUnits = 0;
+  let foilUnits = 0;
+
+  cards.forEach(card=>{
+    const entry = normalizeEntry(card);
+    const set = card.set || card.setCode || "Sin set";
+
+    const stock = Number(entry.stock || 0);
+    const foilStock = supportsFoil(card) ? Number(entry.foilStock || 0) : 0;
+    const normalPrice = Number(entry.storePrice || 0);
+    const foilPrice = Number(entry.foilStorePrice || 0);
+
+    normalUnits += stock;
+    foilUnits += foilStock;
+    totalValue += (stock * normalPrice) + (foilStock * foilPrice);
+
+    if(!bySet[set]){
+      bySet[set] = { normal:0, foil:0, units:0, value:0 };
+    }
+
+    bySet[set].normal += stock;
+    bySet[set].foil += foilStock;
+    bySet[set].units += stock + foilStock;
+    bySet[set].value += (stock * normalPrice) + (foilStock * foilPrice);
+  });
+
+  return { totalValue, normalUnits, foilUnits, bySet };
+}
+
+function updateAdminStatsCenterV12(){
+  const stats = calculateAdminStatsV12();
+  if(!stats) return;
+
+  const valueEl = document.getElementById("statInventoryValue");
+  const normalEl = document.getElementById("statNormalUnits");
+  const foilEl = document.getElementById("statFoilUnits");
+  const chartEl = document.getElementById("setStockChart");
+
+  if(valueEl) valueEl.textContent = formatCLPV12(stats.totalValue);
+  if(normalEl) normalEl.textContent = Number(stats.normalUnits || 0).toLocaleString("es-CL");
+  if(foilEl) foilEl.textContent = Number(stats.foilUnits || 0).toLocaleString("es-CL");
+
+  if(chartEl){
+    const rows = Object.entries(stats.bySet).sort((a,b)=>b[1].units-a[1].units);
+    const maxUnits = Math.max(1, ...rows.map(([,v])=>v.units));
+
+    chartEl.innerHTML = rows.map(([set, data])=>{
+      const pct = Math.max(2, Math.round((data.units / maxUnits) * 100));
+      return `
+        <div class="set-chart-row-v12">
+          <div class="set-chart-head-v12">
+            <strong>${set}</strong>
+            <span>${Number(data.units).toLocaleString("es-CL")} unidades · ${formatCLPV12(data.value)}</span>
+          </div>
+          <div class="set-chart-bar-v12">
+            <div style="width:${pct}%"></div>
+          </div>
+          <small>Normal: ${Number(data.normal).toLocaleString("es-CL")} · Foil: ${Number(data.foil).toLocaleString("es-CL")}</small>
+        </div>
+      `;
+    }).join("");
+  }
+}
+
+function setupAdminCollapsiblesV12(){
+  const panels = Array.from(document.querySelectorAll("section.panel"));
+  panels.forEach(panel=>{
+    if(panel.dataset.v12Ready === "1") return;
+    panel.dataset.v12Ready = "1";
+
+    const heading = panel.querySelector(":scope > h2, :scope > h3");
+    if(!heading) return;
+
+    const title = heading.textContent.trim();
+    const lower = title.toLowerCase();
+
+    panel.classList.add("admin-collapse-v12");
+
+    const openByDefault =
+      lower.includes("sincronización de precios") ||
+      lower.includes("progreso") ||
+      lower.includes("precio base") ||
+      lower.includes("centro de estadísticas");
+
+    panel.classList.toggle("open", openByDefault);
+    panel.classList.toggle("closed", !openByDefault);
+
+    const body = document.createElement("div");
+    body.className = "admin-collapse-body-v12";
+
+    Array.from(panel.children).forEach(child=>{
+      if(child !== heading) body.appendChild(child);
+    });
+
+    const header = document.createElement("button");
+    header.type = "button";
+    header.className = "admin-collapse-header-v12";
+    header.innerHTML = `<span>${title}</span><span class="admin-collapse-arrow-v12">${openByDefault ? "▼" : "▶"}</span>`;
+
+    heading.replaceWith(header);
+    panel.appendChild(body);
+
+    header.addEventListener("click", ()=>{
+      const isOpen = !panel.classList.contains("open");
+      panel.classList.toggle("open", isOpen);
+      panel.classList.toggle("closed", !isOpen);
+      const arrow = header.querySelector(".admin-collapse-arrow-v12");
+      if(arrow) arrow.textContent = isOpen ? "▼" : "▶";
+    });
+  });
+}
+
+// Patch existing render/updateStats without touching old code deeply
+const __updateStatsOriginalV12 = typeof updateStats === "function" ? updateStats : null;
+if(__updateStatsOriginalV12){
+  updateStats = function(){
+    __updateStatsOriginalV12();
+    updateAdminStatsCenterV12();
+  };
+}
+
+const __renderOriginalV12 = typeof render === "function" ? render : null;
+if(__renderOriginalV12){
+  render = function(){
+    __renderOriginalV12();
+    updateAdminStatsCenterV12();
+  };
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  setupAdminCollapsiblesV12();
+  setTimeout(updateAdminStatsCenterV12, 500);
+});

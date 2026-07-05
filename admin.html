@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=110">
+  <link rel="stylesheet" href="css/admin.css?v=120">
 </head>
 <body>
   <header class="admin-header">
@@ -52,6 +52,31 @@
     
     
     
+    
+    <section class="panel stats-center-panel">
+      <h2>Centro de estadísticas</h2>
+
+      <div class="stats-grid-v12">
+        <div class="stat-card-v12">
+          <span>Valor total inventario</span>
+          <strong id="statInventoryValue">$0 CLP</strong>
+        </div>
+        <div class="stat-card-v12">
+          <span>Stock normal</span>
+          <strong id="statNormalUnits">0</strong>
+        </div>
+        <div class="stat-card-v12">
+          <span>Stock foil</span>
+          <strong id="statFoilUnits">0</strong>
+        </div>
+      </div>
+
+      <div class="chart-wrap-v12">
+        <h3>Distribución del stock por set</h3>
+        <div id="setStockChart" class="set-stock-chart-v12"></div>
+      </div>
+    </section>
+
     <section class="panel restore-backup-panel">
       <h2>Restaurar stock desde Excel respaldo</h2>
       <p>Restaura el inventario desde el respaldo Excel cargado en esta versión. Incluye 901 cartas de Origins, Spiritforged y Unleashed con 1820 unidades.</p>
@@ -204,7 +229,7 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="js/admin.js?v=110"></script>
+  <script src="js/admin.js?v=120"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
