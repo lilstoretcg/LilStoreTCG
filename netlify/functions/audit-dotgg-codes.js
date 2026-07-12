@@ -26,7 +26,7 @@ function toNumber(value) {
 
 function normalizeCode(raw = "") {
   const text = String(raw || "").toUpperCase().trim();
-  const match = text.match(/([A-Z]{3})[-\s]?(\d{3}[A-Z]?)/);
+  const match = text.match(/([A-Z]{3})[-\s]?([A-Z]?\d{2,3}[A-Z]?)/);
   if (!match) return "";
   return `${match[1]}-${match[2]}`;
 }

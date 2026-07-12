@@ -30,7 +30,7 @@ function json(statusCode, body) {
 }
 
 function shortCode(value = "") {
-  const match = String(value).toUpperCase().match(/([A-Z]{3})-(\d{3}[A-Z]?)/);
+  const match = String(value).toUpperCase().match(/([A-Z]{3})-([A-Z]?\d{2,3}[A-Z]?)/);
   return match ? `${match[1]}-${match[2]}` : "";
 }
 

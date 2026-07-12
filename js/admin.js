@@ -1257,7 +1257,7 @@ function numberV121(value){
 
 function codeV121(value){
   const text = String(value || "").toUpperCase();
-  const match = text.match(/([A-Z]{3})[-\s]?(\d{3}[A-Z]?)/);
+  const match = text.match(/([A-Z]{3})[-\s]?([A-Z]?\d{2,3}[A-Z]?)/);
   return match ? `${match[1]}-${match[2]}` : text.trim();
 }
 
@@ -1459,7 +1459,7 @@ function normalizeCatalogNameV131(name){
 
 function catalogCardCodeV131(card){
   const text = String(card.publicCode || card.dotggCode || "").toUpperCase();
-  const match = text.match(/([A-Z]{3})[-\s]?(\d{3}[A-Z]?)/);
+  const match = text.match(/([A-Z]{3})[-\s]?([A-Z]?\d{2,3}[A-Z]?)/);
   return match ? `${match[1]}-${match[2]}` : text.trim();
 }
 
