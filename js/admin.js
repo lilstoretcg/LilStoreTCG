@@ -1811,3 +1811,424 @@ orderStatusFilter?.addEventListener("change", loadOrdersHistoryV14);
 document.addEventListener("DOMContentLoaded", ()=>{
   setTimeout(loadOrdersHistoryV14, 800);
 });
+
+
+// v14.1 - Safe backup and restore
+const previewBackupBtn = document.getElementById("previewBackupBtn");
+const confirmRestoreBackupBtn = document.getElementById("confirmRestoreBackupBtn");
+const backupPreview = document.getElementById("backupPreview");
+const restoreHistoryList = document.getElementById("restoreHistoryList");
+const quickBackupBtn = document.getElementById("quickBackupBtn");
+
+let __parsedBackupV141 = null;
+let __parsedBackupMetaV141 = null;
+
+function normalizeHeaderV141(value){
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "");
+}
+
+function rowValueV141(row, names){
+  const normalized = {};
+  Object.keys(row || {}).forEach(key=>{
+    normalized[normalizeHeaderV141(key)] = row[key];
+  });
+
+  for(const name of names){
+    const key = normalizeHeaderV141(name);
+    if(Object.prototype.hasOwnProperty.call(normalized, key)) return normalized[key];
+  }
+
+  return "";
+}
+
+function numberV141(value){
+  const n = Number(String(value ?? "0").replace(",", ".").replace(/[^0-9.\-]/g, ""));
+  return Number.isFinite(n) ? n : 0;
+}
+
+function codeV141(value){
+  const text = String(value || "").toUpperCase().trim();
+  const match = text.match(/([A-Z]{3})[-\s]?([A-Z]?\d{2,3}[A-Z]?)/);
+  return match ? `${match[1]}-${match[2]}` : text;
+}
+
+function inventoryFromRowsV141(rows){
+  const result = {};
+  const duplicates = [];
+  const invalid = [];
+  const seen = new Set();
+
+  rows.forEach((row, index)=>{
+    const code = codeV141(rowValueV141(row, ["Código", "Codigo", "Code", "publicCode", "dotggCode"]));
+    const set = String(rowValueV141(row, ["Set"]) || "").trim();
+    const name = String(rowValueV141(row, ["Carta", "Nombre", "Name"]) || "").trim();
+    const key = code || `${set}-${name}`;
+
+    if(!key){
+      invalid.push({ row:index + 2, reason:"Sin código ni nombre" });
+      return;
+    }
+
+    if(seen.has(key)) duplicates.push(key);
+    seen.add(key);
+
+    const stock = numberV141(rowValueV141(row, ["Stock Normal", "Stock", "Normal Stock", "stock"]));
+    const foilStock = numberV141(rowValueV141(row, ["Stock Foil", "Foil Stock", "foilStock"]));
+    const marketPrice = numberV141(rowValueV141(row, ["Mercado Normal USD", "Mercado USD", "Market USD", "marketPrice"]));
+    const storePrice = numberV141(rowValueV141(row, ["LilStore Normal CLP", "LilStore CLP", "Precio CLP", "storePrice"]));
+    const foilMarketPrice = numberV141(rowValueV141(row, ["Mercado Foil USD", "Foil Market USD", "foilMarketPrice"]));
+    const foilStorePrice = numberV141(rowValueV141(row, ["LilStore Foil CLP", "Foil CLP", "foilStorePrice"]));
+
+    if(stock < 0 || foilStock < 0){
+      invalid.push({ row:index + 2, reason:"Stock negativo", key });
+      return;
+    }
+
+    result[key] = {
+      stock: Math.round(stock),
+      foilStock: Math.round(foilStock),
+      marketPrice: Math.max(0, marketPrice),
+      storePrice: Math.max(0, Math.round(storePrice)),
+      foilMarketPrice: Math.max(0, foilMarketPrice),
+      foilStorePrice: Math.max(0, Math.round(foilStorePrice))
+    };
+  });
+
+  return { inventory:result, duplicates, invalid };
+}
+
+function looksLikeInventoryV141(obj){
+  if(!obj || typeof obj !== "object" || Array.isArray(obj)) return false;
+  const keys = Object.keys(obj);
+  if(!keys.length) return false;
+  const first = obj[keys[0]];
+  return typeof first === "number" || (first && typeof first === "object");
+}
+
+async function parseBackupFileV141(file){
+  const lower = file.name.toLowerCase();
+
+  if(lower.endsWith(".json")){
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+
+    if(looksLikeInventoryV141(parsed)){
+      return { inventory:parsed, duplicates:[], invalid:[] };
+    }
+
+    if(looksLikeInventoryV141(parsed.inventory)){
+      return { inventory:parsed.inventory, duplicates:[], invalid:[] };
+    }
+
+    if(Array.isArray(parsed)){
+      return inventoryFromRowsV141(parsed);
+    }
+
+    if(Array.isArray(parsed.rows)){
+      return inventoryFromRowsV141(parsed.rows);
+    }
+
+    throw new Error("El JSON no contiene un inventario reconocido.");
+  }
+
+  if(lower.endsWith(".xlsx")){
+    if(typeof XLSX === "undefined") throw new Error("No se cargó la librería XLSX.");
+    const buffer = await file.arrayBuffer();
+    const workbook = XLSX.read(buffer, { type:"array" });
+    const sheetName = workbook.SheetNames.includes("Inventario")
+      ? "Inventario"
+      : workbook.SheetNames[0];
+
+    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval:"" });
+    return inventoryFromRowsV141(rows);
+  }
+
+  if(lower.endsWith(".zip")){
+    if(typeof JSZip === "undefined") throw new Error("No se cargó la librería JSZip.");
+    const zip = await JSZip.loadAsync(await file.arrayBuffer());
+    const files = Object.values(zip.files).filter(f=>!f.dir);
+
+    const preferred =
+      files.find(f=>/\.json$/i.test(f.name)) ||
+      files.find(f=>/\.xlsx$/i.test(f.name));
+
+    if(!preferred) throw new Error("El ZIP no contiene Excel ni JSON.");
+
+    const blob = await preferred.async("blob");
+    return parseBackupFileV141(new File([blob], preferred.name));
+  }
+
+  throw new Error("Formato no soportado. Usa .xlsx, .json o .zip.");
+}
+
+function backupStatsV141(inv){
+  const entries = Object.entries(inv || {});
+  let normalUnits = 0;
+  let foilUnits = 0;
+  let totalValue = 0;
+
+  entries.forEach(([,entry])=>{
+    const normalized = typeof entry === "number" ? { stock:entry } : (entry || {});
+    const stock = Number(normalized.stock || 0);
+    const foilStock = Number(normalized.foilStock || 0);
+    const storePrice = Number(normalized.storePrice || 0);
+    const foilStorePrice = Number(normalized.foilStorePrice || 0);
+
+    normalUnits += stock;
+    foilUnits += foilStock;
+    totalValue += stock * storePrice + foilStock * foilStorePrice;
+  });
+
+  return {
+    records:entries.length,
+    normalUnits,
+    foilUnits,
+    totalUnits:normalUnits + foilUnits,
+    totalValue
+  };
+}
+
+function renderBackupPreviewV141(file, parsed){
+  const stats = backupStatsV141(parsed.inventory);
+  const valid = parsed.invalid.length === 0 && parsed.duplicates.length === 0;
+
+  __parsedBackupV141 = parsed.inventory;
+  __parsedBackupMetaV141 = {
+    fileName:file.name,
+    stats,
+    valid,
+    duplicates:parsed.duplicates,
+    invalid:parsed.invalid
+  };
+
+  if(backupPreview){
+    backupPreview.innerHTML = `
+      <div class="backup-preview-grid-v141">
+        <div><span>Archivo</span><strong>${file.name}</strong></div>
+        <div><span>Registros</span><strong>${stats.records.toLocaleString("es-CL")}</strong></div>
+        <div><span>Stock normal</span><strong>${stats.normalUnits.toLocaleString("es-CL")}</strong></div>
+        <div><span>Stock foil</span><strong>${stats.foilUnits.toLocaleString("es-CL")}</strong></div>
+        <div><span>Unidades totales</span><strong>${stats.totalUnits.toLocaleString("es-CL")}</strong></div>
+        <div><span>Valor estimado</span><strong>$${Math.round(stats.totalValue).toLocaleString("es-CL")} CLP</strong></div>
+      </div>
+      <div class="backup-validation-v141 ${valid ? "ok" : "error"}">
+        ${valid
+          ? "Respaldo válido. Puedes continuar."
+          : `Problemas detectados: ${parsed.invalid.length} registros inválidos y ${parsed.duplicates.length} códigos duplicados.`}
+      </div>
+    `;
+  }
+
+  if(confirmRestoreBackupBtn){
+    confirmRestoreBackupBtn.disabled = !valid;
+  }
+}
+
+async function previewBackupV141(){
+  const file = restoreBackupFileInput?.files?.[0];
+
+  if(!file){
+    showMessage("Selecciona un archivo de respaldo.", true);
+    return;
+  }
+
+  try{
+    showMessage("Revisando respaldo...");
+    const parsed = await parseBackupFileV141(file);
+    renderBackupPreviewV141(file, parsed);
+    showMessage("Respaldo revisado correctamente.");
+  }catch(error){
+    __parsedBackupV141 = null;
+    __parsedBackupMetaV141 = null;
+    if(confirmRestoreBackupBtn) confirmRestoreBackupBtn.disabled = true;
+    if(backupPreview) backupPreview.textContent = "No se pudo revisar el respaldo.";
+    showMessage("Error revisando respaldo: " + (error.message || error), true);
+  }
+}
+
+function createCurrentBackupJsonV141(prefix = "LilStoreTCG_backup"){
+  const stamp = backupDateStamp();
+  downloadTextFile(
+    `${prefix}_${stamp}.json`,
+    JSON.stringify(inventory, null, 2)
+  );
+}
+
+async function quickBackupV141(){
+  exportBackupExcel();
+  exportBackupJson();
+
+  if(typeof JSZip !== "undefined"){
+    try{
+      const zip = new JSZip();
+      const stamp = backupDateStamp();
+
+      const rows = cards.map(card=>{
+        const entry = normalizeEntry(card);
+        return {
+          Código:card.publicCode || card.dotggCode || keyFor(card),
+          Carta:card.name,
+          Set:card.set,
+          Rareza:card.rarity,
+          "Stock Normal":entry.stock,
+          "Stock Foil":entry.foilStock,
+          "Mercado Normal USD":entry.marketPrice,
+          "LilStore Normal CLP":entry.storePrice,
+          "Mercado Foil USD":entry.foilMarketPrice,
+          "LilStore Foil CLP":entry.foilStorePrice
+        };
+      });
+
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(rows);
+      XLSX.utils.book_append_sheet(wb, ws, "Inventario");
+      const xlsxData = XLSX.write(wb, { bookType:"xlsx", type:"array" });
+
+      zip.file(`LilStoreTCG_backup_${stamp}.xlsx`, xlsxData);
+      zip.file(`LilStoreTCG_backup_${stamp}.json`, JSON.stringify(inventory, null, 2));
+
+      const blob = await zip.generateAsync({ type:"blob" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `LilStoreTCG_backup_${stamp}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }catch(error){
+      console.error(error);
+    }
+  }
+}
+
+function restoreModeV141(){
+  return document.querySelector('input[name="restoreMode"]:checked')?.value || "stock";
+}
+
+function applyRestoreModeV141(currentInventory, backupInventory, mode){
+  if(mode === "full") return backupInventory;
+
+  const result = { ...currentInventory };
+
+  Object.entries(backupInventory).forEach(([key,backupEntry])=>{
+    const current = typeof result[key] === "number"
+      ? { stock:Number(result[key] || 0) }
+      : { ...(result[key] || {}) };
+
+    const backup = typeof backupEntry === "number"
+      ? { stock:Number(backupEntry || 0) }
+      : (backupEntry || {});
+
+    result[key] = {
+      ...current,
+      stock:Number(backup.stock || 0),
+      foilStock:Number(backup.foilStock || 0)
+    };
+  });
+
+  return result;
+}
+
+function saveRestoreHistoryV141(record){
+  const history = JSON.parse(localStorage.getItem("lilstore_restore_history_v141") || "[]");
+  history.unshift(record);
+  localStorage.setItem("lilstore_restore_history_v141", JSON.stringify(history.slice(0, 10)));
+  renderRestoreHistoryV141();
+}
+
+function renderRestoreHistoryV141(){
+  if(!restoreHistoryList) return;
+
+  const history = JSON.parse(localStorage.getItem("lilstore_restore_history_v141") || "[]");
+
+  if(!history.length){
+    restoreHistoryList.textContent = "Aún no hay restauraciones registradas.";
+    return;
+  }
+
+  restoreHistoryList.innerHTML = history.map(item=>`
+    <div class="restore-history-item-v141">
+      <div>
+        <strong>${new Date(item.date).toLocaleString("es-CL")}</strong>
+        <span>${item.fileName}</span>
+      </div>
+      <div>
+        <strong>${item.mode === "stock" ? "Solo stock" : "Completa"}</strong>
+        <span>${Number(item.records || 0).toLocaleString("es-CL")} registros</span>
+      </div>
+    </div>
+  `).join("");
+}
+
+async function confirmRestoreV141(){
+  const pin = document.getElementById("adminPin").value.trim();
+
+  if(!pin){
+    showMessage("Ingresa el PIN administrador.", true);
+    return;
+  }
+
+  if(!__parsedBackupV141 || !__parsedBackupMetaV141?.valid){
+    showMessage("Primero revisa un respaldo válido.", true);
+    return;
+  }
+
+  const mode = restoreModeV141();
+
+  if(!confirm(`¿Restaurar el respaldo en modo ${mode === "stock" ? "solo stock" : "completo"}?`)){
+    return;
+  }
+
+  createCurrentBackupJsonV141("LilStoreTCG_backup_previo_restauracion");
+
+  const restored = applyRestoreModeV141(inventory, __parsedBackupV141, mode);
+  inventory = restored;
+
+  const ok = await saveInventoryToRemote(
+    `Restauración completada. Modo: ${mode === "stock" ? "solo stock" : "completa"}. Registros: ${Object.keys(inventory).length}.`
+  );
+
+  if(ok){
+    render();
+    updateStats();
+    if(typeof updateAdminStatsCenterV12 === "function") updateAdminStatsCenterV12();
+
+    saveRestoreHistoryV141({
+      date:new Date().toISOString(),
+      fileName:__parsedBackupMetaV141.fileName,
+      mode,
+      records:__parsedBackupMetaV141.stats.records
+    });
+  }
+}
+
+previewBackupBtn?.addEventListener("click", previewBackupV141);
+confirmRestoreBackupBtn?.addEventListener("click", confirmRestoreV141);
+quickBackupBtn?.addEventListener("click", quickBackupV141);
+
+document.addEventListener("DOMContentLoaded", renderRestoreHistoryV141);
+
+
+// v14.1 - Start all Admin sections collapsed
+function collapseAllAdminSectionsV141(){
+  document.querySelectorAll("section.panel").forEach(panel=>{
+    panel.classList.remove("open");
+    panel.classList.add("closed");
+
+    const arrow = panel.querySelector(
+      ".admin-collapse-arrow-v12, .admin-collapsible-icon"
+    );
+
+    if(arrow) arrow.textContent = "▶";
+  });
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  setTimeout(collapseAllAdminSectionsV141, 100);
+  setTimeout(collapseAllAdminSectionsV141, 700);
+});

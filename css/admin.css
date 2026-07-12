@@ -1378,3 +1378,137 @@ td input[data-field="storePrice"]{
     text-align:left;
   }
 }
+
+
+/* v14.1 safe backup */
+.backup-preview-v141{
+  margin-top:14px;
+  border:1px solid #333;
+  border-radius:14px;
+  padding:16px;
+  background:#080808;
+  color:#ccc;
+}
+
+.backup-preview-grid-v141{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(160px,1fr));
+  gap:12px;
+}
+
+.backup-preview-grid-v141 > div{
+  background:#111;
+  border:1px solid #333;
+  border-radius:10px;
+  padding:12px;
+}
+
+.backup-preview-grid-v141 span{
+  display:block;
+  color:#aaa;
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+.backup-preview-grid-v141 strong{
+  color:#ffd34d;
+  font-size:17px;
+}
+
+.backup-validation-v141{
+  margin-top:14px;
+  padding:10px 12px;
+  border-radius:10px;
+  font-weight:800;
+}
+
+.backup-validation-v141.ok{
+  background:#064e3b;
+  color:#a7f3d0;
+}
+
+.backup-validation-v141.error{
+  background:#7f1d1d;
+  color:#fecaca;
+}
+
+.restore-mode-v141{
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+  margin:16px 0;
+}
+
+.restore-mode-v141 label{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:#111;
+  border:1px solid #333;
+  border-radius:10px;
+  padding:10px 12px;
+}
+
+.restore-confirm-v141{
+  margin-top:12px;
+}
+
+#confirmRestoreBackupBtn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+#quickBackupBtn{
+  background:#22c55e;
+  color:#000;
+  font-weight:900;
+}
+
+.restore-history-list-v141{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.restore-history-item-v141{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  border:1px solid #333;
+  border-radius:10px;
+  background:#0b0b0b;
+  padding:12px;
+}
+
+.restore-history-item-v141 > div{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.restore-history-item-v141 > div:last-child{
+  text-align:right;
+}
+
+.restore-history-item-v141 span{
+  color:#aaa;
+  font-size:13px;
+}
+
+@media(max-width:800px){
+  .backup-preview-grid-v141{
+    grid-template-columns:1fr;
+  }
+
+  .restore-mode-v141{
+    flex-direction:column;
+  }
+
+  .restore-history-item-v141{
+    grid-template-columns:1fr;
+  }
+
+  .restore-history-item-v141 > div:last-child{
+    text-align:left;
+  }
+}

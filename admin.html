@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=140">
+  <link rel="stylesheet" href="css/admin.css?v=141">
 </head>
 <body>
   <header class="admin-header">
@@ -87,15 +87,35 @@
     </section>
 
     <section class="panel restore-backup-panel">
-      <h2>Restaurar stock desde respaldo</h2>
-      <p>Sube un respaldo exportado desde LilStore. Acepta Excel (.xlsx), JSON (.json) o ZIP con respaldo adentro.</p>
+      <h2>Restauración segura de inventario</h2>
+      <p>Sube un respaldo de LilStore y revísalo antes de aplicarlo. Acepta Excel, JSON o ZIP.</p>
 
       <div class="restore-upload-box">
-        <input id="restoreBackupFileInput" type="file" accept=".xlsx,.json,.zip,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip">
-        <button id="restoreUploadedBackupBtn" type="button">Restaurar respaldo subido</button>
+        <input id="restoreBackupFileInput" type="file"
+          accept=".xlsx,.json,.zip,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip">
+        <button id="previewBackupBtn" type="button">Revisar respaldo</button>
       </div>
 
-      <small>Recomendado: primero actualiza el catálogo DotGG, luego restaura el respaldo y finalmente actualiza precios.</small>
+      <div id="backupPreview" class="backup-preview-v141">
+        Selecciona un archivo para ver su contenido antes de restaurar.
+      </div>
+
+      <div class="restore-mode-v141">
+        <label>
+          <input type="radio" name="restoreMode" value="stock" checked>
+          Restaurar solo stock
+        </label>
+        <label>
+          <input type="radio" name="restoreMode" value="full">
+          Restaurar todo
+        </label>
+      </div>
+
+      <div class="restore-confirm-v141">
+        <button id="confirmRestoreBackupBtn" type="button" disabled>Confirmar restauración</button>
+      </div>
+
+      <small>Antes de aplicar el respaldo, se descargará automáticamente una copia del inventario actual.</small>
     </section>
 
     <section class="panel base-price-panel">
@@ -174,10 +194,20 @@
       </div>
     </section>
 
+    
+    <section class="panel restore-history-panel">
+      <h2>Historial de restauraciones</h2>
+      <div id="restoreHistoryList" class="restore-history-list-v141">
+        Aún no hay restauraciones registradas.
+      </div>
+    </section>
+
+
     <section class="panel backup-panel">
       <h2>Respaldos de inventario</h2>
       <p>Descarga una copia de emergencia de tu stock actual en Excel y JSON.</p>
       <div class="backup-actions">
+        <button id="quickBackupBtn" type="button">Crear respaldo ahora</button>
         <button id="exportBackupExcelBtn" type="button">📊 Exportar Excel</button>
         <button id="exportBackupJsonBtn" type="button">🧾 Exportar JSON</button>
         <button id="exportBackupBothBtn" type="button">⬇️ Descargar ambos</button>
@@ -253,7 +283,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script src="js/admin.js?v=140"></script>
+  <script src="js/admin.js?v=141"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
