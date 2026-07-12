@@ -7,6 +7,8 @@ const setFilter = document.getElementById("setFilter");
 const stockFilter = document.getElementById("stockFilter"); // compatibilidad antigua
 const saveBtn = document.getElementById("saveBtn");
 const syncPricesBtn = document.getElementById("syncPricesBtn");
+const syncStockPricesBtn = document.getElementById("syncStockPricesBtn");
+const syncAllPricesBtn = document.getElementById("syncAllPricesBtn");
 const syncCatalogBtn = document.getElementById("syncCatalogBtn");
 const message = document.getElementById("message");
 const auditDotGGBtn = document.getElementById("auditDotGGBtn");
@@ -1409,3 +1411,39 @@ document.addEventListener("DOMContentLoaded", ()=>{
   setTimeout(fixCollapsiblesV121, 50);
   setTimeout(fixCollapsiblesV121, 600);
 });
+
+// v13 smart sync and catalog integrity
+function v13HistoryKey(){ return "lilstore_price_sync_history_v13"; }
+function renderLastSyncV13(){
+  const el=document.getElementById("lastPriceSyncInfo"); if(!el) return;
+  const h=JSON.parse(localStorage.getItem(v13HistoryKey())||"[]");
+  if(!h.length){el.textContent="Última actualización: todavía no se ha registrado una sincronización.";return;}
+  const x=h[0], d=new Date(x.finishedAt), mode=x.mode==="stock"?"Solo cartas con stock":"Catálogo completo";
+  el.innerHTML=`<strong>Última actualización:</strong> ${d.toLocaleString("es-CL")} · ${mode} · ${Number(x.processed||0).toLocaleString("es-CL")} procesadas · ${Number(x.updated||0).toLocaleString("es-CL")} actualizadas`;
+}
+function saveSyncV13(r){const h=JSON.parse(localStorage.getItem(v13HistoryKey())||"[]");h.unshift(r);localStorage.setItem(v13HistoryKey(),JSON.stringify(h.slice(0,10)));renderLastSyncV13();}
+function payloadCardsV13(mode){
+  const all=cards.map(card=>({name:card.name,publicCode:card.publicCode||card.dotggCode,dotggCode:card.dotggCode,set:card.set,setCode:card.setCode,rarity:card.rarity,stock:currentStockFor(card),foilStock:supportsFoil(card)?currentFoilStockFor(card):0,marketPrice:normalizeEntry(card).marketPrice,storePrice:normalizeEntry(card).storePrice,foilMarketPrice:supportsFoil(card)?normalizeEntry(card).foilMarketPrice:0,foilStorePrice:supportsFoil(card)?normalizeEntry(card).foilStorePrice:0}));
+  return mode==="stock"?all.filter(c=>Number(c.stock||0)>0||Number(c.foilStock||0)>0):all;
+}
+async function syncPricesV13(mode="stock"){
+  const pin=document.getElementById("adminPin").value.trim(); if(!pin){showMessage("Ingresa el PIN administrador antes de actualizar precios.",true);return;}
+  const dollar=Number(document.getElementById("dollarInput")?.value||900), margin=Number(document.getElementById("marginInput")?.value||1), batchSize=25;
+  const payloadCards=payloadCardsV13(mode); if(!payloadCards.length){showMessage(mode==="stock"?"No hay cartas con stock para actualizar.":"No hay cartas cargadas.",true);return;}
+  __dotggSyncCancelRequested=false; let offset=0,totalUpdated=0,totalFailed=0,totalNotFound=0,totalProcessed=0,batch=1; const totalBatches=Math.ceil(payloadCards.length/batchSize), label=mode==="stock"?"cartas con stock":"todo el catálogo";
+  setDotGGProgress(0,payloadCards.length,`Iniciando actualización de ${label}...`);
+  while(offset<payloadCards.length){
+    if(__dotggSyncCancelRequested){showMessage(`Sincronización cancelada. Procesadas: ${totalProcessed}.`,true);return;}
+    const res=await fetch("/.netlify/functions/sync-riftboundgg-prices",{method:"POST",headers:{"Content-Type":"application/json","x-admin-pin":pin},body:JSON.stringify({cards:payloadCards,offset,limit:batchSize,dollar,margin,syncMode:mode})});
+    const data=await res.json().catch(()=>({})); if(!res.ok){const detail=data.message||data.error||"No se pudieron sincronizar los precios.";showMessage(detail,true);setDotGGProgress(totalProcessed,payloadCards.length,`Error en lote ${batch}: ${detail}`);return;}
+    const processed=Number(data.processed||data.uniqueCodes||0); totalProcessed+=processed; totalUpdated+=Number(data.updated||0); totalFailed+=Number(data.failedCount||0); totalNotFound+=Number(data.notFoundCount||0); offset=Number(data.nextOffset||(offset+batchSize));
+    setDotGGProgress(Math.min(offset,payloadCards.length),payloadCards.length,`Lote ${batch}/${totalBatches} · Actualizadas: ${totalUpdated} · Sin precio: ${totalNotFound} · Fallidas: ${totalFailed}`); batch++; await new Promise(r=>setTimeout(r,800));
+  }
+  try{const r=await fetch("/.netlify/functions/stock?v="+Date.now(),{cache:"no-store"});if(r.ok)inventory=await r.json();}catch(e){}
+  render(); updateStats(); saveSyncV13({finishedAt:new Date().toISOString(),mode,processed:totalProcessed,updated:totalUpdated,notFound:totalNotFound,failed:totalFailed});
+  const msg=`Sincronización completa (${label}). Procesadas: ${totalProcessed}. Actualizadas: ${totalUpdated}. Sin precio: ${totalNotFound}. Fallidas: ${totalFailed}.`; setDotGGProgress(payloadCards.length,payloadCards.length,msg); showMessage(msg);
+}
+function renderCatalogAuditV13(data=null){const el=document.getElementById("catalogAuditSummary");if(!el)return;const x=data||JSON.parse(localStorage.getItem("lilstore_catalog_audit_v13")||"null");if(!x){el.textContent="Aún no se ha registrado una actualización de catálogo.";return;}const b=x.bySet||{};el.innerHTML=`<strong>Último catálogo:</strong> Origins ${Number(b.Origins||0).toLocaleString("es-CL")} · Spiritforged ${Number(b.Spiritforged||0).toLocaleString("es-CL")} · Unleashed ${Number(b.Unleashed||0).toLocaleString("es-CL")} · Total ${Number(x.saved||0).toLocaleString("es-CL")}`;}
+const __catalogOriginalV13=typeof syncDotGGCatalog==="function"?syncDotGGCatalog:null;
+if(__catalogOriginalV13){syncDotGGCatalog=async function(){const pin=document.getElementById("adminPin").value.trim();if(!pin){showMessage("Ingresa el PIN administrador antes de actualizar catálogo.",true);return;}showMessage("Actualizando catálogo desde DotGG...");const res=await fetch("/.netlify/functions/sync-dotgg-catalog",{method:"POST",headers:{"Content-Type":"application/json","x-admin-pin":pin},body:JSON.stringify({currentCards:cards.map(c=>({name:c.name,publicCode:c.publicCode,dotggCode:c.dotggCode,set:c.set,setCode:c.setCode,tcgplayerId:c.tcgplayerId,cardType:c.cardType}))})});const data=await res.json().catch(()=>({}));if(!res.ok){showMessage(data.error||data.message||"No se pudo actualizar el catálogo.",true);return;}localStorage.setItem("lilstore_catalog_audit_v13",JSON.stringify({saved:data.saved,bySet:data.bySet,duplicateCount:data.duplicateCount||0,updatedAt:new Date().toISOString()}));renderCatalogAuditV13(data);try{const cr=await fetch("/.netlify/functions/catalog?v="+Date.now(),{cache:"no-store"});if(cr.ok){const rc=await cr.json();if(Array.isArray(rc)&&rc.length)cards=rc;}}catch(e){}render();showMessage(`Catálogo actualizado: ${data.saved} cartas. Origins: ${data.bySet?.Origins||0}, Spiritforged: ${data.bySet?.Spiritforged||0}, Unleashed: ${data.bySet?.Unleashed||0}.`);};}
+document.addEventListener("DOMContentLoaded",()=>{syncStockPricesBtn?.addEventListener("click",()=>syncPricesV13("stock"));syncAllPricesBtn?.addEventListener("click",()=>syncPricesV13("all"));renderLastSyncV13();renderCatalogAuditV13();const old=document.getElementById("syncCatalogBtn");if(old){const n=old.cloneNode(true);old.parentNode.replaceChild(n,old);n.addEventListener("click",syncDotGGCatalog);}});

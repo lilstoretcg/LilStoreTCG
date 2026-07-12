@@ -298,6 +298,7 @@ exports.handler = async (event) => {
     const limit = Math.min(Math.max(1, Number(payload.limit || 25)), 40);
     const dollar = Number(payload.dollar || 900);
     const margin = Number(payload.margin || 1);
+    const syncMode = String(payload.syncMode || "all");
 
     if (!allCards.length) {
       return json(400, { error: "No se recibieron cartas para actualizar." });
@@ -378,6 +379,7 @@ exports.handler = async (event) => {
     return json(200, {
       ok: true,
       mode: "batch",
+      syncMode,
       offset,
       limit,
       nextOffset,

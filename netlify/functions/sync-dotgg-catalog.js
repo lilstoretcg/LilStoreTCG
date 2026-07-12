@@ -185,6 +185,12 @@ function normalizeDotGGCard(entry) {
   return null;
 }
 
+function uniqueCatalogKey(card = {}) {
+  const setCode = String(card.setCode || "").toUpperCase().trim();
+  const code = shortCode(card.dotggCode || card.publicCode || "");
+  return `${setCode}:${code}`;
+}
+
 function sortCards(cards) {
   const order = { Origins: 0, Spiritforged: 1, Unleashed: 2 };
   return cards.sort((a, b) =>
@@ -244,6 +250,7 @@ exports.handler = async (event) => {
 
     const normalized = [];
     const seen = new Set();
+    let duplicateCount = 0;
 
     for (const raw of rawCards) {
       const card = normalizeDotGGCard(raw);
@@ -252,8 +259,8 @@ exports.handler = async (event) => {
       // LilStore solo trabaja sets conseguibles: Origins, Spiritforged y Unleashed.
       if (!ALLOWED_SET_CODES.has(card.setCode) && !ALLOWED_SET_NAMES.has(card.set)) continue;
 
-      const key = card.dotggCode;
-      if (seen.has(key)) continue;
+      const key = uniqueCatalogKey(card);
+      if (seen.has(key)) { duplicateCount++; continue; }
       seen.add(key);
 
       card.publicCode = preservePublicCodeByShortCode[key] || card.publicCode;
@@ -284,6 +291,8 @@ exports.handler = async (event) => {
       saved: sorted.length,
       bySet,
       byRarity,
+      duplicateCount,
+      integrity: { uniqueBySetAndCode: true, totalUnique: sorted.length },
       sample: sorted.slice(0, 3)
     });
   } catch (error) {

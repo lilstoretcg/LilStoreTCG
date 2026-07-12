@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=121">
+  <link rel="stylesheet" href="css/admin.css?v=130">
 </head>
 <body>
   <header class="admin-header">
@@ -179,7 +179,8 @@
       <h2>Sincronización de catálogo</h2>
       <p>Actualiza cartas, sets, rarezas e imágenes desde DotGG. Solo carga Origins, Spiritforged y Unleashed.</p>
       <button id="syncCatalogBtn" type="button">Actualizar catálogo DotGG</button>
-      <small>Luego puedes usar “Actualizar precios DotGG” para traer los precios.</small>
+      <small>Luego puedes actualizar los precios con stock o todo el catálogo.</small>
+      <div id="catalogAuditSummary" class="catalog-audit-summary">Aún no se ha registrado una actualización de catálogo.</div>
     </section>
 
     <section class="panel price-sync-panel">
@@ -194,10 +195,15 @@
           <input id="marginInput" type="number" min="0" step="0.01" value="1">
           <small>Ejemplo: 0.95 = 5% más barato que mercado.</small>
         </div>
-        <button id="syncPricesBtn" type="button">Actualizar precios DotGG</button>
+        
+        
+      
+        <button id="syncStockPricesBtn" type="button">Actualizar precios con stock</button>
+        <button id="syncAllPricesBtn" type="button">Actualizar todos los precios</button>
         <button id="debugDotGGBtn" type="button">Diagnóstico DotGG</button>
-      </div>
+</div>
       <small>Usa la API DotGG getcardprices como Market USD.</small>
+      <div id="lastPriceSyncInfo" class="last-sync-info">Última actualización: todavía no se ha registrado una sincronización.</div>
     </section>
 
     <section class="panel dotgg-progress-panel">
@@ -236,7 +242,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script src="js/admin.js?v=121"></script>
+  <script src="js/admin.js?v=130"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
