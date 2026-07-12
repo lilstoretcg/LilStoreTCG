@@ -284,6 +284,50 @@ exports.handler = async (event) => {
       byRarity[card.rarity] = (byRarity[card.rarity] || 0) + 1;
     }
 
+
+    const namesBySet = {};
+    const duplicateCodeGroups = {};
+    const invalidCards = [];
+
+    for (const card of sorted) {
+      const normalizedName = String(card.name || "")
+        .replace(/\s*\(Showcase\)\s*$/i, "")
+        .trim()
+        .toLowerCase();
+
+      if (!namesBySet[normalizedName]) namesBySet[normalizedName] = new Set();
+      namesBySet[normalizedName].add(card.setCode || card.set || "UNK");
+
+      const codeKey = shortCode(card.publicCode || card.dotggCode || "");
+      if (!duplicateCodeGroups[codeKey]) duplicateCodeGroups[codeKey] = [];
+      duplicateCodeGroups[codeKey].push({
+        name: card.name,
+        set: card.set,
+        setCode: card.setCode
+      });
+
+      if (!card.name || !card.setCode || !codeKey) {
+        invalidCards.push({
+          name: card.name || "",
+          set: card.set || "",
+          setCode: card.setCode || "",
+          code: codeKey || ""
+        });
+      }
+    }
+
+    const duplicateNameGroups = Object.entries(namesBySet)
+      .filter(([, setCodes]) => setCodes.size > 1)
+      .map(([name, setCodes]) => ({
+        name,
+        sets: Array.from(setCodes).sort()
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    const duplicateCodes = Object.entries(duplicateCodeGroups)
+      .filter(([, entries]) => entries.length > 1)
+      .map(([code, entries]) => ({ code, entries }));
+
     return json(200, {
       ok: true,
       source: DOTGG_CARDS_URL,
@@ -292,7 +336,16 @@ exports.handler = async (event) => {
       bySet,
       byRarity,
       duplicateCount,
-      integrity: { uniqueBySetAndCode: true, totalUnique: sorted.length },
+      duplicateNameGroups,
+      duplicateCodes,
+      invalidCards,
+      integrity: {
+        uniqueBySetAndCode: duplicateCodes.length === 0,
+        totalUnique: sorted.length,
+        duplicateNameGroupCount: duplicateNameGroups.length,
+        duplicateCodeCount: duplicateCodes.length,
+        invalidCardCount: invalidCards.length
+      },
       sample: sorted.slice(0, 3)
     });
   } catch (error) {

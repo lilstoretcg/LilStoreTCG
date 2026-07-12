@@ -1447,3 +1447,140 @@ function renderCatalogAuditV13(data=null){const el=document.getElementById("cata
 const __catalogOriginalV13=typeof syncDotGGCatalog==="function"?syncDotGGCatalog:null;
 if(__catalogOriginalV13){syncDotGGCatalog=async function(){const pin=document.getElementById("adminPin").value.trim();if(!pin){showMessage("Ingresa el PIN administrador antes de actualizar catálogo.",true);return;}showMessage("Actualizando catálogo desde DotGG...");const res=await fetch("/.netlify/functions/sync-dotgg-catalog",{method:"POST",headers:{"Content-Type":"application/json","x-admin-pin":pin},body:JSON.stringify({currentCards:cards.map(c=>({name:c.name,publicCode:c.publicCode,dotggCode:c.dotggCode,set:c.set,setCode:c.setCode,tcgplayerId:c.tcgplayerId,cardType:c.cardType}))})});const data=await res.json().catch(()=>({}));if(!res.ok){showMessage(data.error||data.message||"No se pudo actualizar el catálogo.",true);return;}localStorage.setItem("lilstore_catalog_audit_v13",JSON.stringify({saved:data.saved,bySet:data.bySet,duplicateCount:data.duplicateCount||0,updatedAt:new Date().toISOString()}));renderCatalogAuditV13(data);try{const cr=await fetch("/.netlify/functions/catalog?v="+Date.now(),{cache:"no-store"});if(cr.ok){const rc=await cr.json();if(Array.isArray(rc)&&rc.length)cards=rc;}}catch(e){}render();showMessage(`Catálogo actualizado: ${data.saved} cartas. Origins: ${data.bySet?.Origins||0}, Spiritforged: ${data.bySet?.Spiritforged||0}, Unleashed: ${data.bySet?.Unleashed||0}.`);};}
 document.addEventListener("DOMContentLoaded",()=>{syncStockPricesBtn?.addEventListener("click",()=>syncPricesV13("stock"));syncAllPricesBtn?.addEventListener("click",()=>syncPricesV13("all"));renderLastSyncV13();renderCatalogAuditV13();const old=document.getElementById("syncCatalogBtn");if(old){const n=old.cloneNode(true);old.parentNode.replaceChild(n,old);n.addEventListener("click",syncDotGGCatalog);}});
+
+
+// v13.1 - Catalog integrity audit
+function normalizeCatalogNameV131(name){
+  return String(name || "")
+    .replace(/\s*\(Showcase\)\s*$/i, "")
+    .trim()
+    .toLowerCase();
+}
+
+function catalogCardCodeV131(card){
+  const text = String(card.publicCode || card.dotggCode || "").toUpperCase();
+  const match = text.match(/([A-Z]{3})[-\s]?(\d{3}[A-Z]?)/);
+  return match ? `${match[1]}-${match[2]}` : text.trim();
+}
+
+function auditCatalogV131(){
+  const bySet = {};
+  const names = {};
+  const codes = {};
+  const invalid = [];
+
+  cards.forEach(card=>{
+    const set = card.set || card.setCode || "Sin set";
+    const setCode = card.setCode || String(card.publicCode || card.dotggCode || "").slice(0,3).toUpperCase();
+    const code = catalogCardCodeV131(card);
+    const nameKey = normalizeCatalogNameV131(card.name);
+
+    bySet[set] = (bySet[set] || 0) + 1;
+
+    if(!names[nameKey]) names[nameKey] = new Set();
+    names[nameKey].add(setCode || set);
+
+    if(!codes[code]) codes[code] = [];
+    codes[code].push(card);
+
+    if(!card.name || !setCode || !code){
+      invalid.push(card);
+    }
+  });
+
+  const duplicateNameGroups = Object.entries(names)
+    .filter(([, setCodes])=>setCodes.size > 1)
+    .map(([name, setCodes])=>({ name, sets:Array.from(setCodes).sort() }))
+    .sort((a,b)=>a.name.localeCompare(b.name));
+
+  const duplicateCodes = Object.entries(codes)
+    .filter(([, entries])=>entries.length > 1)
+    .map(([code, entries])=>({ code, entries }));
+
+  return {
+    total: cards.length,
+    bySet,
+    duplicateNameGroups,
+    duplicateCodes,
+    invalid
+  };
+}
+
+function renderCatalogIntegrityV131(result){
+  const el = document.getElementById("catalogIntegrityResult");
+  if(!el) return;
+
+  const duplicateNameExamples = result.duplicateNameGroups.slice(0, 12).map(group=>`
+    <div class="catalog-name-group-v131">
+      <strong>${group.name}</strong>
+      <span>${group.sets.join(" · ")}</span>
+    </div>
+  `).join("");
+
+  const statusOk = result.duplicateCodes.length === 0 && result.invalid.length === 0;
+
+  el.innerHTML = `
+    <div class="catalog-integrity-summary-v131">
+      <div>
+        <span>Estado</span>
+        <strong>${statusOk ? "Catálogo correcto" : "Revisar catálogo"}</strong>
+      </div>
+      <div>
+        <span>Total</span>
+        <strong>${Number(result.total).toLocaleString("es-CL")}</strong>
+      </div>
+      <div>
+        <span>Nombres presentes en varios sets</span>
+        <strong>${Number(result.duplicateNameGroups.length).toLocaleString("es-CL")}</strong>
+      </div>
+      <div>
+        <span>Códigos duplicados reales</span>
+        <strong>${Number(result.duplicateCodes.length).toLocaleString("es-CL")}</strong>
+      </div>
+    </div>
+
+    <div class="catalog-set-counts-v131">
+      <strong>Conteo por set:</strong>
+      <span>Origins: ${Number(result.bySet.Origins || 0).toLocaleString("es-CL")}</span>
+      <span>Spiritforged: ${Number(result.bySet.Spiritforged || 0).toLocaleString("es-CL")}</span>
+      <span>Unleashed: ${Number(result.bySet.Unleashed || 0).toLocaleString("es-CL")}</span>
+    </div>
+
+    <div class="catalog-name-examples-v131">
+      <h3>Ejemplos de nombres compartidos entre sets</h3>
+      ${duplicateNameExamples || "<p>No se encontraron nombres compartidos entre sets.</p>"}
+    </div>
+  `;
+
+  localStorage.setItem("lilstore_catalog_integrity_v131", JSON.stringify({
+    checkedAt:new Date().toISOString(),
+    total:result.total,
+    bySet:result.bySet,
+    duplicateNameGroupCount:result.duplicateNameGroups.length,
+    duplicateCodeCount:result.duplicateCodes.length,
+    invalidCount:result.invalid.length
+  }));
+}
+
+function runCatalogAuditV131(){
+  if(!Array.isArray(cards) || !cards.length){
+    showMessage("El catálogo aún no está cargado.", true);
+    return;
+  }
+
+  const result = auditCatalogV131();
+  renderCatalogIntegrityV131(result);
+
+  if(result.duplicateCodes.length || result.invalid.length){
+    showMessage(`Revisión terminada: ${result.duplicateCodes.length} códigos duplicados y ${result.invalid.length} registros incompletos.`, true);
+  }else{
+    showMessage(`Catálogo correcto: ${result.total} cartas identificadas por set y código.`);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  document.getElementById("auditCurrentCatalogBtn")?.addEventListener("click", runCatalogAuditV131);
+  setTimeout(()=>{
+    if(Array.isArray(cards) && cards.length) runCatalogAuditV131();
+  }, 1200);
+});
