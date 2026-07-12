@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=132">
+  <link rel="stylesheet" href="css/admin.css?v=133">
 </head>
 <body>
   <header class="admin-header">
@@ -34,6 +34,14 @@
           <option value="Origins">Origins</option>
           <option value="Spiritforged">Spiritforged</option>
           <option value="Unleashed">Unleashed</option>
+        </select>
+      </div>
+      <div>
+        <label>Precio</label>
+        <select id="priceFilter">
+          <option value="">Todas</option>
+          <option value="priced">Con precio</option>
+          <option value="no-price">Sin precio</option>
         </select>
       </div>
       <button id="saveBtn">Guardar stock</button>
@@ -217,7 +225,7 @@
         <button id="syncAllPricesBtn" type="button">Actualizar todos los precios</button>
         <button id="debugDotGGBtn" type="button">Diagnóstico DotGG</button>
 </div>
-      <small>Usa la API DotGG getcardprices como Market USD.</small>
+      <small>Usa la API DotGG getcardprices como Market USD. Las cartas sin precio conservan su valor anterior y no se cuentan como errores técnicos.</small>
       <div id="lastPriceSyncInfo" class="last-sync-info">Última actualización: todavía no se ha registrado una sincronización.</div>
     </section>
 
@@ -257,7 +265,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script src="js/admin.js?v=132"></script>
+  <script src="js/admin.js?v=133"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {

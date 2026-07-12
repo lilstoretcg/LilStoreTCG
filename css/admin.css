@@ -1167,3 +1167,15 @@ td input[data-field="storePrice"]{
 }
 
 .catalog-code-note-v132{display:block;margin-top:10px;color:#a7f3d0;}
+
+
+/* v13.3 price filter */
+#priceFilter{
+  min-width:180px;
+}
+
+@media(max-width:700px){
+  #priceFilter{
+    width:100%;
+  }
+}

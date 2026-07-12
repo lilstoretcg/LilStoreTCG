@@ -4,6 +4,7 @@ let inventory = {};
 const rowsEl = document.getElementById("stockRows");
 const searchInput = document.getElementById("searchInput");
 const setFilter = document.getElementById("setFilter");
+const priceFilter = document.getElementById("priceFilter");
 const stockFilter = document.getElementById("stockFilter"); // compatibilidad antigua
 const saveBtn = document.getElementById("saveBtn");
 const syncPricesBtn = document.getElementById("syncPricesBtn");
@@ -89,11 +90,16 @@ function render(){
 
   const q = (searchInput?.value || "").toLowerCase();
   const setValue = setFilter?.value || "";
+  const priceValue = priceFilter?.value || "";
   const legacyStockFilter = stockFilter?.value || "";
 
   const filtered = cards.filter(card=>{
     const stock = currentStockFor(card);
     const foilStock = currentFoilStockFor(card);
+    const priceEntry = normalizeEntry(card);
+    const hasMarketPrice =
+      Number(priceEntry.marketPrice || 0) > 0 ||
+      Number(priceEntry.foilMarketPrice || 0) > 0;
     const matchesText =
       String(card.name || "").toLowerCase().includes(q) ||
       String(card.publicCode || "").toLowerCase().includes(q) ||
@@ -101,12 +107,17 @@ function render(){
 
     const matchesSet = !setValue || String(card.set || "") === setValue || String(card.setCode || "") === setValue;
 
+    const matchesPrice =
+      !priceValue ||
+      (priceValue === "priced" && hasMarketPrice) ||
+      (priceValue === "no-price" && !hasMarketPrice);
+
     const matchesStock =
       !legacyStockFilter ||
       (legacyStockFilter === "available" && (stock > 0 || foilStock > 0)) ||
       (legacyStockFilter === "soldout" && stock <= 0 && foilStock <= 0);
 
-    return matchesText && matchesSet && matchesStock;
+    return matchesText && matchesSet && matchesPrice && matchesStock;
   });
 
   rowsEl.innerHTML = filtered.map(card=>{
@@ -942,7 +953,7 @@ async function syncRiftboundPricesBatchV101(){
     setDotGGProgress(
       totalProcessed,
       payloadCards.length,
-      `Lote ${lote} de ${totalLotes} · Cartas ${loteDesde}-${loteHasta} · Actualizadas: ${totalUpdated} · Sin precio: ${totalNotFound} · Fallidas: ${totalFailed}`
+      `Lote ${lote} de ${totalLotes} · Cartas ${loteDesde}-${loteHasta} · Actualizadas: ${totalUpdated} · Sin precio: ${totalNotFound} · Errores técnicos: ${totalFailed}`
     );
 
     showMessage(`Actualizando lote DotGG ${lote}/${totalLotes}: ${loteDesde}-${loteHasta} de ${payloadCards.length}...`);
@@ -985,7 +996,7 @@ async function syncRiftboundPricesBatchV101(){
     setDotGGProgress(
       Math.min(offset, payloadCards.length),
       payloadCards.length,
-      `Actualizadas: ${totalUpdated} · Sin precio: ${totalNotFound} · Fallidas: ${totalFailed}`
+      `Actualizadas: ${totalUpdated} · Sin precio: ${totalNotFound} · Errores técnicos: ${totalFailed}`
     );
 
     await new Promise(resolve => setTimeout(resolve, 800));
@@ -1437,11 +1448,11 @@ async function syncPricesV13(mode="stock"){
     const res=await fetch("/.netlify/functions/sync-riftboundgg-prices",{method:"POST",headers:{"Content-Type":"application/json","x-admin-pin":pin},body:JSON.stringify({cards:payloadCards,offset,limit:batchSize,dollar,margin,syncMode:mode})});
     const data=await res.json().catch(()=>({})); if(!res.ok){const detail=data.message||data.error||"No se pudieron sincronizar los precios.";showMessage(detail,true);setDotGGProgress(totalProcessed,payloadCards.length,`Error en lote ${batch}: ${detail}`);return;}
     const processed=Number(data.processed||data.uniqueCodes||0); totalProcessed+=processed; totalUpdated+=Number(data.updated||0); totalFailed+=Number(data.failedCount||0); totalNotFound+=Number(data.notFoundCount||0); offset=Number(data.nextOffset||(offset+batchSize));
-    setDotGGProgress(Math.min(offset,payloadCards.length),payloadCards.length,`Lote ${batch}/${totalBatches} · Actualizadas: ${totalUpdated} · Sin precio: ${totalNotFound} · Fallidas: ${totalFailed}`); batch++; await new Promise(r=>setTimeout(r,800));
+    setDotGGProgress(Math.min(offset,payloadCards.length),payloadCards.length,`Lote ${batch}/${totalBatches} · Actualizadas: ${totalUpdated} · Sin precio: ${totalNotFound} · Errores técnicos: ${totalFailed}`); batch++; await new Promise(r=>setTimeout(r,800));
   }
   try{const r=await fetch("/.netlify/functions/stock?v="+Date.now(),{cache:"no-store"});if(r.ok)inventory=await r.json();}catch(e){}
   render(); updateStats(); saveSyncV13({finishedAt:new Date().toISOString(),mode,processed:totalProcessed,updated:totalUpdated,notFound:totalNotFound,failed:totalFailed});
-  const msg=`Sincronización completa (${label}). Procesadas: ${totalProcessed}. Actualizadas: ${totalUpdated}. Sin precio: ${totalNotFound}. Fallidas: ${totalFailed}.`; setDotGGProgress(payloadCards.length,payloadCards.length,msg); showMessage(msg);
+  const msg=`Sincronización completa (${label}). Procesadas: ${totalProcessed}. Actualizadas: ${totalUpdated}. Sin precio: ${totalNotFound}. Errores técnicos: ${totalFailed}.`; setDotGGProgress(payloadCards.length,payloadCards.length,msg); showMessage(msg);
 }
 function renderCatalogAuditV13(data=null){const el=document.getElementById("catalogAuditSummary");if(!el)return;const x=data||JSON.parse(localStorage.getItem("lilstore_catalog_audit_v13")||"null");if(!x){el.textContent="Aún no se ha registrado una actualización de catálogo.";return;}const b=x.bySet||{};el.innerHTML=`<strong>Último catálogo:</strong> Origins ${Number(b.Origins||0).toLocaleString("es-CL")} · Spiritforged ${Number(b.Spiritforged||0).toLocaleString("es-CL")} · Unleashed ${Number(b.Unleashed||0).toLocaleString("es-CL")} · Total ${Number(x.saved||0).toLocaleString("es-CL")}`;}
 const __catalogOriginalV13=typeof syncDotGGCatalog==="function"?syncDotGGCatalog:null;
@@ -1584,3 +1595,5 @@ document.addEventListener("DOMContentLoaded", ()=>{
     if(Array.isArray(cards) && cards.length) runCatalogAuditV131();
   }, 1200);
 });
+
+priceFilter?.addEventListener("change", render);

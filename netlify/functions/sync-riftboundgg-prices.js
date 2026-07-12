@@ -325,19 +325,35 @@ exports.handler = async (event) => {
 
     let updated = 0;
     const failed = [];
-    const notFound = [];
+    const noPrice = [];
 
     for (const item of candidates) {
       const priceData = await fetchDotGG(item.cardId);
 
       if (!priceData.ok) {
-        failed.push(priceData);
-        notFound.push({
-          publicCode: item.card.publicCode,
-          dotggCode: item.card.dotggCode,
-          cardid: item.cardId,
-          name: item.card.name
-        });
+        const key = item.key;
+
+        // Asegura que la carta exista en inventario, pero conserva todos sus precios previos.
+        if (typeof inventory[key] === "number") {
+          inventory[key] = { stock: inventory[key] };
+        }
+        inventory[key] = inventory[key] || {};
+        inventory[key].stock = Number(inventory[key].stock ?? item.card.stock ?? 0);
+        if (supportsFoil(item.card)) {
+          inventory[key].foilStock = Number(inventory[key].foilStock ?? item.card.foilStock ?? 0);
+        }
+
+        if (priceData.status === "NO_PRICE") {
+          noPrice.push({
+            publicCode: item.card.publicCode,
+            dotggCode: item.card.dotggCode,
+            cardid: item.cardId,
+            name: item.card.name
+          });
+        } else {
+          failed.push(priceData);
+        }
+
         await sleep(150);
         continue;
       }
@@ -389,9 +405,11 @@ exports.handler = async (event) => {
       uniqueCodes: cards.length,
       updated,
       failedCount: failed.length,
-      notFoundCount: notFound.length,
+      technicalErrorCount: failed.length,
+      notFoundCount: noPrice.length,
+      noPriceCount: noPrice.length,
       failed: failed.slice(0, 8),
-      notFound: notFound.slice(0, 8),
+      noPrice: noPrice.slice(0, 20),
       debugFailed: failed.slice(0, 8).map(f => ({
         cardId: f.cardId,
         status: f.status,
