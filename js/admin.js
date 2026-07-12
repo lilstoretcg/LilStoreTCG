@@ -433,7 +433,7 @@ async function completeOrder(){
       "x-admin-pin": pin
     },
     body: JSON.stringify({
-      action:"complete",
+      action:"confirm",
       orderId:id
     })
   });
@@ -450,7 +450,8 @@ async function completeOrder(){
   renderOrderPreview(data.order);
   render();
   updateStats();
-  showMessage(data.message || `Pedido #${id} descontado correctamente.`);
+  showMessage(data.message || `Pedido #${id} confirmado correctamente.`);
+  if(typeof loadOrdersHistoryV14 === "function") await loadOrdersHistoryV14();
 }
 
 
@@ -1597,3 +1598,216 @@ document.addEventListener("DOMContentLoaded", ()=>{
 });
 
 priceFilter?.addEventListener("change", render);
+
+
+// v14 - Professional order management
+const deliverOrderBtn = document.getElementById("deliverOrderBtn");
+const cancelOrderBtn = document.getElementById("cancelOrderBtn");
+const refreshOrdersBtn = document.getElementById("refreshOrdersBtn");
+const orderStatusFilter = document.getElementById("orderStatusFilter");
+const ordersHistory = document.getElementById("ordersHistory");
+
+function orderStatusLabelV14(status){
+  const map = {
+    pending: "Pendiente",
+    confirmed: "Confirmado",
+    completed: "Confirmado",
+    delivered: "Entregado",
+    cancelled: "Cancelado"
+  };
+  return map[status] || "Pendiente";
+}
+
+function orderStatusClassV14(status){
+  const normalized = status === "completed" ? "confirmed" : (status || "pending");
+  return `order-status-${normalized}`;
+}
+
+function formatOrderDateV14(value){
+  if(!value) return "—";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "—" : date.toLocaleString("es-CL");
+}
+
+function renderOrderPreviewV14(order){
+  if(!orderPreview) return;
+
+  const itemsHtml = (order.items || []).map(item=>{
+    const variant = item.variant === "foil" ? "Foil" : "Normal";
+    return `
+      <div class="order-preview-item">
+        <strong>${item.name}</strong>
+        <span>${item.code || item.cardKey} · ${variant} x${item.qty}</span>
+        <b>$${Number(item.subtotal || 0).toLocaleString("es-CL")} CLP</b>
+      </div>
+    `;
+  }).join("");
+
+  orderPreview.innerHTML = `
+    <div class="order-preview-head">
+      <div>
+        <strong>Pedido #${order.id}</strong>
+        <small>Creado: ${formatOrderDateV14(order.createdAt)}</small>
+      </div>
+      <span class="order-status-pill ${orderStatusClassV14(order.status)}">
+        ${orderStatusLabelV14(order.status)}
+      </span>
+    </div>
+
+    <div class="order-dates-v14">
+      <span>Confirmado: ${formatOrderDateV14(order.confirmedAt || order.completedAt)}</span>
+      <span>Entregado: ${formatOrderDateV14(order.deliveredAt)}</span>
+      <span>Cancelado: ${formatOrderDateV14(order.cancelledAt)}</span>
+    </div>
+
+    <div class="order-preview-list">${itemsHtml}</div>
+
+    <div class="order-preview-total">
+      <span>Total</span>
+      <strong>$${Number(order.total || 0).toLocaleString("es-CL")} CLP</strong>
+    </div>
+  `;
+}
+
+async function adminOrderRequestV14(action, orderId){
+  const pin = document.getElementById("adminPin").value.trim();
+  if(!pin){
+    showMessage("Ingresa el PIN administrador.", true);
+    return null;
+  }
+
+  const res = await fetch("/.netlify/functions/orders", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "x-admin-pin":pin
+    },
+    body:JSON.stringify({ action, orderId })
+  });
+
+  const data = await res.json().catch(()=>({}));
+
+  if(!res.ok){
+    showMessage(data.error || "No se pudo actualizar el pedido.", true);
+    if(data.order) renderOrderPreviewV14(data.order);
+    return null;
+  }
+
+  if(data.inventory){
+    inventory = data.inventory;
+    render();
+    updateStats();
+  }
+
+  if(data.order) renderOrderPreviewV14(data.order);
+  showMessage(data.message || "Pedido actualizado.");
+  await loadOrdersHistoryV14();
+  return data;
+}
+
+async function deliverOrderV14(){
+  const id = cleanOrderId(orderIdInput?.value);
+  if(!id || id === "00000"){
+    showMessage("Ingresa un número de pedido válido.", true);
+    return;
+  }
+
+  if(!confirm(`¿Marcar el pedido #${id} como entregado?`)) return;
+  await adminOrderRequestV14("deliver", id);
+}
+
+async function cancelOrderV14(){
+  const id = cleanOrderId(orderIdInput?.value);
+  if(!id || id === "00000"){
+    showMessage("Ingresa un número de pedido válido.", true);
+    return;
+  }
+
+  if(!confirm(`¿Cancelar el pedido #${id}? Solo se permite si aún no descontó stock.`)) return;
+  await adminOrderRequestV14("cancel", id);
+}
+
+function renderOrdersHistoryV14(orders){
+  if(!ordersHistory) return;
+
+  if(!orders.length){
+    ordersHistory.innerHTML = '<div class="orders-empty-v14">No hay pedidos para este filtro.</div>';
+    return;
+  }
+
+  ordersHistory.innerHTML = orders.map(order=>`
+    <button class="order-history-card-v14" type="button" data-order-id="${order.id}">
+      <div>
+        <strong>#${order.id}</strong>
+        <span>${formatOrderDateV14(order.createdAt)}</span>
+      </div>
+      <div>
+        <span>${(order.items || []).reduce((sum,item)=>sum + Number(item.qty || 0), 0)} cartas</span>
+        <strong>$${Number(order.total || 0).toLocaleString("es-CL")} CLP</strong>
+      </div>
+      <span class="order-status-pill ${orderStatusClassV14(order.status)}">
+        ${orderStatusLabelV14(order.status)}
+      </span>
+    </button>
+  `).join("");
+
+  ordersHistory.querySelectorAll("[data-order-id]").forEach(button=>{
+    button.addEventListener("click", async ()=>{
+      const id = button.dataset.orderId;
+      if(orderIdInput) orderIdInput.value = id;
+
+      const res = await fetch("/.netlify/functions/orders?id=" + encodeURIComponent(id), {
+        cache:"no-store"
+      });
+      const data = await res.json().catch(()=>({}));
+
+      if(res.ok && data.order){
+        renderOrderPreviewV14(data.order);
+      }else{
+        showMessage(data.error || "No se pudo cargar el pedido.", true);
+      }
+    });
+  });
+}
+
+async function loadOrdersHistoryV14(){
+  if(!ordersHistory) return;
+
+  const pin = document.getElementById("adminPin").value.trim();
+  if(!pin){
+    ordersHistory.textContent = "Ingresa el PIN administrador para ver el historial.";
+    return;
+  }
+
+  ordersHistory.textContent = "Cargando historial…";
+  const status = orderStatusFilter?.value || "";
+
+  const res = await fetch(
+    "/.netlify/functions/orders?list=1&status=" + encodeURIComponent(status),
+    {
+      headers:{ "x-admin-pin":pin },
+      cache:"no-store"
+    }
+  );
+
+  const data = await res.json().catch(()=>({}));
+
+  if(!res.ok){
+    ordersHistory.textContent = data.error || "No se pudo cargar el historial.";
+    return;
+  }
+
+  renderOrdersHistoryV14(data.orders || []);
+}
+
+// Override previous order preview with richer version.
+renderOrderPreview = renderOrderPreviewV14;
+
+deliverOrderBtn?.addEventListener("click", deliverOrderV14);
+cancelOrderBtn?.addEventListener("click", cancelOrderV14);
+refreshOrdersBtn?.addEventListener("click", loadOrdersHistoryV14);
+orderStatusFilter?.addEventListener("change", loadOrdersHistoryV14);
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  setTimeout(loadOrdersHistoryV14, 800);
+});
