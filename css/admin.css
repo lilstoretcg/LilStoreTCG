@@ -1512,3 +1512,6 @@ td input[data-field="storePrice"]{
     text-align:left;
   }
 }
+
+/* v14.2 reintegrated orders */
+#reintegrateOrderBtn{background:#f59e0b;color:#000;font-weight:900}.order-status-reintegrated{background:#7c2d12;color:#fed7aa!important}.order-stock-state-v142{margin:12px 0;display:inline-flex;padding:7px 11px;border:1px solid #3b3b3b;border-radius:999px;background:#111;color:#ffd34d;font-weight:900;font-size:13px}.order-timeline-v142{margin-top:18px;padding-top:16px;border-top:1px solid #292929}.order-timeline-v142 h4{margin:0 0 12px;color:#ffd34d}.order-timeline-item-v142{display:grid;grid-template-columns:12px 1fr;gap:10px;align-items:start;margin-bottom:10px}.order-timeline-item-v142>span{width:10px;height:10px;margin-top:5px;border-radius:50%;background:#ffd34d;box-shadow:0 0 0 4px rgba(255,211,77,.12)}.order-timeline-item-v142>div{display:flex;flex-direction:column;gap:3px}.order-timeline-item-v142 strong{color:#fff}.order-timeline-item-v142 small,.order-timeline-empty-v142{color:#999}

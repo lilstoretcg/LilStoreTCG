@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=141">
+  <link rel="stylesheet" href="css/admin.css?v=142">
 </head>
 <body>
   <header class="admin-header">
@@ -165,6 +165,7 @@
         <button id="searchOrderBtn" type="button">Buscar pedido</button>
         <button id="completeOrderBtn" type="button">Confirmar y descontar</button>
         <button id="deliverOrderBtn" type="button">Marcar entregado</button>
+        <button id="reintegrateOrderBtn" type="button">Reintegrar stock</button>
         <button id="cancelOrderBtn" type="button">Cancelar pedido</button>
       </div>
 
@@ -184,6 +185,7 @@
             <option value="confirmed">Confirmados</option>
             <option value="delivered">Entregados</option>
             <option value="cancelled">Cancelados</option>
+            <option value="reintegrated">Reintegrados</option>
           </select>
           <button id="refreshOrdersBtn" type="button">Actualizar historial</button>
         </div>
@@ -283,7 +285,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script src="js/admin.js?v=141"></script>
+  <script src="js/admin.js?v=142"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
