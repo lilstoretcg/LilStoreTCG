@@ -366,17 +366,29 @@ exports.handler = async (event) => {
         card,
         key: keyFor(card),
         cardId: codes[0]
+        catalogCode: normalizeCode(card.publicCode)
       });
     }
 
     const inventoryStore = getStore(INVENTORY_STORE);
-const catalogStore = getStore(CATALOG_STORE);
+    const catalogStore = getStore(CATALOG_STORE);
 
 const inventory =
   await inventoryStore.get(INVENTORY_KEY, { type: "json" }) || {};
 
 const catalog =
   await catalogStore.get(CATALOG_KEY, { type: "json" }) || [];
+
+const catalogIndex = new Map();
+
+for (const catalogCard of catalog) {
+  const code = normalizeCode(catalogCard.publicCode);
+
+  if (code) {
+    catalogIndex.set(code, catalogCard);
+  }
+}
+
     const basePrices = await getBasePrices();
 
     let updated = 0;
@@ -415,7 +427,8 @@ const catalog =
       }
 
       const key = item.key;
-      const catalogCard = findCatalogCard(catalog, item.card);
+      const catalogCard =
+          catalogIndex.get(item.catalogCode) || null;
 
       if (typeof inventory[key] === "number") {
         inventory[key] = { stock: inventory[key] };
