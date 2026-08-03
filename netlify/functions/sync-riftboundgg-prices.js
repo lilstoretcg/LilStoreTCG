@@ -365,7 +365,7 @@ exports.handler = async (event) => {
       candidates.push({
         card,
         key: keyFor(card),
-        cardId: codes[0]
+        cardId: codes[0],
         catalogCode: normalizeCode(card.publicCode)
       });
     }
