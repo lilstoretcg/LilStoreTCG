@@ -78,15 +78,21 @@ async function loadCards(){
     const foilStock = Number(entry.foilStock ?? card.foilStock ?? 0);
 
     return {
-      ...card,
-      stock: stockValue,
-      foilStock,
-      status: (stockValue > 0 || (supportsFoil(card) && foilStock > 0)) ? 'available' : 'soldout',
-      marketPrice: Number(entry.marketPrice ?? card.marketPrice ?? 0),
-      storePrice: Number(entry.storePrice ?? card.storePrice ?? 0),
-      foilMarketPrice: Number(entry.foilMarketPrice ?? card.foilMarketPrice ?? 0),
-      foilStorePrice: Number(entry.foilStorePrice ?? card.foilStorePrice ?? 0)
-    };
+  ...card,
+  stock: stockValue,
+  foilStock,
+  status: (stockValue > 0 || (supportsFoil(card) && foilStock > 0))
+    ? 'available'
+    : 'soldout',
+
+  // v14.5A
+  // Los precios SIEMPRE vienen del catálogo.
+  // El inventario solo guarda stock.
+  marketPrice: Number(card.marketPrice ?? 0),
+  storePrice: Number(card.storePrice ?? 0),
+  foilMarketPrice: Number(card.foilMarketPrice ?? 0),
+  foilStorePrice: Number(card.foilStorePrice ?? 0)
+};
   });
 }
 

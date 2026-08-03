@@ -318,6 +318,7 @@ async function syncRiftboundPrices(){
         dotggCode: card.dotggCode,
         set: card.set,
         setCode: card.setCode,
+        collectorNumber: card.collectorNumber,
         rarity: card.rarity,
         stock: currentStockFor(card),
         foilStock: supportsFoil(card) ? currentFoilStockFor(card) : 0,

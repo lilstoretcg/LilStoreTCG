@@ -1,9 +1,14 @@
 const { getStore, connectLambda } = require("@netlify/blobs");
 
-const STORE_NAME = "lilstore-inventory";
+const INVENTORY_STORE = "lilstore-inventory";
 const INVENTORY_KEY = "inventory";
+
+const CATALOG_STORE = "lilstore-catalog";
+const CATALOG_KEY = "cards";
+
 const SETTINGS_STORE = "lilstore-settings";
 const BASE_PRICES_KEY = "base-prices";
+
 const DOTGG_PRICE_URL = "https://api.dotgg.gg/cgfw/getcardprices";
 
 function json(statusCode, body) {
@@ -39,13 +44,19 @@ function supportsFoil(card) {
 }
 
 function normalizeCode(raw = "") {
-  const text = String(raw || "").toUpperCase().trim();
-  const match = text.match(/([A-Z]{3})[-\s]?([A-Z]?\d{2,3}[A-Z]?)/);
+  const text = String(raw || "")
+    .toUpperCase()
+    .trim()
+    .split("/")[0]; // Convierte OGN-001/298 -> OGN-001
+
+  const match = text.match(/^([A-Z]{3})[-\s]?([A-Z]?\d{2,3}[A-Z]?)$/);
+
   if (!match) return "";
+
   return `${match[1]}-${match[2]}`;
 }
-
 function possibleCodes(card = {}) {
+
   const rawValues = [
     card.cardid,
     card.cardId,
@@ -60,12 +71,51 @@ function possibleCodes(card = {}) {
 
   for (const raw of rawValues) {
     const normalized = normalizeCode(raw);
-    if (normalized && !out.includes(normalized)) out.push(normalized);
+
+    if (normalized && !out.includes(normalized)) {
+      out.push(normalized);
+    }
+  }
+
+  // Respaldo usando setCode + collectorNumber
+  if (card.setCode && card.collectorNumber) {
+
+    const fallback =
+      `${String(card.setCode).toUpperCase()}-${String(card.collectorNumber).padStart(3, "0")}`;
+
+    if (!out.includes(fallback)) {
+      out.push(fallback);
+    }
+
   }
 
   return out;
 }
+function findCatalogCard(catalog, card = {}) {
 
+  const searchCodes = possibleCodes(card);
+
+  return catalog.find(catalogCard => {
+
+    const catalogCodes = possibleCodes(catalogCard);
+
+    if (catalogCodes.some(code => searchCodes.includes(code))) {
+      return true;
+    }
+
+    if (
+      Number(catalogCard.collectorNumber) === Number(card.collectorNumber) &&
+      String(catalogCard.setCode || "").toUpperCase() ===
+      String(card.setCode || "").toUpperCase()
+    ) {
+      return true;
+    }
+
+    return false;
+
+  }) || null;
+
+}
 function extractRows(payload) {
   if (Array.isArray(payload)) return payload;
   if (payload && Array.isArray(payload.lines)) return payload.lines;
@@ -319,8 +369,14 @@ exports.handler = async (event) => {
       });
     }
 
-    const store = getStore(STORE_NAME);
-    const inventory = await store.get(INVENTORY_KEY, { type: "json" }) || {};
+    const inventoryStore = getStore(INVENTORY_STORE);
+const catalogStore = getStore(CATALOG_STORE);
+
+const inventory =
+  await inventoryStore.get(INVENTORY_KEY, { type: "json" }) || {};
+
+const catalog =
+  await catalogStore.get(CATALOG_KEY, { type: "json" }) || [];
     const basePrices = await getBasePrices();
 
     let updated = 0;
@@ -359,6 +415,7 @@ exports.handler = async (event) => {
       }
 
       const key = item.key;
+      const catalogCard = findCatalogCard(catalog, item.card);
 
       if (typeof inventory[key] === "number") {
         inventory[key] = { stock: inventory[key] };
@@ -371,23 +428,39 @@ exports.handler = async (event) => {
         inventory[key].foilStock = Number(inventory[key].foilStock ?? item.card.foilStock ?? 0);
       }
 
-      const market = priceData.normalPrice || priceData.effectivePrice;
+     const market = priceData.normalPrice || priceData.effectivePrice;
 
-      if (market) {
-        inventory[key].marketPrice = Number(market.toFixed(2));
-        inventory[key].storePrice = Math.max(Math.round(market * dollar * margin), basePriceForCard(item.card, basePrices, "normal"));
-      }
+if (catalogCard && market) {
 
-      if (supportsFoil(item.card) && priceData.foilPrice) {
-        inventory[key].foilMarketPrice = Number(priceData.foilPrice.toFixed(2));
-        inventory[key].foilStorePrice = Math.max(Math.round(priceData.foilPrice * dollar * margin), basePriceForCard(item.card, basePrices, "foil"));
-      }
+  catalogCard.marketPrice = Number(market.toFixed(2));
 
-      updated++;
-      await sleep(150);
-    }
+  catalogCard.storePrice = Math.max(
+    Math.round(market * dollar * margin),
+    basePriceForCard(item.card, basePrices, "normal")
+  );
 
-    await store.setJSON(INVENTORY_KEY, inventory);
+  if (supportsFoil(item.card) && priceData.foilPrice) {
+
+    catalogCard.foilMarketPrice =
+      Number(priceData.foilPrice.toFixed(2));
+
+    catalogCard.foilStorePrice = Math.max(
+      Math.round(priceData.foilPrice * dollar * margin),
+      basePriceForCard(item.card, basePrices, "foil")
+    );
+
+  }
+
+  updated++;
+
+  await sleep(150);
+
+}
+
+}
+
+    await catalogStore.setJSON(CATALOG_KEY, catalog);
+    await inventoryStore.setJSON(INVENTORY_KEY, inventory);
 
     const nextOffset = offset + limit;
     const done = nextOffset >= allCards.length;
