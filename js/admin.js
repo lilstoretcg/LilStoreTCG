@@ -1452,8 +1452,37 @@ async function syncPricesV13(mode="stock"){
     const processed=Number(data.processed||data.uniqueCodes||0); totalProcessed+=processed; totalUpdated+=Number(data.updated||0); totalFailed+=Number(data.failedCount||0); totalNotFound+=Number(data.notFoundCount||0); offset=Number(data.nextOffset||(offset+batchSize));
     setDotGGProgress(Math.min(offset,payloadCards.length),payloadCards.length,`Lote ${batch}/${totalBatches} · Actualizadas: ${totalUpdated} · Sin precio: ${totalNotFound} · Errores técnicos: ${totalFailed}`); batch++; await new Promise(r=>setTimeout(r,800));
   }
-  try{const r=await fetch("/.netlify/functions/stock?v="+Date.now(),{cache:"no-store"});if(r.ok)inventory=await r.json();}catch(e){}
-  render(); updateStats(); saveSyncV13({finishedAt:new Date().toISOString(),mode,processed:totalProcessed,updated:totalUpdated,notFound:totalNotFound,failed:totalFailed});
+  try{
+  const r = await fetch("/.netlify/functions/stock?v="+Date.now(), { cache:"no-store" });
+  if(r.ok){
+    inventory = await r.json();
+  }
+}catch(e){}
+
+try{
+  const catalogRes = await fetch("/.netlify/functions/catalog?v="+Date.now(), { cache:"no-store" });
+
+  if(catalogRes.ok){
+    const remoteCards = await catalogRes.json();
+
+    if(Array.isArray(remoteCards) && remoteCards.length){
+      cards = remoteCards;
+    }
+  }
+}catch(e){}
+
+render();
+updateStats();
+
+saveSyncV13({
+  finishedAt:new Date().toISOString(),
+  mode,
+  processed:totalProcessed,
+  updated:totalUpdated,
+  notFound:totalNotFound,
+  failed:totalFailed
+});
+
   const msg=`Sincronización completa (${label}). Procesadas: ${totalProcessed}. Actualizadas: ${totalUpdated}. Sin precio: ${totalNotFound}. Errores técnicos: ${totalFailed}.`; setDotGGProgress(payloadCards.length,payloadCards.length,msg); showMessage(msg);
 }
 function renderCatalogAuditV13(data=null){const el=document.getElementById("catalogAuditSummary");if(!el)return;const x=data||JSON.parse(localStorage.getItem("lilstore_catalog_audit_v13")||"null");if(!x){el.textContent="Aún no se ha registrado una actualización de catálogo.";return;}const b=x.bySet||{};el.innerHTML=`<strong>Último catálogo:</strong> Origins ${Number(b.Origins||0).toLocaleString("es-CL")} · Spiritforged ${Number(b.Spiritforged||0).toLocaleString("es-CL")} · Unleashed ${Number(b.Unleashed||0).toLocaleString("es-CL")} · Total ${Number(x.saved||0).toLocaleString("es-CL")}`;}
