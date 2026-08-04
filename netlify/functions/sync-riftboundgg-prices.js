@@ -375,7 +375,7 @@ exports.handler = async (event) => {
         card,
         key: keyFor(card),
         cardId: codes[0],
-        catalogCode: normalizeCode(card.publicCode)
+        catalogCode: normalizeCode(card.publicCode || card.dotggCode)
       });
     }
 
@@ -391,7 +391,7 @@ const catalog =
 const catalogIndex = new Map();
 
 for (const catalogCard of catalog) {
-  const code = normalizeCode(catalogCard.publicCode);
+  const code = normalizeCode(catalogCard.publicCode || catalogCard.dotggCode);
 
   if (code) {
     catalogIndex.set(code, catalogCard);
@@ -436,8 +436,7 @@ for (const catalogCard of catalog) {
       }
 
       const key = item.key;
-      const catalogCard =
-          catalogIndex.get(item.catalogCode) || null;
+      const catalogCard = findCatalogCard(catalog, item.card);
 
       if (typeof inventory[key] === "number") {
         inventory[key] = { stock: inventory[key] };
