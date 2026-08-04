@@ -27,6 +27,25 @@ exports.handler = async (event) => {
     connectLambda(event);
     const store = getStore(STORE_NAME);
     const catalog = await store.get(CATALOG_KEY, { type: "json" });
+
+console.log("CATALOG READ", {
+  host: event.headers?.host,
+  path: event.path,
+  sfd247: (catalog || [])
+    .filter(card =>
+      String(card.publicCode || card.dotggCode || "")
+        .toUpperCase()
+        .startsWith("SFD-247")
+    )
+    .map(card => ({
+      id: card.id,
+      name: card.name,
+      publicCode: card.publicCode,
+      dotggCode: card.dotggCode,
+      marketPrice: card.marketPrice
+    }))
+});
+
     return json(200, Array.isArray(catalog) ? catalog.filter(allowedCard) : []);
   } catch (error) {
     return json(200, []);
