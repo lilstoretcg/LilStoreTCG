@@ -499,6 +499,16 @@ if (catalogCard && market) {
 }
 
     await catalogStore.setJSON(CATALOG_KEY, catalog);
+
+const verify = await catalogStore.get(CATALOG_KEY, { type: "json" });
+
+const saved = verify.find(c => c.publicCode === "SFD-247");
+
+console.log("VERIFY", {
+  market: saved?.marketPrice,
+  store: saved?.storePrice
+});
+
     await inventoryStore.setJSON(INVENTORY_KEY, removeLegacyInventoryPrices(inventory));
 
     const nextOffset = offset + limit;
