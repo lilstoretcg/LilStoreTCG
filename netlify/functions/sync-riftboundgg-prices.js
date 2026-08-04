@@ -438,6 +438,15 @@ for (const catalogCard of catalog) {
       const key = item.key;
       const catalogCard = findCatalogCard(catalog, item.card);
 
+      if (item.card.publicCode === "SFD-247") {
+      console.log("MATCH", {
+        buscada: item.card.publicCode,
+        encontrada: catalogCard?.publicCode,
+        nombre: catalogCard?.name
+     });
+   }
+
+
       if (typeof inventory[key] === "number") {
         inventory[key] = { stock: inventory[key] };
       }
@@ -450,6 +459,15 @@ for (const catalogCard of catalog) {
       }
 
      const market = priceData.normalPrice || priceData.effectivePrice;
+
+if (item.card.publicCode === "SFD-247") {
+  console.log("WRITE", {
+    buscada: item.card.publicCode,
+    encontrada: catalogCard?.publicCode,
+    antes: catalogCard?.marketPrice,
+    nuevo: market
+  });
+}
 
 if (catalogCard && market) {
 
