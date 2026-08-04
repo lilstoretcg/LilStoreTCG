@@ -55,10 +55,11 @@ function normalizeEntry(card){
   return {
     stock: Number(entry?.stock ?? card.stock ?? 0),
     foilStock: Number(entry?.foilStock ?? card.foilStock ?? 0),
-    marketPrice: Number(entry?.marketPrice ?? card.marketPrice ?? 0),
-    storePrice: Number(entry?.storePrice ?? card.storePrice ?? 0),
-    foilMarketPrice: Number(entry?.foilMarketPrice ?? card.foilMarketPrice ?? 0),
-    foilStorePrice: Number(entry?.foilStorePrice ?? card.foilStorePrice ?? 0)
+    // Los precios pertenecen exclusivamente al catálogo.
+    marketPrice: Number(card.marketPrice ?? 0),
+    storePrice: Number(card.storePrice ?? 0),
+    foilMarketPrice: Number(card.foilMarketPrice ?? 0),
+    foilStorePrice: Number(card.foilStorePrice ?? 0)
   };
 }
 
@@ -197,6 +198,7 @@ async function save(){
 
     const key = input.dataset.cardKey;
     const field = input.dataset.field;
+    if(["marketPrice", "storePrice", "foilMarketPrice", "foilStorePrice"].includes(field)) return;
     const value = Number(input.value || 0);
 
     if(typeof inventory[key] === "number"){
@@ -214,11 +216,7 @@ async function save(){
     const e = inventory[key];
     if(!e || (
       Number(e.stock || 0) <= 0 &&
-      Number(e.foilStock || 0) <= 0 &&
-      Number(e.marketPrice || 0) <= 0 &&
-      Number(e.storePrice || 0) <= 0 &&
-      Number(e.foilMarketPrice || 0) <= 0 &&
-      Number(e.foilStorePrice || 0) <= 0
+      Number(e.foilStock || 0) <= 0
     )){
       delete inventory[key];
     }

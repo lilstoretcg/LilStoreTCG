@@ -2,6 +2,15 @@ const { getStore, connectLambda } = require("@netlify/blobs");
 
 const STORE_NAME = "lilstore-inventory";
 const INVENTORY_KEY = "inventory";
+const PRICE_FIELDS = ["marketPrice", "storePrice", "foilMarketPrice", "foilStorePrice"];
+
+function stockOnly(inventory = {}) {
+  return Object.fromEntries(Object.entries(inventory).map(([key, value]) => {
+    const entry = typeof value === "number" ? { stock: value } : { ...(value || {}) };
+    for (const field of PRICE_FIELDS) delete entry[field];
+    return [key, entry];
+  }));
+}
 
 function json(statusCode, body) {
   return {
@@ -42,7 +51,7 @@ exports.handler = async (event) => {
         return json(400, { error: "JSON inválido." });
       }
 
-      const inventory = payload.inventory || payload.stock || {};
+      const inventory = stockOnly(payload.inventory || payload.stock || {});
       await store.setJSON(INVENTORY_KEY, inventory);
 
       return json(200, {

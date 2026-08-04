@@ -8,6 +8,7 @@ const CATALOG_KEY = "cards";
 
 const SETTINGS_STORE = "lilstore-settings";
 const BASE_PRICES_KEY = "base-prices";
+const PRICE_FIELDS = ["marketPrice", "storePrice", "foilMarketPrice", "foilStorePrice"];
 
 const DOTGG_PRICE_URL = "https://api.dotgg.gg/cgfw/getcardprices";
 
@@ -41,6 +42,14 @@ function keyFor(card) {
 
 function supportsFoil(card) {
   return ["common", "uncommon"].includes(String(card.rarity || "").toLowerCase());
+}
+
+function removeLegacyInventoryPrices(inventory = {}) {
+  for (const value of Object.values(inventory)) {
+    if (!value || typeof value !== "object") continue;
+    for (const field of PRICE_FIELDS) delete value[field];
+  }
+  return inventory;
 }
 
 function normalizeCode(raw = "") {
@@ -473,7 +482,7 @@ if (catalogCard && market) {
 }
 
     await catalogStore.setJSON(CATALOG_KEY, catalog);
-    await inventoryStore.setJSON(INVENTORY_KEY, inventory);
+    await inventoryStore.setJSON(INVENTORY_KEY, removeLegacyInventoryPrices(inventory));
 
     const nextOffset = offset + limit;
     const done = nextOffset >= allCards.length;
