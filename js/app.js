@@ -311,7 +311,7 @@ function whatsappMessageForOrder(order){
   ].join("\n");
 }
 
-function renderMiniCartShippingNotice(total){
+function renderMiniCartShippingNoticeLegacy(total){
   const {shippingNotice} = miniCartElements();
   if(!shippingNotice) return;
 
@@ -327,6 +327,28 @@ function renderMiniCartShippingNotice(total){
   }
 
   shippingNotice.innerHTML = `━━━━━━━━━━━━━━<br><br>🚚 Envío GRATIS<br><br>en compras sobre<br>$35.000 CLP<br><br>📍 A tu punto Blue Express<br>de preferencia.`;
+}
+
+function renderMiniCartShippingNotice(total){
+  const {shippingNotice} = miniCartElements();
+  if(!shippingNotice) return;
+
+  let primaryLine = '';
+  if(total >= 35000){
+    primaryLine = '🎉 <strong>¡Felicidades!</strong><br>Tu pedido tiene 🚚 <strong>ENVÍO GRATIS.</strong>';
+  }else if(total >= 30000){
+    const remaining = 35000 - total;
+    primaryLine = `🔥 <strong>¡Ya casi!</strong><br>Te faltan <strong>$${formatPesoGlobal(remaining)} CLP</strong> para obtener<br>🚚 <strong>ENVÍO GRATIS.</strong>`;
+  }else{
+    primaryLine = '🚚 <strong>Envío GRATIS</strong> en compras sobre $35.000 CLP';
+  }
+
+  shippingNotice.innerHTML = `
+    <div class="mini-cart-shipping-card">
+      <p class="mini-cart-shipping-main">${primaryLine}</p>
+      <p class="mini-cart-shipping-location">📍 A tu punto Blue Express de preferencia.</p>
+    </div>
+  `;
 }
 
 function renderMiniCart(){

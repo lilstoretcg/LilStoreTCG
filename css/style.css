@@ -917,6 +917,31 @@ header .brand img{
   font-size:22px;
 }
 
+/* v16.1.1 - Aviso de envío Blue Express */
+.mini-cart-shipping-card{
+  margin:0 0 10px;
+  padding:12px 14px;
+  background:#071d33;
+  border:1px solid #1f6fb2;
+  border-radius:11px;
+  color:#e8f4ff;
+  font-size:14px;
+  line-height:1.4;
+}
+
+.mini-cart-shipping-card p{
+  margin:0;
+}
+
+.mini-cart-shipping-main strong{
+  color:#ffffff;
+}
+
+.mini-cart-shipping-location{
+  margin-top:7px !important;
+  color:#b9dcf7;
+}
+
 .mini-cart-full-btn,
 .mini-cart-whatsapp-btn,
 .mini-cart-clear-btn{
