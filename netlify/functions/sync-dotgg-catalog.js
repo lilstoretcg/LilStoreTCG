@@ -7,11 +7,23 @@ const DOTGG_CARDS_URL = "https://api.dotgg.gg/cgfw/getcards?game=riftbound&mode=
 const KNOWN_SETS = {
   OGN: "Origins",
   SFD: "Spiritforged",
-  UNL: "Unleashed"
+  UNL: "Unleashed",
+  VEN: "Vendetta"
 };
 
-const ALLOWED_SET_CODES = new Set(["OGN", "SFD", "UNL"]);
-const ALLOWED_SET_NAMES = new Set(["Origins", "Spiritforged", "Unleashed"]);
+const ALLOWED_SET_CODES = new Set([
+  "OGN",
+  "SFD",
+  "UNL",
+  "VEN"
+]);
+
+const ALLOWED_SET_NAMES = new Set([
+  "Origins",
+  "Spiritforged",
+  "Unleashed",
+  "Vendetta"
+]);
 
 const RARITIES = ["Common", "Uncommon", "Rare", "Epic", "Showcase"];
 const RARITY_SET = new Set(RARITIES.map(r => r.toLowerCase()));
@@ -192,7 +204,7 @@ function uniqueCatalogKey(card = {}) {
 }
 
 function sortCards(cards) {
-  const order = { Origins: 0, Spiritforged: 1, Unleashed: 2 };
+  const order = { Origins: 0, Spiritforged: 1, Unleashed: 2, Vendetta: 3 };
   return cards.sort((a, b) =>
     (order[a.set] ?? 99) - (order[b.set] ?? 99) ||
     String(a.set).localeCompare(String(b.set)) ||
@@ -256,7 +268,7 @@ exports.handler = async (event) => {
       const card = normalizeDotGGCard(raw);
       if (!card || !card.dotggCode) continue;
 
-      // LilStore solo trabaja sets conseguibles: Origins, Spiritforged y Unleashed.
+      // LilStore solo trabaja con los sets soportados por la tienda.
       if (!ALLOWED_SET_CODES.has(card.setCode) && !ALLOWED_SET_NAMES.has(card.set)) continue;
 
       const key = uniqueCatalogKey(card);

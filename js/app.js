@@ -413,7 +413,14 @@ loadCards().then(cards=>{
     setFilter.innerHTML = '<option value="">Todos los Sets</option>';
     [...new Set(cards.map(c=>c.set).filter(Boolean))]
       .sort((a,b)=>{
-        const order = {"Origins":0,"Spiritforged":1,"Unleashed":2,"Proving Grounds":3,"ARC":4};
+        const order = {
+  "Origins": 0,
+  "Spiritforged": 1,
+  "Unleashed": 2,
+  "Vendetta": 3,
+  "Proving Grounds": 4,
+  "ARC": 5
+};
         return (order[a] ?? 99) - (order[b] ?? 99) || a.localeCompare(b);
       })
       .forEach(s=>setFilter.innerHTML += `<option value="${s}">${s}</option>`);

@@ -2,8 +2,19 @@ const { getStore, connectLambda } = require("@netlify/blobs");
 
 const STORE_NAME = "lilstore-catalog";
 const CATALOG_KEY = "cards";
-const ALLOWED_SET_CODES = new Set(["OGN", "SFD", "UNL"]);
-const ALLOWED_SET_NAMES = new Set(["Origins", "Spiritforged", "Unleashed"]);
+const ALLOWED_SET_CODES = new Set([
+  "OGN",
+  "SFD",
+  "UNL",
+  "VEN"
+]);
+
+const ALLOWED_SET_NAMES = new Set([
+  "Origins",
+  "Spiritforged",
+  "Unleashed",
+  "Vendetta"
+]);
 
 function allowedCard(card = {}) {
   const setCode = String(card.setCode || card.dotggCode || card.publicCode || "").toUpperCase().slice(0, 3);
