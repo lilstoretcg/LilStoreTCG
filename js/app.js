@@ -248,19 +248,66 @@ async function createLilStoreOrder(){
 }
 
 function whatsappMessageForOrder(order){
-  const lines = (order.items || []).map(item => {
-    const variantLabel = item.variant === 'foil' ? 'Foil' : 'Normal';
-    return `• ${item.name} (${variantLabel}) x${item.qty}\n  ${item.code || item.cardKey}\n  $${formatPesoGlobal(item.subtotal)} CLP`;
+  const setOrder = ["Origins", "Spiritforged", "Unleashed", "Vendetta"];
+  const setLabels = {
+    Origins: "ORIGINS",
+    Spiritforged: "SPIRITFORGED",
+    Unleashed: "UNLEASHED",
+    Vendetta: "VENDETTA"
+  };
+  const setByCode = { OGN: "Origins", SFD: "Spiritforged", UNL: "Unleashed", VEN: "Vendetta" };
+  const separator = "━━━━━━━━━━━━━━";
+
+  const items = (order.items || [])
+    .map(item=>{
+      const code = String(item.code || item.cardKey || "").trim().toUpperCase();
+      const prefix = code.split("-")[0];
+      return { ...item, code, set: setByCode[prefix] || "Otros" };
+    })
+    .sort((a,b)=>{
+      const setDifference = (setOrder.indexOf(a.set) === -1 ? 99 : setOrder.indexOf(a.set)) -
+        (setOrder.indexOf(b.set) === -1 ? 99 : setOrder.indexOf(b.set));
+      return setDifference || a.code.localeCompare(b.code, "es", { numeric:true }) ||
+        String(a.name || "").localeCompare(String(b.name || ""), "es");
+    });
+
+  const groupedLines = [];
+  [...setOrder, "Otros"].forEach(set=>{
+    const group = items.filter(item=>item.set === set);
+    if(!group.length) return;
+
+    groupedLines.push(separator, `📦 ${setLabels[set] || String(set).toUpperCase()}`, separator, "");
+    group.forEach(item=>{
+      const variantLabel = item.variant === "foil" ? "Foil" : "Normal";
+      groupedLines.push(`• ${item.code} — ${item.name} (${variantLabel}) ×${item.qty}`);
+    });
+    groupedLines.push("");
   });
 
+  const total = Number(order.total || 0);
+  const shippingMessage = total < 35000
+    ? [
+        "🚚 Envío GRATIS sobre $35.000 CLP",
+        "a tu punto Blue Express de preferencia."
+      ]
+    : [
+        "🎉 ¡Felicidades!",
+        "",
+        "Tu pedido califica para",
+        "",
+        "🚚 ENVÍO GRATIS",
+        "a tu punto Blue Express de preferencia."
+      ];
+
   return [
-    'Pedido LilStore TCG',
+    "🛒 Pedido LilStore TCG",
     `Pedido #${order.id}`,
-    '',
-    ...lines,
-    '',
-    `Total: $${formatPesoGlobal(order.total)} CLP`
-  ].join('\n');
+    "",
+    ...groupedLines,
+    `💰 Total: $${formatPesoGlobal(total)} CLP`,
+    "",
+    ...shippingMessage
+  ].join("\n");
 }
 
 function renderMiniCart(){
