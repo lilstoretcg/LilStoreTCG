@@ -141,6 +141,7 @@ function miniCartElements(){
     items: document.getElementById('miniCartItems'),
     summary: document.getElementById('miniCartSummary'),
     total: document.getElementById('miniCartTotal'),
+    shippingNotice: document.getElementById('miniCartShippingNotice'),
     whatsapp: document.getElementById('miniCartWhatsappBtn'),
     clearBtn: document.getElementById('miniCartClearBtn')
   };
@@ -310,8 +311,26 @@ function whatsappMessageForOrder(order){
   ].join("\n");
 }
 
+function renderMiniCartShippingNotice(total){
+  const {shippingNotice} = miniCartElements();
+  if(!shippingNotice) return;
+
+  if(total >= 35000){
+    shippingNotice.innerHTML = `━━━━━━━━━━━━━━<br><br>🎉 ¡Felicidades!<br><br>Tu pedido tiene<br><br>🚚 ENVÍO GRATIS<br><br>📍 A tu punto Blue Express<br>de preferencia.`;
+    return;
+  }
+
+  if(total >= 30000){
+    const remaining = 35000 - total;
+    shippingNotice.innerHTML = `━━━━━━━━━━━━━━<br><br>🔥 ¡Ya casi!<br><br>Te faltan solamente<br><br>$${formatPesoGlobal(remaining)} CLP<br><br>para obtener<br><br>🚚 ENVÍO GRATIS<br><br>📍 A tu punto Blue Express<br>de preferencia.`;
+    return;
+  }
+
+  shippingNotice.innerHTML = `━━━━━━━━━━━━━━<br><br>🚚 Envío GRATIS<br><br>en compras sobre<br>$35.000 CLP<br><br>📍 A tu punto Blue Express<br>de preferencia.`;
+}
+
 function renderMiniCart(){
-  const {items, summary, total, whatsapp} = miniCartElements();
+  const {items, summary, total, shippingNotice, whatsapp} = miniCartElements();
   if(!items) return;
 
   cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -327,6 +346,7 @@ function renderMiniCart(){
   if(!cart.length){
     items.innerHTML = '<p class="mini-cart-empty">Tu carrito está vacío.</p>';
     if(total) total.textContent = '$0 CLP';
+    if(shippingNotice) shippingNotice.innerHTML = '';
     if(whatsapp) {
       whatsapp.href = '#';
       whatsapp.onclick = (event)=>{ event.preventDefault(); alert('Tu carrito está vacío.'); };
@@ -355,6 +375,7 @@ function renderMiniCart(){
 
   items.innerHTML = html || '<p class="mini-cart-empty">Tu carrito está vacío.</p>';
   if(total) total.textContent = `$${formatPesoGlobal(totalValue)} CLP`;
+  renderMiniCartShippingNotice(totalValue);
 
   if(whatsapp){
     whatsapp.href = '#';
