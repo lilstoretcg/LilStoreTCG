@@ -134,8 +134,14 @@ function normalizeObjectCard(entry) {
 function normalizeArrayCard(entry) {
   const strings = entry.filter(v => typeof v === "string").map(v => v.trim()).filter(Boolean);
 
-  const code = shortCode(strings.find(v => shortCode(v)) || "");
+  const sourceCode = strings.find(v => shortCode(v)) || "";
+  const code = shortCode(sourceCode);
   if (!code) return null;
+
+  const sourceCodePrefix = String(sourceCode).toUpperCase().split("/")[0];
+  const isCardSlug = value =>
+    Boolean(sourceCodePrefix) &&
+    String(value).toUpperCase().startsWith(`${sourceCodePrefix}-`);
 
   const image = strings.find(v => /^https?:\/\//i.test(v) && /\.(webp|png|jpg|jpeg)/i.test(v)) || "assets/logo.png";
 
@@ -160,6 +166,7 @@ function normalizeArrayCard(entry) {
       v !== rarityRaw &&
       !/^https?:\/\//i.test(v) &&
       !shortCode(v) &&
+      !isCardSlug(v) &&
       v.length > 1
     ) || "";
 
