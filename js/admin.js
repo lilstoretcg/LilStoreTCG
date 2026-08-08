@@ -77,13 +77,20 @@ function currentFoilStockFor(card){
   return supportsFoil(card) ? normalizeEntry(card).foilStock : 0;
 }
 
+function requiresManualPrice(card){
+  const entry = normalizeEntry(card);
+  return Number(entry.marketPrice || 0) <= 0 && Number(entry.foilMarketPrice || 0) <= 0;
+}
+
 function updateStats(){
   const totalUnits = cards.reduce((sum, card)=>sum + currentStockFor(card) + currentFoilStockFor(card), 0);
   const availableCards = cards.filter(card=>currentStockFor(card)>0 || currentFoilStockFor(card)>0).length;
+  const manualPriceCards = cards.filter(requiresManualPrice).length;
 
   document.getElementById("totalCards").textContent = cards.length;
   document.getElementById("availableCards").textContent = availableCards;
   document.getElementById("totalUnits").textContent = totalUnits;
+  document.getElementById("manualPriceCards").textContent = manualPriceCards;
 }
 
 function render(){
@@ -98,9 +105,7 @@ function render(){
     const stock = currentStockFor(card);
     const foilStock = currentFoilStockFor(card);
     const priceEntry = normalizeEntry(card);
-    const hasMarketPrice =
-      Number(priceEntry.marketPrice || 0) > 0 ||
-      Number(priceEntry.foilMarketPrice || 0) > 0;
+    const hasMarketPrice = !requiresManualPrice(card);
     const matchesText =
       String(card.name || "").toLowerCase().includes(q) ||
       String(card.publicCode || "").toLowerCase().includes(q) ||
@@ -111,7 +116,7 @@ function render(){
     const matchesPrice =
       !priceValue ||
       (priceValue === "priced" && hasMarketPrice) ||
-      (priceValue === "no-price" && !hasMarketPrice);
+      (priceValue === "manual-price" && !hasMarketPrice);
 
     const matchesStock =
       !legacyStockFilter ||
@@ -146,6 +151,15 @@ function render(){
       </tr>
     `;
   }).join("");
+
+  rowsEl.querySelectorAll('[data-field="marketPrice"], [data-field="foilMarketPrice"]').forEach(input=>{
+    input.addEventListener("input", ()=>{
+      const card = cards.find(item => keyFor(item) === input.dataset.cardKey);
+      if(!card) return;
+      card[input.dataset.field] = Math.max(0, Number(input.value || 0));
+      updateStats();
+    });
+  });
 
   updateStats();
 }
