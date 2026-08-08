@@ -137,8 +137,7 @@ function priceFromCandidates(values) {
   return null;
 }
 
-function extractPrices(payload) {
-  const rows = extractRows(payload);
+function extractPricesFromRows(rows) {
   let normalPrice = null;
   let foilPrice = null;
 
@@ -203,6 +202,13 @@ function extractPrices(payload) {
     foilPrice,
     effectivePrice: normalPrice || foilPrice || null
   };
+}
+
+function extractPrices(payload) {
+  const usdPrices = extractPricesFromRows(extractRows(payload));
+  if (usdPrices.effectivePrice) return usdPrices;
+
+  return extractPricesFromRows(Array.isArray(payload?.lines_cm) ? payload.lines_cm : []);
 }
 
 async function fetchDotGG(cardId, attempt = 1) {
