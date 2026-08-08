@@ -1266,10 +1266,15 @@ function numberV121(value){
   return Number.isFinite(n) ? n : 0;
 }
 
+function normalizeCardCodeV162(value){
+  const text = String(value || "").toUpperCase().trim().split("/")[0];
+  const match = text.match(/^([A-Z]{3})[-\s]?([A-Z]*\d+[A-Z0-9]*)$/);
+  return match ? `${match[1]}-${match[2]}` : "";
+}
+
 function codeV121(value){
-  const text = String(value || "").toUpperCase();
-  const match = text.match(/([A-Z]{3})[-\s]?([A-Z]?\d{2,3}[A-Z]?)/);
-  return match ? `${match[1]}-${match[2]}` : text.trim();
+  const normalized = normalizeCardCodeV162(value);
+  return normalized || String(value || "").toUpperCase().trim();
 }
 
 function cardKeyFromBackupRowV121(row){
@@ -1498,9 +1503,8 @@ function normalizeCatalogNameV131(name){
 }
 
 function catalogCardCodeV131(card){
-  const text = String(card.publicCode || card.dotggCode || "").toUpperCase();
-  const match = text.match(/([A-Z]{3})[-\s]?([A-Z]?\d{2,3}[A-Z]?)/);
-  return match ? `${match[1]}-${match[2]}` : text.trim();
+  const text = String(card.publicCode || card.dotggCode || "").toUpperCase().trim();
+  return normalizeCardCodeV162(text) || text;
 }
 
 function auditCatalogV131(){
@@ -1880,8 +1884,7 @@ function numberV141(value){
 
 function codeV141(value){
   const text = String(value || "").toUpperCase().trim();
-  const match = text.match(/([A-Z]{3})[-\s]?([A-Z]?\d{2,3}[A-Z]?)/);
-  return match ? `${match[1]}-${match[2]}` : text;
+  return normalizeCardCodeV162(text) || text;
 }
 
 function inventoryFromRowsV141(rows){

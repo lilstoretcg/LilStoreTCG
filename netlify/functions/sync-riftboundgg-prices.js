@@ -1,4 +1,5 @@
 const { getStore, connectLambda } = require("@netlify/blobs");
+const { normalizeCardCode } = require("./card-code");
 
 const INVENTORY_STORE = "lilstore-inventory";
 const INVENTORY_KEY = "inventory";
@@ -53,16 +54,7 @@ function removeLegacyInventoryPrices(inventory = {}) {
 }
 
 function normalizeCode(raw = "") {
-  const text = String(raw || "")
-    .toUpperCase()
-    .trim()
-    .split("/")[0]; // Convierte OGN-001/298 -> OGN-001
-
-  const match = text.match(/^([A-Z]{3})[-\s]?([A-Z]?\d{2,3}[A-Z]?)$/);
-
-  if (!match) return "";
-
-  return `${match[1]}-${match[2]}`;
+  return normalizeCardCode(raw);
 }
 function possibleCodes(card = {}) {
 

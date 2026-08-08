@@ -1,4 +1,5 @@
 const { getStore, connectLambda } = require("@netlify/blobs");
+const { normalizeCardCode } = require("./card-code");
 
 const STORE_NAME = "lilstore-catalog";
 const CATALOG_KEY = "cards";
@@ -42,8 +43,7 @@ function json(statusCode, body) {
 }
 
 function shortCode(value = "") {
-  const match = String(value).toUpperCase().match(/([A-Z]{3})-([A-Z]?\d{2,3}[A-Z]?)/);
-  return match ? `${match[1]}-${match[2]}` : "";
+  return normalizeCardCode(value);
 }
 
 function setNameFromCode(code, fallback = "") {

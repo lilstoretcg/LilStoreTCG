@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "test:card-codes": "node tests/card-code-format.test.js",
     "import:gallery": "node scripts/import-riftbound-gallery.js",
     "import:origins": "node scripts/import-origins-gallery-v6.js",
     "import:stock": "node scripts/import-stock.js",
