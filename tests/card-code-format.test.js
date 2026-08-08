@@ -5,6 +5,9 @@ for (const code of ["OGN-001", "SFD-R01", "UNL-R01A", "VEN-SP1", "VEN-SP6", "VEN
   assert.equal(normalizeCardCode(code), code);
 }
 
+assert.equal(normalizeCardCode("SFD-178a-P"), "SFD-178A");
+assert.equal(normalizeCardCode("UNL-082b-P"), "UNL-082B");
+assert.equal(normalizeCardCode("VEN-R04B-P"), "VEN-R04B");
 assert.equal(normalizeCardCode("VEN SP42"), "VEN-SP42");
 assert.equal(normalizeCardCode("VEN-SP1/999"), "VEN-SP1");
 assert.equal(normalizeCardCode("VEN-SP"), "");
