@@ -470,6 +470,7 @@ if (item.card.publicCode === "SFD-247") {
 if (catalogCard && market) {
 
   catalogCard.marketPrice = Number(market.toFixed(2));
+  catalogCard.priceSource = "dotgg";
 
   catalogCard.storePrice = Math.max(
     Math.round(market * dollar * margin),

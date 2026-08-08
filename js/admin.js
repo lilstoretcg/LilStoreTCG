@@ -77,20 +77,19 @@ function currentFoilStockFor(card){
   return supportsFoil(card) ? normalizeEntry(card).foilStock : 0;
 }
 
-function requiresManualPrice(card){
-  const entry = normalizeEntry(card);
-  return Number(entry.marketPrice || 0) <= 0 && Number(entry.foilMarketPrice || 0) <= 0;
+function priceSourceFor(card){
+  return card.priceSource === "manual" ? "manual" : "dotgg";
 }
 
 function updateStats(){
   const totalUnits = cards.reduce((sum, card)=>sum + currentStockFor(card) + currentFoilStockFor(card), 0);
   const availableCards = cards.filter(card=>currentStockFor(card)>0 || currentFoilStockFor(card)>0).length;
-  const manualPriceCards = cards.filter(requiresManualPrice).length;
+  const manualPriceCards = cards.filter(card=>priceSourceFor(card) === "manual").length;
 
   document.getElementById("totalCards").textContent = cards.length;
   document.getElementById("availableCards").textContent = availableCards;
   document.getElementById("totalUnits").textContent = totalUnits;
-  document.getElementById("manualPriceCards").textContent = manualPriceCards;
+  document.getElementById("manualPriceSourceCards").textContent = manualPriceCards;
 }
 
 function render(){
@@ -105,7 +104,7 @@ function render(){
     const stock = currentStockFor(card);
     const foilStock = currentFoilStockFor(card);
     const priceEntry = normalizeEntry(card);
-    const hasMarketPrice = !requiresManualPrice(card);
+    const priceSource = priceSourceFor(card);
     const matchesText =
       String(card.name || "").toLowerCase().includes(q) ||
       String(card.publicCode || "").toLowerCase().includes(q) ||
@@ -115,8 +114,8 @@ function render(){
 
     const matchesPrice =
       !priceValue ||
-      (priceValue === "priced" && hasMarketPrice) ||
-      (priceValue === "manual-price" && !hasMarketPrice);
+      (priceValue === "automatic-price" && priceSource === "dotgg") ||
+      (priceValue === "manual-price" && priceSource === "manual");
 
     const matchesStock =
       !legacyStockFilter ||
@@ -152,11 +151,12 @@ function render(){
     `;
   }).join("");
 
-  rowsEl.querySelectorAll('[data-field="marketPrice"], [data-field="foilMarketPrice"]').forEach(input=>{
+  rowsEl.querySelectorAll('[data-field="marketPrice"], [data-field="storePrice"], [data-field="foilMarketPrice"], [data-field="foilStorePrice"]').forEach(input=>{
     input.addEventListener("input", ()=>{
       const card = cards.find(item => keyFor(item) === input.dataset.cardKey);
       if(!card) return;
       card[input.dataset.field] = Math.max(0, Number(input.value || 0));
+      card.priceSource = "manual";
       updateStats();
     });
   });
@@ -207,13 +207,31 @@ async function save(){
     return;
   }
 
+  const manualPriceUpdates = new Map();
+
   document.querySelectorAll("[data-card-key]").forEach(input=>{
     if(input.disabled) return;
 
     const key = input.dataset.cardKey;
     const field = input.dataset.field;
-    if(["marketPrice", "storePrice", "foilMarketPrice", "foilStorePrice"].includes(field)) return;
     const value = Number(input.value || 0);
+
+    if(["marketPrice", "storePrice", "foilMarketPrice", "foilStorePrice"].includes(field)){
+      const card = cards.find(item => keyFor(item) === key);
+      if(!card) return;
+      card[field] = ["marketPrice", "foilMarketPrice"].includes(field)
+        ? Math.max(0, Number(value.toFixed(2)))
+        : Math.max(0, Math.round(value));
+      card.priceSource = "manual";
+      manualPriceUpdates.set(key, {
+        cardKey: key,
+        marketPrice: Number(card.marketPrice || 0),
+        storePrice: Number(card.storePrice || 0),
+        foilMarketPrice: Number(card.foilMarketPrice || 0),
+        foilStorePrice: Number(card.foilStorePrice || 0)
+      });
+      return;
+    }
 
     if(typeof inventory[key] === "number"){
       inventory[key] = { stock: inventory[key] };
@@ -252,7 +270,24 @@ async function save(){
     return;
   }
 
-  showMessage(`Inventario guardado correctamente. Cartas editadas: ${data.updated}`);
+  if(manualPriceUpdates.size){
+    const priceRes = await fetch("/.netlify/functions/manual-prices", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "x-admin-pin":pin
+      },
+      body: JSON.stringify({ updates:[...manualPriceUpdates.values()] })
+    });
+    const priceData = await priceRes.json().catch(()=>({}));
+    if(!priceRes.ok){
+      showMessage(priceData.error || "El inventario se guardó, pero no se pudieron guardar los precios manuales.", true);
+      return;
+    }
+    if(Array.isArray(priceData.cards)) cards = priceData.cards;
+  }
+
+  showMessage(`Inventario guardado correctamente. Cartas editadas: ${data.updated}${manualPriceUpdates.size ? ` · Precios manuales: ${manualPriceUpdates.size}` : ""}`);
   render();
 }
 
