@@ -404,6 +404,7 @@ for (const catalogCard of catalog) {
 
     for (const item of candidates) {
       const priceData = await fetchDotGG(item.cardId);
+      const catalogCard = findCatalogCard(catalog, item.card);
 
       if (!priceData.ok) {
         const key = item.key;
@@ -419,6 +420,7 @@ for (const catalogCard of catalog) {
         }
 
         if (priceData.status === "NO_PRICE") {
+          if (catalogCard) catalogCard.requiresManualPrice = true;
           noPrice.push({
             publicCode: item.card.publicCode,
             dotggCode: item.card.dotggCode,
@@ -434,8 +436,6 @@ for (const catalogCard of catalog) {
       }
 
       const key = item.key;
-      const catalogCard = findCatalogCard(catalog, item.card);
-
       if (item.card.publicCode === "SFD-247") {
       console.log("MATCH", {
         buscada: item.card.publicCode,
@@ -471,6 +471,7 @@ if (catalogCard && market) {
 
   catalogCard.marketPrice = Number(market.toFixed(2));
   catalogCard.priceSource = "dotgg";
+  catalogCard.requiresManualPrice = false;
 
   catalogCard.storePrice = Math.max(
     Math.round(market * dollar * margin),

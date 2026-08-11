@@ -77,19 +77,15 @@ function currentFoilStockFor(card){
   return supportsFoil(card) ? normalizeEntry(card).foilStock : 0;
 }
 
-function priceSourceFor(card){
-  return card.priceSource === "manual" ? "manual" : "dotgg";
-}
-
 function updateStats(){
   const totalUnits = cards.reduce((sum, card)=>sum + currentStockFor(card) + currentFoilStockFor(card), 0);
   const availableCards = cards.filter(card=>currentStockFor(card)>0 || currentFoilStockFor(card)>0).length;
-  const manualPriceCards = cards.filter(card=>priceSourceFor(card) === "manual").length;
+  const requiresManualPriceCards = cards.filter(card=>card.requiresManualPrice === true).length;
 
   document.getElementById("totalCards").textContent = cards.length;
   document.getElementById("availableCards").textContent = availableCards;
   document.getElementById("totalUnits").textContent = totalUnits;
-  document.getElementById("manualPriceSourceCards").textContent = manualPriceCards;
+  document.getElementById("requiresManualPriceCards").textContent = requiresManualPriceCards;
 }
 
 function render(){
@@ -103,8 +99,6 @@ function render(){
   const filtered = cards.filter(card=>{
     const stock = currentStockFor(card);
     const foilStock = currentFoilStockFor(card);
-    const priceEntry = normalizeEntry(card);
-    const priceSource = priceSourceFor(card);
     const matchesText =
       String(card.name || "").toLowerCase().includes(q) ||
       String(card.publicCode || "").toLowerCase().includes(q) ||
@@ -114,8 +108,8 @@ function render(){
 
     const matchesPrice =
       !priceValue ||
-      (priceValue === "automatic-price" && priceSource === "dotgg") ||
-      (priceValue === "manual-price" && priceSource === "manual");
+      (priceValue === "dotgg-price" && card.requiresManualPrice !== true) ||
+      (priceValue === "requires-manual-price" && card.requiresManualPrice === true);
 
     const matchesStock =
       !legacyStockFilter ||
@@ -314,7 +308,8 @@ async function syncDotGGCatalog(){
         set: card.set,
         setCode: card.setCode,
         tcgplayerId: card.tcgplayerId,
-        cardType: card.cardType
+        cardType: card.cardType,
+        requiresManualPrice: card.requiresManualPrice === true
       }))
     })
   });

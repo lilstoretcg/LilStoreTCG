@@ -123,6 +123,7 @@ function normalizeObjectCard(entry) {
     status: "soldout",
     marketPrice: 0,
     storePrice: 0,
+    requiresManualPrice: false,
     image,
     tcgplayerId: "",
     source: "dotgg-catalog-api",
@@ -190,6 +191,7 @@ function normalizeArrayCard(entry) {
     status: "soldout",
     marketPrice: 0,
     storePrice: 0,
+    requiresManualPrice: false,
     image,
     tcgplayerId: "",
     source: "dotgg-catalog-api",
@@ -249,7 +251,8 @@ exports.handler = async (event) => {
       preservePublicCodeByShortCode[code] = card.publicCode || code;
       preserveDataByShortCode[code] = {
         tcgplayerId: card.tcgplayerId || "",
-        cardType: card.cardType || ""
+        cardType: card.cardType || "",
+        requiresManualPrice: card.requiresManualPrice === true
       };
     }
 
@@ -282,10 +285,12 @@ exports.handler = async (event) => {
       if (seen.has(key)) { duplicateCount++; continue; }
       seen.add(key);
 
-      card.publicCode = preservePublicCodeByShortCode[key] || card.publicCode;
-      if (preserveDataByShortCode[key]) {
-        card.tcgplayerId = preserveDataByShortCode[key].tcgplayerId || "";
-        card.cardType = card.cardType || preserveDataByShortCode[key].cardType || "";
+      const shortCardCode = shortCode(card.publicCode || card.dotggCode || "");
+      card.publicCode = preservePublicCodeByShortCode[shortCardCode] || card.publicCode;
+      if (preserveDataByShortCode[shortCardCode]) {
+        card.tcgplayerId = preserveDataByShortCode[shortCardCode].tcgplayerId || "";
+        card.cardType = card.cardType || preserveDataByShortCode[shortCardCode].cardType || "";
+        card.requiresManualPrice = preserveDataByShortCode[shortCardCode].requiresManualPrice;
       }
 
       normalized.push(card);
