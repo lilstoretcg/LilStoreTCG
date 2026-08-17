@@ -249,65 +249,35 @@ async function createLilStoreOrder(){
 }
 
 function whatsappMessageForOrder(order){
-  const setOrder = ["Origins", "Spiritforged", "Unleashed", "Vendetta"];
-  const setLabels = {
-    Origins: "ORIGINS",
-    Spiritforged: "SPIRITFORGED",
-    Unleashed: "UNLEASHED",
-    Vendetta: "VENDETTA"
-  };
-  const setByCode = { OGN: "Origins", SFD: "Spiritforged", UNL: "Unleashed", VEN: "Vendetta" };
-  const separator = "━━━━━━━━━━━━━━";
+  const detailLines = (order.items || []).flatMap(item=>{
+    const variant = String(item.variant || 'normal').trim();
+    const variantLabel = ` (${variant.charAt(0).toUpperCase()}${variant.slice(1)})`;
+    const qty = Number(item.qty || 0);
+    // El pedido guarda estos importes al crearse desde el carrito; no se recalculan
+    // contra el catálogo para que el mensaje sea una instantánea exacta de la compra.
+    const unitPrice = Number(item.unitPrice || 0);
+    const subtotal = Number(item.subtotal ?? unitPrice * qty);
 
-  const items = (order.items || [])
-    .map(item=>{
-      const code = String(item.code || item.cardKey || "").trim().toUpperCase();
-      const prefix = code.split("-")[0];
-      return { ...item, code, set: setByCode[prefix] || "Otros" };
-    })
-    .sort((a,b)=>{
-      const setDifference = (setOrder.indexOf(a.set) === -1 ? 99 : setOrder.indexOf(a.set)) -
-        (setOrder.indexOf(b.set) === -1 ? 99 : setOrder.indexOf(b.set));
-      return setDifference || a.code.localeCompare(b.code, "es", { numeric:true }) ||
-        String(a.name || "").localeCompare(String(b.name || ""), "es");
-    });
-
-  const groupedLines = [];
-  [...setOrder, "Otros"].forEach(set=>{
-    const group = items.filter(item=>item.set === set);
-    if(!group.length) return;
-
-    groupedLines.push(separator, `📦 ${setLabels[set] || String(set).toUpperCase()}`, separator, "");
-    group.forEach(item=>{
-      const variantLabel = item.variant === "foil" ? "Foil" : "Normal";
-      groupedLines.push(`• ${item.code} — ${item.name} (${variantLabel}) ×${item.qty}`);
-    });
-    groupedLines.push("");
+    return [
+      `• ${item.name || 'Carta'}${variantLabel}`,
+      `  Código: ${item.code || item.cardKey || ''}`,
+      `  Cantidad: ${qty}`,
+      `  Precio unitario: $${formatPesoGlobal(unitPrice)} CLP`,
+      `  Subtotal: $${formatPesoGlobal(subtotal)} CLP`,
+      ''
+    ];
   });
 
-  const total = Number(order.total || 0);
-  const shippingMessage = total < 35000
-    ? [
-        "🚚 Envío GRATIS sobre $35.000 CLP",
-        "a tu punto Blue Express de preferencia."
-      ]
-    : [
-        "🎉 ¡Felicidades!",
-        "",
-        "Tu pedido califica para",
-        "",
-        "🚚 ENVÍO GRATIS",
-        "a tu punto Blue Express de preferencia."
-      ];
-
+  const total = Number(order.total ?? 0);
   return [
-    "🛒 Pedido LilStore TCG",
-    `Pedido #${order.id}`,
+    '🛒 *Pedido LilStore TCG*',
+    '',
+    `Pedido: #${order.id}`,
     "",
-    ...groupedLines,
-    `💰 Total: $${formatPesoGlobal(total)} CLP`,
-    "",
-    ...shippingMessage
+    '📦 *Detalle del pedido:*',
+    '',
+    ...detailLines,
+    `💰 *Total: $${formatPesoGlobal(total)} CLP*`
   ].join("\n");
 }
 
