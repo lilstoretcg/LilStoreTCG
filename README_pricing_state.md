@@ -4,7 +4,7 @@ La configuración de dólar/multiplicador y el catálogo viven juntos en `lilsto
 
 Las actualizaciones utilizan `setJSON` con `onlyIfNew` o `onlyIfMatch`, verifican que el SDK devuelva `modified: true` y un ETag no vacío, y conservan los identificadores de operación confirmados para rechazar reintentos antiguos. `@netlify/blobs` está fijado en `10.7.13`; `package-lock.json` es el lockfile de instalación, y Netlify ejecuta `npm ci`.
 
-Configure en Netlify los valores privados `NETLIFY_BLOBS_API_TOKEN` y `NETLIFY_SITE_ID` en el proyecto de staging y luego en producción, con scope de ejecución de Functions y los contextos de deploy necesarios. Cree un Personal Access Token de Netlify con acceso a Blobs para el proyecto correspondiente; el código no lee el secreto desde el navegador ni lo devuelve en las respuestas. `NETLIFY_SITE_ID` debe ser el Project ID del mismo sitio. El ID configurado tiene prioridad sobre `x-nf-site-id`; si ambos existen y difieren, la función falla cerrada. No comparta ni copie el token en el repositorio, tickets, logs o comandos que queden en el historial. Sin `NETLIFY_BLOBS_API_TOKEN`, las lecturas usan el endpoint edge y las escrituras versionadas fallan cerradas con HTTP 503. Las lecturas fuertes no están disponibles mediante el `connectLambda(event)` de esta versión del SDK porque el contexto Lambda carece de `uncachedEdgeURL`; el token permite acceso directo a la API con consistencia fuerte.
+Para esta validación, configura en Netlify los valores privados `NETLIFY_BLOBS_API_TOKEN` y `NETLIFY_SITE_ID` únicamente en el proyecto de staging, con scope de ejecución de Functions y los contextos de deploy necesarios. Cree un Personal Access Token de Netlify con acceso a Blobs para ese proyecto; el código no lee el secreto desde el navegador ni lo devuelve en las respuestas. `NETLIFY_SITE_ID` debe ser el Project ID del mismo sitio. El ID configurado tiene prioridad sobre `x-nf-site-id`; si ambos existen y difieren, la función falla cerrada. No comparta ni copie el token en el repositorio, tickets, logs o comandos que queden en el historial. Sin `NETLIFY_BLOBS_API_TOKEN`, las lecturas usan el endpoint edge y las escrituras versionadas fallan cerradas con HTTP 503. Las lecturas fuertes no están disponibles mediante el `connectLambda(event)` de esta versión del SDK porque el contexto Lambda carece de `uncachedEdgeURL`; el token permite acceso directo a la API con consistencia fuerte. La configuración de producción queda fuera de este procedimiento.
 
 La sincronización de precios DotGG no lee ni escribe `lilstore-inventory`; por ello no puede restaurar una captura anterior ni reemplazar stock normal, foil o variantes especiales editados durante las consultas externas. Solo publica los cambios del catálogo mediante el registro versionado. El catálogo público emite el identificador de versión que el administrador y la tienda comparan con el endpoint de configuración.
 
@@ -16,6 +16,34 @@ No hay transacción atómica entre catálogo, inventario y pedidos. Las funcione
 2. En **Project configuration > General > Project information**, copia el Project ID de staging y compáralo privadamente con el de producción. En **Project configuration > Environment variables**, crea `NETLIFY_SITE_ID` con el ID de staging, `NETLIFY_BLOBS_API_TOKEN` como secreto y `ADMIN_PIN` con un PIN exclusivo de staging. Limita variables al contexto de Functions y deploy contexts usados. No pongas valores en el repo, comandos, capturas, logs ni en esta guía.
 3. Usa un Personal Access Token con acceso a Blobs para el sitio de staging; verifica en Netlify que la identidad/token pueda acceder al sitio correcto. No uses una credencial que permita accidentalmente operar en producción. No compartas el valor del token con quien ejecute las pruebas.
 4. Despliega solo a ese proyecto aislado y carga cartas, inventario y pedidos **sintéticos**. Verifica que su Project ID sea staging antes de guardar. La propia función prioriza `NETLIFY_SITE_ID` y rechaza una cabecera de sitio distinta.
+
+### Inicializar el catálogo pequeño de staging
+
+El repositorio incluye `tests/fixtures/staging-catalog.json`: siete cartas con códigos publicados de Origins, pero cantidades y valores de prueba inventados. Incluye Common, Uncommon, Rare, Epic y Showcase, stock normal/foil, variantes, precios automáticos y dos precios manuales. No contiene inventario ni pedidos de producción.
+
+1. En la interfaz de Netlify, abre el proyecto `pruebastienda` y copia su Project ID. Comprueba allí mismo que el Project ID de producción sea distinto. No continúes si no puedes comprobar ambos.
+2. En el proyecto `pruebastienda`, configura `NETLIFY_SITE_ID` y `STAGING_NETLIFY_SITE_ID` con el Project ID de staging; configura además `NETLIFY_BLOBS_API_TOKEN` y un `ADMIN_PIN` exclusivo de staging. Mantén los secretos como variables privadas y aplica los cambios al contexto de Functions. No guardes los valores secretos en archivos ni los pegues en una consola compartida.
+3. Despliega esta rama solamente al proyecto separado `pruebastienda`. No uses un Deploy Preview del proyecto de producción. El endpoint de inicialización solo acepta `pruebastienda.netlify.app`, exige que ambos IDs configurados coincidan, PIN correcto y acceso fuerte a Blobs.
+4. Abre la consola del navegador en `https://pruebastienda.netlify.app` y ejecuta el siguiente fragmento. El PIN se solicita en un diálogo y no se imprime. Antes de ejecutarlo, verifica visualmente en Netlify que sigues dentro del proyecto staging y que el catálogo y el inventario remoto están vacíos. La función aborta con 409 si encuentra inventario o cartas preexistentes; no los reemplaza.
+
+```js
+(async()=>{
+  const pin=prompt('PIN exclusivo de staging');
+  if(!pin)return;
+  const r=await fetch('/.netlify/functions/seed-staging-catalog',{
+    method:'POST',headers:{'x-admin-pin':pin}
+  });
+  const result=await r.json();
+  console.log('Seed HTTP:',r.status,'Resultado:',result);
+  if(!r.ok)throw new Error(result.error||'No se pudo inicializar el catálogo sintético.');
+  if(result.cards!==7)throw new Error('Cantidad inesperada de cartas inicializadas.');
+})();
+```
+
+5. Comprueba `/.netlify/functions/catalog` y el administrador. Verifica los siete códigos, stock normal/foil y variantes; cambia dólar/multiplicador desde **Administrador > Sincronización de precios**, y confirma que los precios automáticos se recalculan mientras los dos manuales permanecen intactos. Guarda la respuesta HTTP y las versiones, sin incluir PIN ni token.
+6. No pulses “Actualizar catálogo DotGG” ni ejecutes una sincronización externa mientras uses el catálogo sintético. La inicialización no toca el store de inventario ni el de pedidos. Las operaciones de stock que pruebes después son únicamente en staging.
+
+Si el Project ID no se puede verificar, falta cualquiera de las variables exigidas, el catálogo o inventario no están vacíos, o la función devuelve error, detente sin reintentar con otro destino. No se ha ejecutado ninguna escritura remota desde este equipo.
 
 ### Procedimiento de comprobación real
 
@@ -47,7 +75,7 @@ Haz las pruebas siguientes en la URL del sitio staging, nunca en producción. An
 ```
 
    **Aprueba:** un `200`, un `409`, y las versiones de settings y catálogo iguales; el segundo cambio no debe sobrescribir al primero. **Rechaza:** dos respuestas `200`, dos commits o versiones distintas.
-2. **Escritura y lectura fuerte inmediata.** Guarda una nueva configuración sintética desde el modal público con el PIN de staging. En cuanto responda, vuelve a leer settings y catálogo desde dos pestañas; confirma el mismo `stateVersion`, `catalogVersion` y `pricingVersion`, el valor recién guardado y el precio recalculado. Como la función exige acceso directo con el token y crea el store con consistencia `strong`, esta comprobación ejercita el backend real.
+2. **Escritura y lectura fuerte inmediata.** Desde el administrador, en **Sincronización de precios**, guarda una nueva configuración sintética con el PIN de staging. En cuanto responda, vuelve a leer settings y catálogo desde dos pestañas; confirma el mismo `stateVersion`, `catalogVersion` y `pricingVersion`, el valor recién guardado y el precio recalculado. Como la función exige acceso directo con el token y crea el store con consistencia `strong`, esta comprobación ejercita el backend real.
 3. **Interrupción y recuperación.** En DevTools Network, envía un POST válido a settings con `operationId` único y desconecta la pestaña/conexión antes de ver la respuesta. Reenvía exactamente cuerpo, `expectedVersion` y `operationId`. Lee el estado: debe quedar aplicada como máximo una vez (versión inicial + 1); no infieras que cortar la conexión cancela una escritura aceptada. Si después de leer otra operación distinta, reenvía el ID antiguo y confirma HTTP 409, sin incremento de versión.
 4. **Reintentos idempotentes.** Envía dos veces seguidas el mismo POST y el mismo ID antes de cualquier otro cambio. La repetición puede responder `200`, pero no debe aumentar la versión otra vez. Después guarda una operación nueva y reintenta el ID antiguo: debe recibir `409`, sin modificar el estado.
 5. **Catálogo, inventario y precios.** Carga cartas sintéticas con código conocido, stock normal, `foilStock`, variantes especiales, una carta `priceSource: "manual"` con precios normal/foil diferenciados y otra automática con precios base por rareza. Revisa catálogo antes/después de cambiar dólar/multiplicador y de sincronizar DotGG. Stock y variantes deben mantener los valores más recientes; los precios manuales no cambian; los automáticos reflejan precio USD × dólar × multiplicador con el piso de rareza aplicado una vez. Fuerza un conflicto de versión: debe fallar sin mensaje de éxito ni escritura parcial.

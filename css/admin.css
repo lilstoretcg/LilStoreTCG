@@ -753,6 +753,20 @@ td input[data-field="storePrice"]{
   max-width:220px;
 }
 
+#saveSharedPricingBtn{
+  background:#ffb000;
+  color:#111;
+  font-weight:900;
+}
+
+.shared-pricing-message{
+  grid-column:1 / -1;
+  min-height:1.2em;
+  color:#a7f3d0;
+}
+
+.shared-pricing-message.error{color:#fecaca;}
+
 /* En móvil, todo apilado y cómodo */
 @media(max-width:800px){
   .admin-collapsible-header{
@@ -775,6 +789,7 @@ td input[data-field="storePrice"]{
 
   #dollarInput,
   #marginInput,
+  #saveSharedPricingBtn,
   #syncPricesBtn,
   #debugDotGGBtn{
     width:100%;

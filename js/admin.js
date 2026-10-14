@@ -30,6 +30,8 @@ const restoreBackupFileInput = document.getElementById("restoreBackupFileInput")
 const restoreUploadedBackupBtn = document.getElementById("restoreUploadedBackupBtn");
 const saveBasePricesBtn = document.getElementById("saveBasePricesBtn");
 const applyBasePricesBtn = document.getElementById("applyBasePricesBtn");
+const saveSharedPricingBtn = document.getElementById("saveSharedPricingBtn");
+let pendingSharedPricing = null;
 
 function keyFor(card){
   return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
@@ -700,6 +702,48 @@ async function loadBasePrices(){
   }catch(e){}
 }
 
+async function saveSharedPricing(){
+  const pin = document.getElementById("adminPin")?.value.trim();
+  const messageEl = document.getElementById("sharedPricingMessage");
+  const setMessage = (text, error=false) => {
+    if(messageEl){ messageEl.textContent = text; messageEl.classList.toggle("error", error); }
+  };
+  if(!pin){ setMessage("Ingresa el PIN administrador para guardar la configuración.", true); return; }
+  const dollar = Number(document.getElementById("dollarInput")?.value);
+  const margin = Number(document.getElementById("marginInput")?.value);
+  if(!Number.isFinite(dollar) || dollar < 1 || dollar > 100000 || !Number.isFinite(margin) || margin < 0 || margin > 100){
+    setMessage("Revisa el dólar y el multiplicador antes de guardar.", true); return;
+  }
+  const signature = `${dollar}:${margin}:${sharedPricingVersion}`;
+  if(!pendingSharedPricing || pendingSharedPricing.signature !== signature){
+    pendingSharedPricing = { signature, operationId: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}` };
+  }
+  saveSharedPricingBtn.disabled = true;
+  setMessage("Guardando configuración y actualizando precios…");
+  try{
+    const res = await fetch("/.netlify/functions/settings", {
+      method:"POST",
+      headers:{"Content-Type":"application/json", "x-admin-pin":pin},
+      body:JSON.stringify({ pricing:{ dollar, margin }, expectedVersion:sharedPricingVersion, operationId:pendingSharedPricing.operationId })
+    });
+    const data = await res.json().catch(()=>({}));
+    if(!res.ok){
+      if(res.status === 409){ pendingSharedPricing = null; await loadBasePrices(); }
+      setMessage(data.error || "No se pudo guardar la configuración.", true);
+      return;
+    }
+    sharedPricingVersion = Number(data.pricingVersion ?? sharedPricingVersion + 1);
+    pendingSharedPricing = null;
+    await load();
+    await loadBasePrices();
+    setMessage("Configuración guardada y precios actualizados.");
+  }catch(error){
+    setMessage("No se pudo confirmar el guardado. Reintenta sin cambiar los valores.", true);
+  }finally{
+    saveSharedPricingBtn.disabled = false;
+  }
+}
+
 async function saveBasePrices(){
   const pin = document.getElementById("adminPin").value.trim();
   if(!pin){
@@ -953,6 +997,7 @@ completeOrderBtn?.addEventListener("click", completeOrder);
 auditDotGGBtn?.addEventListener("click", auditDotGGCodes);
 restoreExcelBackupBtn?.addEventListener("click", restoreExcelBackup);
 saveBasePricesBtn?.addEventListener("click", saveBasePrices);
+saveSharedPricingBtn?.addEventListener("click", saveSharedPricing);
 applyBasePricesBtn?.addEventListener("click", applyBasePrices);
 loadBasePrices();
 load();

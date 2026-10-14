@@ -16,23 +16,8 @@
       <span>Riftbound Singles Chile</span>
     </div>
   </a>
-  <div class="header-actions"><button id="openPricingSettings" class="pricing-settings-trigger" type="button">⚙️ Configurar precios</button><a class="cart-header-btn" href="cart.html" data-open-cart="true">🛒 <span>Carrito</span> <strong id="cartCount">0</strong></a></div>
+  <div class="header-actions"><a class="cart-header-btn" href="cart.html" data-open-cart="true">🛒 <span>Carrito</span> <strong id="cartCount">0</strong></a></div>
 </header>
-
-<div id="pricingSettingsModal" class="pricing-modal" aria-hidden="true">
-  <form id="pricingSettingsForm" class="pricing-modal-card">
-    <button id="closePricingSettings" class="pricing-modal-close" type="button" aria-label="Cerrar">×</button>
-    <h2>Configurar precios</h2>
-    <label for="pricingAdminPin">PIN administrador</label>
-    <input id="pricingAdminPin" type="password" autocomplete="current-password" required>
-    <label for="publicDollarInput">Valor del dólar (CLP)</label>
-    <input id="publicDollarInput" type="number" min="1" step="1" required>
-    <label for="publicMarginInput">Multiplicador LilStore</label>
-    <input id="publicMarginInput" type="number" min="0" step="0.01" required>
-    <p id="pricingSettingsMessage" role="status" aria-live="polite"></p>
-    <div class="pricing-modal-actions"><button type="submit">Guardar cambios</button><button id="cancelPricingSettings" type="button">Cancelar</button></div>
-  </form>
-</div>
 
 <div class="filters">
   <div class="filter-group search-group">

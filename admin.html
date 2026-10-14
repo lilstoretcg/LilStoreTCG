@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Stock - LilStore TCG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/admin.css?v=142">
+  <link rel="stylesheet" href="css/admin.css?v=143">
 </head>
 <body>
   <header class="admin-header">
@@ -240,13 +240,14 @@
           <input id="marginInput" type="number" min="0" step="0.01" value="1">
           <small>Ejemplo: 0.95 = 5% más barato que mercado.</small>
         </div>
-        
+        <button id="saveSharedPricingBtn" type="button">Guardar dólar y multiplicador</button>
         
       
         <button id="syncStockPricesBtn" type="button">Actualizar precios con stock</button>
         <button id="syncAllPricesBtn" type="button">Actualizar todos los precios</button>
         <button id="debugDotGGBtn" type="button">Diagnóstico DotGG</button>
 </div>
+      <div id="sharedPricingMessage" class="shared-pricing-message" role="status" aria-live="polite"></div>
       <small>Usa la API DotGG getcardprices como Market USD. Las cartas sin precio conservan su valor anterior y no se cuentan como errores técnicos.</small>
       <div id="lastPriceSyncInfo" class="last-sync-info">Última actualización: todavía no se ha registrado una sincronización.</div>
     </section>
@@ -287,7 +288,7 @@
 
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script src="js/admin.js?v=16.3.1"></script>
+  <script src="js/admin.js?v=16.3.2"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
