@@ -1,4 +1,6 @@
 let cards = [];
+let sharedPricingVersion = 0;
+let pendingManualPricesOperationId = null;
 let inventory = {};
 
 const rowsEl = document.getElementById("stockRows");
@@ -160,6 +162,9 @@ function render(){
 
 async function load(){
   showMessage("Cargando catálogo...");
+  let remoteCatalogVersion = null;
+  let remoteCatalogLoaded = false;
+  let remoteCatalogFailed = false;
 
   try{
     const catalogRes = await fetch("/.netlify/functions/catalog?v=" + Date.now(), { cache:"no-store" });
@@ -167,9 +172,17 @@ async function load(){
       const remoteCards = await catalogRes.json();
       if(Array.isArray(remoteCards) && remoteCards.length){
         cards = remoteCards;
+        remoteCatalogVersion = catalogRes.headers.get("X-LilStore-State-Version");
+        remoteCatalogLoaded = true;
       }
-    }
+    }else if(catalogRes.status>=500)remoteCatalogFailed=true;
   }catch(e){}
+
+  if(remoteCatalogFailed){
+    cards = [];
+    showMessage("No se pudo leer el catálogo versionado. Inténtalo de nuevo.", true);
+    return;
+  }
 
   if(!cards.length){
     try{
@@ -188,6 +201,22 @@ async function load(){
   }catch(e){
     inventory = {};
     showMessage("Modo local: no se pudo leer inventario remoto. En Netlify funcionará con Functions.", true);
+  }
+
+  if(remoteCatalogLoaded){
+    try{
+      const settingsRes = await fetch("/.netlify/functions/settings?v=" + Date.now(), { cache:"no-store" });
+      const settingsState = settingsRes.ok ? await settingsRes.json() : null;
+      if(!settingsState || remoteCatalogVersion === null || Number(remoteCatalogVersion) !== Number(settingsState.stateVersion)){
+        cards = [];
+        showMessage("El catálogo y la configuración de precios no coinciden. Recarga para evitar mostrar datos mezclados.", true);
+        return;
+      }
+    }catch(e){
+      cards = [];
+      showMessage("No se pudo verificar la versión del catálogo y los precios.", true);
+      return;
+    }
   }
 
   render();
@@ -265,13 +294,14 @@ async function save(){
   }
 
   if(manualPriceUpdates.size){
+    pendingManualPricesOperationId = pendingManualPricesOperationId || (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`);
     const priceRes = await fetch("/.netlify/functions/manual-prices", {
       method:"POST",
       headers:{
         "Content-Type":"application/json",
         "x-admin-pin":pin
       },
-      body: JSON.stringify({ updates:[...manualPriceUpdates.values()] })
+      body: JSON.stringify({ updates:[...manualPriceUpdates.values()], operationId:pendingManualPricesOperationId })
     });
     const priceData = await priceRes.json().catch(()=>({}));
     if(!priceRes.ok){
@@ -279,6 +309,7 @@ async function save(){
       return;
     }
     if(Array.isArray(priceData.cards)) cards = priceData.cards;
+    pendingManualPricesOperationId = null;
   }
 
   showMessage(`Inventario guardado correctamente. Cartas editadas: ${data.updated}${manualPriceUpdates.size ? ` · Precios manuales: ${manualPriceUpdates.size}` : ""}`);
@@ -657,8 +688,15 @@ async function loadBasePrices(){
   try{
     const res = await fetch("/.netlify/functions/settings?v=" + Date.now(), { cache:"no-store" });
     if(!res.ok) return;
-    const rules = await res.json();
-    fillBasePrices(rules);
+    const data = await res.json();
+    fillBasePrices(data.basePrices || data);
+    if(data.pricing){
+      const dollar = document.getElementById("dollarInput");
+      const margin = document.getElementById("marginInput");
+      if(dollar) dollar.value = data.pricing.dollar;
+      if(margin) margin.value = data.pricing.margin;
+    }
+    sharedPricingVersion = Number(data.pricingVersion || 0);
   }catch(e){}
 }
 
@@ -1490,13 +1528,13 @@ async function syncPricesV13(mode="stock"){
   const pin=document.getElementById("adminPin").value.trim(); if(!pin){showMessage("Ingresa el PIN administrador antes de actualizar precios.",true);return;}
   const dollar=Number(document.getElementById("dollarInput")?.value||900), margin=Number(document.getElementById("marginInput")?.value||1), batchSize=25;
   const payloadCards=payloadCardsV13(mode); if(!payloadCards.length){showMessage(mode==="stock"?"No hay cartas con stock para actualizar.":"No hay cartas cargadas.",true);return;}
-  __dotggSyncCancelRequested=false; let offset=0,totalUpdated=0,totalFailed=0,totalNotFound=0,totalProcessed=0,batch=1; const totalBatches=Math.ceil(payloadCards.length/batchSize), label=mode==="stock"?"cartas con stock":"todo el catálogo";
+  __dotggSyncCancelRequested=false; let offset=0,totalUpdated=0,totalFailed=0,totalNotFound=0,totalProcessed=0,batch=1,pricingApplied=false; const syncOperationId=crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random()}`; const totalBatches=Math.ceil(payloadCards.length/batchSize), label=mode==="stock"?"cartas con stock":"todo el catálogo";
   setDotGGProgress(0,payloadCards.length,`Iniciando actualización de ${label}...`);
   while(offset<payloadCards.length){
     if(__dotggSyncCancelRequested){showMessage(`Sincronización cancelada. Procesadas: ${totalProcessed}.`,true);return;}
-    const res=await fetch("/.netlify/functions/sync-riftboundgg-prices",{method:"POST",headers:{"Content-Type":"application/json","x-admin-pin":pin},body:JSON.stringify({cards:payloadCards,offset,limit:batchSize,dollar,margin,syncMode:mode})});
+    const res=await fetch("/.netlify/functions/sync-riftboundgg-prices",{method:"POST",headers:{"Content-Type":"application/json","x-admin-pin":pin},body:JSON.stringify({cards:payloadCards,offset,limit:batchSize,dollar,margin,syncMode:mode,expectedPricingVersion:sharedPricingVersion,priorFailedCount:totalFailed,operationId:`${syncOperationId}-${offset}`})});
     const data=await res.json().catch(()=>({})); if(!res.ok){const detail=data.message||data.error||"No se pudieron sincronizar los precios.";showMessage(detail,true);setDotGGProgress(totalProcessed,payloadCards.length,`Error en lote ${batch}: ${detail}`);return;}
-    const processed=Number(data.processed||data.uniqueCodes||0); totalProcessed+=processed; totalUpdated+=Number(data.updated||0); totalFailed+=Number(data.failedCount||0); totalNotFound+=Number(data.notFoundCount||0); offset=Number(data.nextOffset||(offset+batchSize));
+    pricingApplied=Boolean(data.pricingApplied); const processed=Number(data.processed||data.uniqueCodes||0); totalProcessed+=processed; totalUpdated+=Number(data.updated||0); totalFailed+=Number(data.failedCount||0); totalNotFound+=Number(data.notFoundCount||0); offset=Number(data.nextOffset||(offset+batchSize));
     setDotGGProgress(Math.min(offset,payloadCards.length),payloadCards.length,`Lote ${batch}/${totalBatches} · Actualizadas: ${totalUpdated} · Sin precio: ${totalNotFound} · Errores técnicos: ${totalFailed}`); batch++; await new Promise(r=>setTimeout(r,800));
   }
   try{
@@ -1518,6 +1556,7 @@ try{
   }
 }catch(e){}
 
+if(pricingApplied) sharedPricingVersion++;
 render();
 updateStats();
 
@@ -1530,11 +1569,11 @@ saveSyncV13({
   failed:totalFailed
 });
 
-  const msg=`Sincronización completa (${label}). Procesadas: ${totalProcessed}. Actualizadas: ${totalUpdated}. Sin precio: ${totalNotFound}. Errores técnicos: ${totalFailed}.`; setDotGGProgress(payloadCards.length,payloadCards.length,msg); showMessage(msg);
+  const msg=`Sincronización completa (${label}). Procesadas: ${totalProcessed}. Actualizadas: ${totalUpdated}. Sin precio: ${totalNotFound}. Errores técnicos: ${totalFailed}.${pricingApplied?" Configuración de precios guardada.":" La configuración no cambió porque hubo errores técnicos."}`; setDotGGProgress(payloadCards.length,payloadCards.length,msg); showMessage(msg);
 }
 function renderCatalogAuditV13(data=null){const el=document.getElementById("catalogAuditSummary");if(!el)return;const x=data||JSON.parse(localStorage.getItem("lilstore_catalog_audit_v13")||"null");if(!x){el.textContent="Aún no se ha registrado una actualización de catálogo.";return;}const b=x.bySet||{};el.innerHTML=`<strong>Último catálogo:</strong> Origins ${Number(b.Origins||0).toLocaleString("es-CL")} · Spiritforged ${Number(b.Spiritforged||0).toLocaleString("es-CL")} · Unleashed ${Number(b.Unleashed||0).toLocaleString("es-CL")} · Vendetta ${Number(b.Vendetta||0).toLocaleString("es-CL")} · Total ${Number(x.saved||0).toLocaleString("es-CL")}`;}
 const __catalogOriginalV13=typeof syncDotGGCatalog==="function"?syncDotGGCatalog:null;
-if(__catalogOriginalV13){syncDotGGCatalog=async function(){const pin=document.getElementById("adminPin").value.trim();if(!pin){showMessage("Ingresa el PIN administrador antes de actualizar catálogo.",true);return;}showMessage("Actualizando catálogo desde DotGG...");const res=await fetch("/.netlify/functions/sync-dotgg-catalog",{method:"POST",headers:{"Content-Type":"application/json","x-admin-pin":pin},body:JSON.stringify({currentCards:cards.map(c=>({name:c.name,publicCode:c.publicCode,dotggCode:c.dotggCode,set:c.set,setCode:c.setCode,tcgplayerId:c.tcgplayerId,cardType:c.cardType}))})});const data=await res.json().catch(()=>({}));if(!res.ok){showMessage(data.error||data.message||"No se pudo actualizar el catálogo.",true);return;}localStorage.setItem("lilstore_catalog_audit_v13",JSON.stringify({saved:data.saved,bySet:data.bySet,duplicateCount:data.duplicateCount||0,updatedAt:new Date().toISOString()}));renderCatalogAuditV13(data);try{const cr=await fetch("/.netlify/functions/catalog?v="+Date.now(),{cache:"no-store"});if(cr.ok){const rc=await cr.json();if(Array.isArray(rc)&&rc.length)cards=rc;}}catch(e){}render();showMessage(`Catálogo actualizado: ${data.saved} cartas. Origins: ${data.bySet?.Origins||0}, Spiritforged: ${data.bySet?.Spiritforged||0}, Unleashed: ${data.bySet?.Unleashed||0}, Vendetta: ${data.bySet?.Vendetta||0}.`);};}
+if(__catalogOriginalV13){syncDotGGCatalog=async function(){const pin=document.getElementById("adminPin").value.trim();if(!pin){showMessage("Ingresa el PIN administrador antes de actualizar catálogo.",true);return;}showMessage("Actualizando catálogo desde DotGG...");const res=await fetch("/.netlify/functions/sync-dotgg-catalog",{method:"POST",headers:{"Content-Type":"application/json","x-admin-pin":pin},body:JSON.stringify({operationId:`catalog-${crypto.randomUUID?crypto.randomUUID():Date.now()}`,currentCards:cards.map(c=>({name:c.name,publicCode:c.publicCode,dotggCode:c.dotggCode,set:c.set,setCode:c.setCode,tcgplayerId:c.tcgplayerId,cardType:c.cardType}))})});const data=await res.json().catch(()=>({}));if(!res.ok){showMessage(data.error||data.message||"No se pudo actualizar el catálogo.",true);return;}localStorage.setItem("lilstore_catalog_audit_v13",JSON.stringify({saved:data.saved,bySet:data.bySet,duplicateCount:data.duplicateCount||0,updatedAt:new Date().toISOString()}));renderCatalogAuditV13(data);try{const cr=await fetch("/.netlify/functions/catalog?v="+Date.now(),{cache:"no-store"});if(cr.ok){const rc=await cr.json();if(Array.isArray(rc)&&rc.length)cards=rc;}}catch(e){}render();showMessage(`Catálogo actualizado: ${data.saved} cartas. Origins: ${data.bySet?.Origins||0}, Spiritforged: ${data.bySet?.Spiritforged||0}, Unleashed: ${data.bySet?.Unleashed||0}, Vendetta: ${data.bySet?.Vendetta||0}.`);};}
 document.addEventListener("DOMContentLoaded",()=>{syncStockPricesBtn?.addEventListener("click",()=>syncPricesV13("stock"));syncAllPricesBtn?.addEventListener("click",()=>syncPricesV13("all"));renderLastSyncV13();renderCatalogAuditV13();const old=document.getElementById("syncCatalogBtn");if(old){const n=old.cloneNode(true);old.parentNode.replaceChild(n,old);n.addEventListener("click",syncDotGGCatalog);}});
 
 

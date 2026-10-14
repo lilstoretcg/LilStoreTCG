@@ -1,15 +1,10 @@
-const { getStore, connectLambda } = require("@netlify/blobs");
 const { normalizeCardCode } = require("./card-code");
 
-const INVENTORY_STORE = "lilstore-inventory";
-const INVENTORY_KEY = "inventory";
-
 const CATALOG_STORE = "lilstore-catalog";
-const CATALOG_KEY = "cards";
 
 const SETTINGS_STORE = "lilstore-settings";
 const BASE_PRICES_KEY = "base-prices";
-const PRICE_FIELDS = ["marketPrice", "storePrice", "foilMarketPrice", "foilStorePrice"];
+const { applyPricing, applyDotggQuote, readState, updateState, connectSharedStorage, getSharedStore, requireStrongStorage } = require("./pricing-state");
 
 const DOTGG_PRICE_URL = "https://api.dotgg.gg/cgfw/getcardprices";
 
@@ -37,20 +32,8 @@ function toNumber(value) {
   return Number.isFinite(n) && n > 0 ? n : null;
 }
 
-function keyFor(card) {
-  return card.publicCode || card.dotggCode || `${card.setCode || card.set}-${card.name}`;
-}
-
 function supportsFoil(card) {
   return ["common", "uncommon"].includes(String(card.rarity || "").toLowerCase());
-}
-
-function removeLegacyInventoryPrices(inventory = {}) {
-  for (const value of Object.values(inventory)) {
-    if (!value || typeof value !== "object") continue;
-    for (const field of PRICE_FIELDS) delete value[field];
-  }
-  return inventory;
 }
 
 function normalizeCode(raw = "") {
@@ -298,18 +281,11 @@ function defaultBasePrices() {
 
 async function getBasePrices() {
   try {
-    const settingsStore = getStore(SETTINGS_STORE);
+    const settingsStore = getSharedStore(SETTINGS_STORE);
     return await settingsStore.get(BASE_PRICES_KEY, { type: "json" }) || defaultBasePrices();
   } catch {
     return defaultBasePrices();
   }
-}
-
-function basePriceForCard(card, rules, variant = "normal") {
-  const rarity = String(card.rarity || "").toLowerCase();
-  const rule = rules[rarity];
-  if (!rule) return 0;
-  return Math.max(0, Math.round(Number(variant === "foil" ? rule.foil : rule.normal || 0)));
 }
 
 async function debugDotGG(event = {}) {
@@ -335,13 +311,14 @@ exports.handler = async (event) => {
   }
 
   try {
-    connectLambda(event);
+    connectSharedStorage(event);
 
     const adminPin = process.env.ADMIN_PIN || "";
     const receivedPin = event.headers["x-admin-pin"] || event.headers["X-Admin-Pin"] || "";
 
     if (!adminPin) return json(500, { error: "Falta configurar ADMIN_PIN en Netlify." });
     if (receivedPin !== adminPin) return json(401, { error: "PIN incorrecto." });
+    requireStrongStorage();
 
     let payload;
     try {
@@ -353,12 +330,17 @@ exports.handler = async (event) => {
     const allCards = Array.isArray(payload.cards) ? payload.cards : [];
     const offset = Math.max(0, Number(payload.offset || 0));
     const limit = Math.min(Math.max(1, Number(payload.limit || 25)), 40);
-    const dollar = Number(payload.dollar || 900);
-    const margin = Number(payload.margin || 1);
+    const dollar = Number(payload.dollar ?? 900);
+    const margin = Number(payload.margin ?? 1);
+    const expectedPricingVersion = Number(payload.expectedPricingVersion);
+    const priorFailedCount = Math.max(0, Number(payload.priorFailedCount || 0));
     const syncMode = String(payload.syncMode || "all");
 
     if (!allCards.length) {
       return json(400, { error: "No se recibieron cartas para actualizar." });
+    }
+    if (!Number.isFinite(dollar) || dollar < 1 || dollar > 100000 || !Number.isFinite(margin) || margin < 0 || margin > 100 || !Number.isInteger(expectedPricingVersion) || expectedPricingVersion < 0) {
+      return json(400, { error: "Configuración de precios inválida o desactualizada." });
     }
 
     const cards = allCards.slice(offset, offset + limit);
@@ -371,34 +353,23 @@ exports.handler = async (event) => {
 
       candidates.push({
         card,
-        key: keyFor(card),
         cardId: codes[0],
         catalogCode: normalizeCode(card.publicCode || card.dotggCode)
       });
     }
 
-    const inventoryStore = getStore(INVENTORY_STORE);
-    const catalogStore = getStore(CATALOG_STORE);
+    const catalogStore = getSharedStore(CATALOG_STORE);
 
-const inventory =
-  await inventoryStore.get(INVENTORY_KEY, { type: "json" }) || {};
-
-const catalog =
-  await catalogStore.get(CATALOG_KEY, { type: "json" }) || [];
-
-const catalogIndex = new Map();
-
-for (const catalogCard of catalog) {
-  const code = normalizeCode(catalogCard.publicCode || catalogCard.dotggCode);
-
-  if (code) {
-    catalogIndex.set(code, catalogCard);
-  }
-}
+const { state: catalogState } = await readState(catalogStore);
+const catalog = catalogState.cards || [];
+    if (Number(catalogState.pricingVersion || 0) !== expectedPricingVersion) {
+      return json(409, { error: "La configuración de precios cambió antes de iniciar la sincronización. Recarga el administrador e inténtalo de nuevo." });
+    }
 
     const basePrices = await getBasePrices();
-
+    const legacyPricing = await getSharedStore(SETTINGS_STORE).get("pricing", { type: "json" });
     let updated = 0;
+    const updatedCatalogCodes = new Set();
     const failed = [];
     const noPrice = [];
 
@@ -407,20 +378,11 @@ for (const catalogCard of catalog) {
       const catalogCard = findCatalogCard(catalog, item.card);
 
       if (!priceData.ok) {
-        const key = item.key;
-
-        // Asegura que la carta exista en inventario, pero conserva todos sus precios previos.
-        if (typeof inventory[key] === "number") {
-          inventory[key] = { stock: inventory[key] };
-        }
-        inventory[key] = inventory[key] || {};
-        inventory[key].stock = Number(inventory[key].stock ?? item.card.stock ?? 0);
-        if (supportsFoil(item.card)) {
-          inventory[key].foilStock = Number(inventory[key].foilStock ?? item.card.foilStock ?? 0);
-        }
-
         if (priceData.status === "NO_PRICE") {
-          if (catalogCard) catalogCard.requiresManualPrice = true;
+          if (catalogCard && catalogCard.priceSource !== "manual") {
+            catalogCard.requiresManualPrice = true;
+            updatedCatalogCodes.add(normalizeCode(catalogCard.publicCode || catalogCard.dotggCode));
+          }
           noPrice.push({
             publicCode: item.card.publicCode,
             dotggCode: item.card.dotggCode,
@@ -435,7 +397,6 @@ for (const catalogCard of catalog) {
         continue;
       }
 
-      const key = item.key;
       if (item.card.publicCode === "SFD-247") {
       console.log("MATCH", {
         buscada: item.card.publicCode,
@@ -444,17 +405,6 @@ for (const catalogCard of catalog) {
      });
    }
 
-
-      if (typeof inventory[key] === "number") {
-        inventory[key] = { stock: inventory[key] };
-      }
-
-      inventory[key] = inventory[key] || {};
-      inventory[key].stock = Number(inventory[key].stock ?? item.card.stock ?? 0);
-
-      if (supportsFoil(item.card)) {
-        inventory[key].foilStock = Number(inventory[key].foilStock ?? item.card.foilStock ?? 0);
-      }
 
      const market = priceData.normalPrice || priceData.effectivePrice;
 
@@ -468,39 +418,43 @@ if (item.card.publicCode === "SFD-247") {
 }
 
 if (catalogCard && market) {
-
-  catalogCard.marketPrice = Number(market.toFixed(2));
-  catalogCard.priceSource = "dotgg";
-  catalogCard.requiresManualPrice = false;
-
-  catalogCard.storePrice = Math.max(
-    Math.round(market * dollar * margin),
-    basePriceForCard(item.card, basePrices, "normal")
-  );
-
-  if (supportsFoil(item.card) && priceData.foilPrice) {
-
-    catalogCard.foilMarketPrice =
-      Number(priceData.foilPrice.toFixed(2));
-
-    catalogCard.foilStorePrice = Math.max(
-      Math.round(priceData.foilPrice * dollar * margin),
-      basePriceForCard(item.card, basePrices, "foil")
-    );
-
+  const quoteResult = applyDotggQuote(catalogCard, priceData, { dollar, margin }, basePrices, supportsFoil(item.card));
+  if (quoteResult.changed) {
+    Object.assign(catalogCard, quoteResult.card);
+    updated++;
+    updatedCatalogCodes.add(normalizeCode(catalogCard.publicCode || catalogCard.dotggCode));
   }
-
-  updated++;
-
   await sleep(150);
 
 }
 
 }
 
-    await catalogStore.setJSON(CATALOG_KEY, catalog);
+    const done = offset + limit >= allCards.length;
+    const operationPricing = { dollar, margin };
+    const verifyState = await updateState(catalogStore, current => {
+      if (Number(current.pricingVersion || 0) !== expectedPricingVersion) {
+        const error = new Error("La configuración de precios cambió durante la sincronización. Vuelve a cargar el administrador e inténtalo de nuevo.");
+        error.statusCode = 409;
+        throw error;
+      }
+      const sourceByCode = new Map(catalog.map(card => [normalizeCode(card.publicCode || card.dotggCode), card]));
+      const merged = (current.cards || []).map(card => {
+        const code = normalizeCode(card.publicCode || card.dotggCode);
+        const source = sourceByCode.get(code);
+        if (!source || !updatedCatalogCodes.has(code) || card.priceSource === "manual") return card;
+        return { ...card, marketPrice: source.marketPrice, foilMarketPrice: source.foilMarketPrice, priceSource: source.priceSource, requiresManualPrice: source.requiresManualPrice };
+      });
+      const publishPricing = done && failed.length === 0 && priorFailedCount === 0;
+      const currentPricing = Number(current.pricingVersion || 0) === 0 ? (legacyPricing || current.pricing || { dollar, margin }) : (current.pricing || { dollar, margin });
+      const pricing = publishPricing ? operationPricing : currentPricing;
+      return { ...current, pricing, pricingVersion: Number(current.pricingVersion || 0) + (publishPricing ? 1 : 0), cards: applyPricing(merged, pricing, basePrices) };
+    }, String(payload.operationId || `dotgg-${offset}-${Date.now()}-${Math.random()}`));
+    if (verifyState._replayedOperationId && verifyState.lastOperation !== payload.operationId) {
+      return json(409, { error: "Este lote ya se aplicó y el catálogo cambió después. Reinicia la sincronización con datos actualizados." });
+    }
 
-const verify = await catalogStore.get(CATALOG_KEY, { type: "json" });
+const verify = verifyState.cards;
 
 const saved = verify.find(c => c.publicCode === "SFD-247");
 
@@ -509,10 +463,8 @@ console.log("VERIFY", {
   store: saved?.storePrice
 });
 
-    await inventoryStore.setJSON(INVENTORY_KEY, removeLegacyInventoryPrices(inventory));
-
     const nextOffset = offset + limit;
-    const done = nextOffset >= allCards.length;
+    const pricingApplied = done && failed.length === 0 && priorFailedCount === 0;
 
     return json(200, {
       ok: true,
@@ -522,6 +474,7 @@ console.log("VERIFY", {
       limit,
       nextOffset,
       done,
+      pricingApplied,
       total: allCards.length,
       processed: cards.length,
       uniqueCodes: cards.length,
@@ -542,8 +495,9 @@ console.log("VERIFY", {
       margin
     });
   } catch (error) {
-    return json(500, {
-      error: "Error interno sincronizando precios DotGG.",
+    const statusCode = Number(error.statusCode) || 500;
+    return json(statusCode, {
+      error: statusCode === 409 ? error.message : "Error interno sincronizando precios DotGG.",
       message: error.message || String(error),
       stack: error.stack || "",
       name: error.name || "Error"

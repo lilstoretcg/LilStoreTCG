@@ -1,6 +1,9 @@
 {
   "scripts": {
     "test:card-codes": "node tests/card-code-format.test.js",
+    "test:pricing-state": "node tests/pricing-state.test.js",
+    "test:blobs-api": "node tests/netlify-blobs-api.test.js",
+    "test:sync-concurrency": "node tests/sync-riftboundgg-prices.test.js",
     "import:gallery": "node scripts/import-riftbound-gallery.js",
     "import:origins": "node scripts/import-origins-gallery-v6.js",
     "import:stock": "node scripts/import-stock.js",
@@ -13,7 +16,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "xlsx": "^0.18.5",
-    "@netlify/blobs": "^8.1.0"
+    "@netlify/blobs": "10.7.13",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   }
 }

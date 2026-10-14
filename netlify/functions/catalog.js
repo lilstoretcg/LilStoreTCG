@@ -1,7 +1,5 @@
-const { getStore, connectLambda } = require("@netlify/blobs");
-
 const STORE_NAME = "lilstore-catalog";
-const CATALOG_KEY = "cards";
+const { readState, connectSharedStorage, getSharedStore } = require("./pricing-state");
 const ALLOWED_SET_CODES = new Set([
   "OGN",
   "SFD",
@@ -22,12 +20,13 @@ function allowedCard(card = {}) {
   return ALLOWED_SET_CODES.has(setCode) || ALLOWED_SET_NAMES.has(setName);
 }
 
-function json(statusCode, body) {
+function json(statusCode, body, extraHeaders = {}) {
   return {
     statusCode,
     headers: {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*"
+      "Access-Control-Allow-Origin": "*",
+      ...extraHeaders
     },
     body: JSON.stringify(body)
   };
@@ -35,9 +34,10 @@ function json(statusCode, body) {
 
 exports.handler = async (event) => {
   try {
-    connectLambda(event);
-    const store = getStore(STORE_NAME);
-    const catalog = await store.get(CATALOG_KEY, { type: "json" });
+    connectSharedStorage(event);
+    const store = getSharedStore(STORE_NAME);
+    const { state } = await readState(store);
+    const catalog = state.cards;
 
 console.log("CATALOG READ", {
   host: event.headers?.host,
@@ -57,8 +57,12 @@ console.log("CATALOG READ", {
     }))
 });
 
-    return json(200, Array.isArray(catalog) ? catalog.filter(allowedCard) : []);
+    return json(200, Array.isArray(catalog) ? catalog.filter(allowedCard) : [], {
+      "X-LilStore-State-Version": String(state.version || 0),
+      "X-LilStore-Catalog-Version": String(state.catalogVersion || 0),
+      "X-LilStore-Pricing-Version": String(state.pricingVersion || 0)
+    });
   } catch (error) {
-    return json(200, []);
+    return json(500, { error: "No se pudo leer el catálogo versionado.", message: error.message || String(error) });
   }
 };

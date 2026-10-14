@@ -23,15 +23,25 @@ function supportsFoil(card){
 }
 
 async function loadCatalog(){
-  try{
-    const remote = await fetch('/.netlify/functions/catalog?v=' + Date.now(), { cache:'no-store' });
-    if(remote.ok){
-      const remoteCards = await remote.json();
-      if(Array.isArray(remoteCards) && remoteCards.length){
-        return remoteCards;
-      }
-    }
-  }catch(e){}
+  let versionMismatch=false;
+  let remoteReadFailed=false;
+  for(let attempt=0;attempt<3;attempt++){
+    try{
+      const [remote,settings] = await Promise.all([
+        fetch('/.netlify/functions/catalog?v=' + Date.now(), { cache:'no-store' }),
+        fetch('/.netlify/functions/settings?v=' + Date.now(), { cache:'no-store' })
+      ]);
+      if(remote.ok&&settings.ok){
+        const [remoteCards,pricingState] = await Promise.all([remote.json(),settings.json()]);
+        const catalogVersion=remote.headers.get('X-LilStore-State-Version');
+        if(Array.isArray(remoteCards)&&remoteCards.length&&catalogVersion!==null&&Number(catalogVersion)===Number(pricingState.stateVersion))return remoteCards;
+        versionMismatch=true;
+      }else if(remote.status>=500||settings.status>=500)remoteReadFailed=true;
+    }catch(e){}
+    await new Promise(resolve=>setTimeout(resolve,120*(attempt+1)));
+  }
+
+  if(versionMismatch||remoteReadFailed)throw new Error('No se pudo verificar una versión coherente del catálogo y los precios. Recarga la página.');
 
   const cardsRes = await fetch('data/cards.json?v=' + Date.now(), { cache:'no-store' });
   return await cardsRes.json();
@@ -672,6 +682,7 @@ loadCards().then(cards=>{
   bindMiniCartButtons();
   render();
   try { renderMiniCart(); } catch(e) { console.error('Mini cart initial render error', e); }
+  setupPublicPricingControls(async()=>{cards=await loadCards();render();try{renderMiniCart();}catch{}});
 }).catch(err=>{
   const catalog=document.getElementById('catalog');
   if(catalog){
@@ -679,3 +690,51 @@ loadCards().then(cards=>{
   }
   console.error(err);
 });
+
+async function setupPublicPricingControls(refreshPrices){
+  const modal=document.getElementById('pricingSettingsModal');
+  const form=document.getElementById('pricingSettingsForm');
+  if(!modal||!form)return;
+  const open=document.getElementById('openPricingSettings');
+  let loadedPricingVersion=null;
+  let pendingOperationId=null;
+  const close=()=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true');};
+  const show=async()=>{
+    const message=document.getElementById('pricingSettingsMessage');
+    message.textContent='Cargando configuración…';
+    modal.classList.add('open');modal.setAttribute('aria-hidden','false');
+    try{
+      const res=await fetch('/.netlify/functions/settings?v='+Date.now(),{cache:'no-store'});
+      if(!res.ok)throw new Error('No se pudo cargar la configuración.');
+      const data=await res.json();
+      loadedPricingVersion=Number(data.pricingVersion||0);
+      document.getElementById('publicDollarInput').value=data.pricing?.dollar??900;
+      document.getElementById('publicMarginInput').value=data.pricing?.margin??1;
+      message.textContent=data.recoveryRequired?'Se detectó una versión desincronizada; al guardar se reparará de forma segura.':'';
+    }catch(e){message.textContent=e.message;}
+  };
+  open.addEventListener('click',show);
+  ['closePricingSettings','cancelPricingSettings'].forEach(id=>document.getElementById(id).addEventListener('click',close));
+  modal.addEventListener('click',e=>{if(e.target===modal)close();});
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const message=document.getElementById('pricingSettingsMessage');
+    const pin=document.getElementById('pricingAdminPin').value.trim();
+    const dollar=Number(document.getElementById('publicDollarInput').value);
+    const margin=Number(document.getElementById('publicMarginInput').value);
+    if(!pin){message.textContent='Ingresa el PIN administrador.';return;}
+    message.textContent='Guardando y actualizando precios…';
+    try{
+      pendingOperationId=pendingOperationId||(crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random()}`);
+      const res=await fetch('/.netlify/functions/settings',{method:'POST',headers:{'Content-Type':'application/json','x-admin-pin':pin},body:JSON.stringify({pricing:{dollar,margin},expectedVersion:loadedPricingVersion,operationId:pendingOperationId})});
+      const data=await res.json().catch(()=>({}));
+      if(!res.ok)throw new Error(data.error||'No se pudieron guardar los cambios.');
+      await refreshPrices();
+      loadedPricingVersion=Number(data.pricingVersion??loadedPricingVersion+1);
+      pendingOperationId=null;
+      message.textContent='Precios actualizados correctamente.';
+      document.getElementById('pricingAdminPin').value='';
+      setTimeout(close,900);
+    }catch(error){message.textContent=error.message;}
+  });
+}

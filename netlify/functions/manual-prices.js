@@ -1,8 +1,6 @@
-const { getStore, connectLambda } = require("@netlify/blobs");
-
 const STORE_NAME = "lilstore-catalog";
-const CATALOG_KEY = "cards";
 const PRICE_FIELDS = ["marketPrice", "storePrice", "foilMarketPrice", "foilStorePrice"];
+const { updateState, connectSharedStorage, getSharedStore, requireStrongStorage } = require("./pricing-state");
 
 function json(statusCode, body) {
   return {
@@ -29,11 +27,12 @@ exports.handler = async event => {
   if (event.httpMethod !== "POST") return json(405, { error: "Método no permitido." });
 
   try {
-    connectLambda(event);
+    connectSharedStorage(event);
     const pin = process.env.ADMIN_PIN || "";
     const receivedPin = event.headers["x-admin-pin"] || event.headers["X-Admin-Pin"] || "";
     if (!pin) return json(500, { error: "Falta configurar ADMIN_PIN en Netlify." });
     if (receivedPin !== pin) return json(401, { error: "PIN incorrecto." });
+    requireStrongStorage();
 
     const payload = JSON.parse(event.body || "{}");
     const updates = Array.isArray(payload.updates) ? payload.updates : [];
@@ -45,25 +44,28 @@ exports.handler = async event => {
       if (cardKey) byKey.set(cardKey, update);
     }
 
-    const store = getStore(STORE_NAME);
-    const cards = await store.get(CATALOG_KEY, { type: "json" }) || [];
-    let updated = 0;
-
-    for (const card of cards) {
-      const key = String(card.publicCode || card.dotggCode || "");
-      const update = byKey.get(key);
-      if (!update) continue;
-      for (const field of PRICE_FIELDS) {
-        if (Object.prototype.hasOwnProperty.call(update, field)) {
-          card[field] = normalizePrice(update[field], field);
+    const store = getSharedStore(STORE_NAME);
+    const operationId = String(payload.operationId || `${Date.now()}-${Math.random()}`);
+    const state = await updateState(store, current => {
+      let updated = 0;
+      const cards = (current.cards || []).map(card => {
+        const key = String(card.publicCode || card.dotggCode || "");
+        const update = byKey.get(key);
+        if (!update) return card;
+        const next = { ...card };
+        for (const field of PRICE_FIELDS) {
+          if (Object.prototype.hasOwnProperty.call(update, field)) next[field] = normalizePrice(update[field], field);
         }
-      }
-      card.priceSource = "manual";
-      updated++;
+        next.priceSource = "manual";
+        updated++;
+        return next;
+      });
+      return { ...current, cards, lastManualUpdateCount: updated };
+    }, operationId);
+    if (state._replayedOperationId && state.lastOperation !== operationId) {
+      return json(409, { error: "Esta edición ya se aplicó y después hubo otros cambios. Recarga los precios antes de continuar." });
     }
-
-    await store.setJSON(CATALOG_KEY, cards);
-    return json(200, { ok: true, updated, cards });
+    return json(200, { ok: true, updated: state.lastManualUpdateCount || 0, cards: state.cards });
   } catch (error) {
     return json(500, { error: "Error guardando precios manuales.", message: error.message || String(error) });
   }

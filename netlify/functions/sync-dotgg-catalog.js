@@ -1,8 +1,7 @@
-const { getStore, connectLambda } = require("@netlify/blobs");
 const { normalizeCardCode } = require("./card-code");
 
 const STORE_NAME = "lilstore-catalog";
-const CATALOG_KEY = "cards";
+const { updateState, connectSharedStorage, getSharedStore, requireStrongStorage } = require("./pricing-state");
 const DOTGG_CARDS_URL = "https://api.dotgg.gg/cgfw/getcards?game=riftbound&mode=indexed";
 
 const KNOWN_SETS = {
@@ -221,39 +220,66 @@ function sortCards(cards) {
   );
 }
 
+function mergeCatalog(existingCards, incomingCards) {
+  const existingByCode = new Map();
+  for (const card of existingCards || []) {
+    const code = shortCode(card.publicCode || card.dotggCode || "");
+    const queue = existingByCode.get(code) || [];
+    queue.push(card);
+    existingByCode.set(code, queue);
+  }
+  let nextId = (existingCards || []).reduce((max, card) => Math.max(max, Number(card.id) || 0), 0) + 1;
+  const matchedExisting = new Set();
+  const modified = [];
+  let added = 0;
+  const merged = (incomingCards || []).map(incoming => {
+    const code = shortCode(incoming.publicCode || incoming.dotggCode || "");
+    const existing = existingByCode.get(code)?.shift();
+    if (!existing) { added++; return { ...incoming, id: incoming.id ?? nextId++ }; }
+    matchedExisting.add(existing);
+    if (["name", "set", "setCode", "rarity", "image", "cardType"].some(field => incoming[field] !== undefined && incoming[field] !== existing[field])) modified.push(code);
+    return {
+      ...existing, ...incoming,
+      id: existing.id ?? incoming.id ?? nextId++,
+      publicCode: existing.publicCode || incoming.publicCode,
+      stock: existing.stock ?? incoming.stock,
+      foilStock: existing.foilStock ?? incoming.foilStock,
+      variants: existing.variants ?? incoming.variants,
+      marketPrice: existing.marketPrice ?? incoming.marketPrice,
+      storePrice: existing.storePrice ?? incoming.storePrice,
+      foilMarketPrice: existing.foilMarketPrice ?? incoming.foilMarketPrice,
+      foilStorePrice: existing.foilStorePrice ?? incoming.foilStorePrice,
+      priceSource: existing.priceSource ?? incoming.priceSource,
+      requiresManualPrice: existing.requiresManualPrice ?? incoming.requiresManualPrice,
+      tcgplayerId: existing.tcgplayerId || incoming.tcgplayerId,
+      cardType: existing.cardType || incoming.cardType
+    };
+  });
+  const missing = (existingCards || []).filter(card => !matchedExisting.has(card));
+  return { cards: sortCards([...merged, ...missing]), added, modified, missing };
+}
+
+exports.mergeCatalog = mergeCatalog;
+
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return json(200, { ok: true });
   if (event.httpMethod !== "POST") return json(405, { error: "Método no permitido." });
 
   try {
-    connectLambda(event);
+    connectSharedStorage(event);
 
     const adminPin = process.env.ADMIN_PIN || "";
     const receivedPin = event.headers["x-admin-pin"] || event.headers["X-Admin-Pin"] || "";
 
     if (!adminPin) return json(500, { error: "Falta configurar ADMIN_PIN en Netlify." });
     if (receivedPin !== adminPin) return json(401, { error: "PIN incorrecto." });
+    requireStrongStorage();
 
     let payload;
     try {
       payload = JSON.parse(event.body || "{}");
     } catch {
       return json(400, { error: "JSON inválido." });
-    }
-
-    const existingCards = Array.isArray(payload.currentCards) ? payload.currentCards : [];
-    const preservePublicCodeByShortCode = {};
-    const preserveDataByShortCode = {};
-
-    for (const card of existingCards) {
-      const code = shortCode(card.publicCode || card.dotggCode || "");
-      if (!code) continue;
-      preservePublicCodeByShortCode[code] = card.publicCode || code;
-      preserveDataByShortCode[code] = {
-        tcgplayerId: card.tcgplayerId || "",
-        cardType: card.cardType || "",
-        requiresManualPrice: card.requiresManualPrice === true
-      };
     }
 
     const response = await fetch(DOTGG_CARDS_URL, {
@@ -285,21 +311,22 @@ exports.handler = async (event) => {
       if (seen.has(key)) { duplicateCount++; continue; }
       seen.add(key);
 
-      const shortCardCode = shortCode(card.publicCode || card.dotggCode || "");
-      card.publicCode = preservePublicCodeByShortCode[shortCardCode] || card.publicCode;
-      if (preserveDataByShortCode[shortCardCode]) {
-        card.tcgplayerId = preserveDataByShortCode[shortCardCode].tcgplayerId || "";
-        card.cardType = card.cardType || preserveDataByShortCode[shortCardCode].cardType || "";
-        card.requiresManualPrice = preserveDataByShortCode[shortCardCode].requiresManualPrice;
-      }
-
       normalized.push(card);
     }
 
-    const sorted = sortCards(normalized).map((card, index) => ({ ...card, id: index + 1 }));
+    const sorted = sortCards(normalized);
 
-    const store = getStore(STORE_NAME);
-    await store.setJSON(CATALOG_KEY, sorted);
+    const store = getSharedStore(STORE_NAME);
+    let mergeReport;
+    const operationId = String(payload.operationId || "").trim();
+    const catalogState = await updateState(store, current => {
+      mergeReport = mergeCatalog(current.cards || [], sorted);
+      return { ...current, cards: mergeReport.cards };
+    }, operationId);
+    if (catalogState._replayedOperationId && catalogState.lastOperation !== operationId) {
+      return json(409, { error: "Esta sincronización ya fue confirmada y después hubo otros cambios. Vuelve a ejecutarla con un identificador nuevo." });
+    }
+    mergeReport ||= { cards: catalogState.cards || [], added: 0, modified: [], missing: [] };
 
     const bySet = {};
     const byRarity = {};
@@ -357,6 +384,11 @@ exports.handler = async (event) => {
       source: DOTGG_CARDS_URL,
       rawCount: rawCards.length,
       saved: sorted.length,
+      added: mergeReport.added,
+      modified: mergeReport.modified.length,
+      modifiedCodes: mergeReport.modified,
+      retainedMissing: mergeReport.missing.length,
+      missingCodes: mergeReport.missing.map(card => card.publicCode || card.dotggCode),
       bySet,
       byRarity,
       duplicateCount,
