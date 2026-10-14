@@ -230,25 +230,28 @@
 
     <section class="panel price-sync-panel">
       <h2>Sincronización de precios</h2>
-      <div class="price-sync-grid">
-        <div>
+      <div class="pricing-settings-fields">
+        <div class="pricing-setting-field">
           <label>Dólar CLP</label>
           <input id="dollarInput" type="number" min="1" step="1" value="900">
         </div>
-        <div>
+        <div class="pricing-setting-field">
           <label>Multiplicador LilStore</label>
           <input id="marginInput" type="number" min="0" step="0.01" value="1">
           <small>Ejemplo: 0.95 = 5% más barato que mercado.</small>
         </div>
-        <button id="saveSharedPricingBtn" type="button">Guardar dólar y multiplicador</button>
-        
-      
-        <button id="syncStockPricesBtn" type="button">Actualizar precios con stock</button>
-        <button id="syncAllPricesBtn" type="button">Actualizar todos los precios</button>
-        <button id="debugDotGGBtn" type="button">Diagnóstico DotGG</button>
-</div>
+      </div>
+      <button id="saveSharedPricingBtn" type="button">Guardar configuración</button>
       <div id="sharedPricingMessage" class="shared-pricing-message" role="status" aria-live="polite"></div>
-      <small>Usa la API DotGG getcardprices como Market USD. Las cartas sin precio conservan su valor anterior y no se cuentan como errores técnicos.</small>
+      <div class="pricing-sync-tools">
+        <h3>Herramientas de sincronización</h3>
+        <button id="debugDotGGBtn" type="button">Diagnóstico DotGG</button>
+        <div class="pricing-sync-actions">
+          <button id="syncStockPricesBtn" type="button">Actualizar precios con stock</button>
+          <button id="syncAllPricesBtn" type="button">Actualizar todos los precios</button>
+        </div>
+        <small class="pricing-sync-help">Usa la API DotGG getcardprices como Market USD. Las cartas sin precio conservan su valor anterior y no se cuentan como errores técnicos.</small>
+      </div>
       <div id="lastPriceSyncInfo" class="last-sync-info">Última actualización: todavía no se ha registrado una sincronización.</div>
     </section>
 
